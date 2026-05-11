@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piazza Marconi Cafe - Menu Digitale</title>
+    
+    <!-- Importazione Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Importazione FontAwesome per le Icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Importazione Google Fonts (Serif per le intestazioni) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Importazione librerie React (CDN) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#faf9f6] text-[#2d3436]">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('panini');
+            const [isAiOpen, setIsAiOpen] = useState(false);
+            const [aiMessages, setAiMessages] = useState([{role: 'model', content: 'Salve. Sono l\'assistente AI del Cafe. Come posso supportare la sua scelta?'}]);
+            const [aiInput, setAiInput] = useState('');
+            const [isAiLoading, setIsAiLoading] = useState(false);
+
+            const menuData = {
+                panini: [
+                    {
+                        title: "I Panini d'Autore",
+                        items: [
+                            { name: "Panino Poldo", desc: "Pollo arrostito, pomodoro, lattuga, salse artigianali. Pane di farina tipo 0", price: "6.00", allergens: ["1", "3", "7"], highlightTier: 2, tags: ["Best Seller"] },
+                            { name: "Panino Fish", desc: "Filetto di merluzzo panato*, pomodoro, Emmental, lattuga. Pane di farina tipo 0", price: "6.00", allergens: ["1", "4", "7"] },
+                            { name: "Multicereali Fumè", desc: "Salmone affumicato, rucola, emulsione di olio e limone. Pane multicereali", price: "4.50", allergens: ["1", "4"] },
+                            { name: "Panino Caprese", desc: "Farina 0, mozzarella, pomodoro, olio, origano e sale", price: "3.50", highlightTier: 2, tags: ["Best Value"] },
+                            { name: "Panino Bresaola", desc: "Farina 0, bresaola, rucola, scaglie di grana, olio e limone", price: "4.50" },
+                            { name: "Panino Elegante", desc: "Farina 0, prosciutto crudo, mozzarella, pomodoro, lattuga, olio e sale", price: "4.50" },
+                            { name: "Panino Cotto", desc: "Farina 0, prosciutto cotto, mozzarella, pomodoro, lattuga, olio e sale", price: "4.50" },
+                            { name: "Panino Porchetta", desc: "Farina 0, porchetta, primo sale pepe rosso, funghi semi piccanti sott'olio", price: "4.50" },
+                            { name: "Panino Pancetta", desc: "Farina 0, pancetta, primo sale pepe nero, filetti di melanzane sott'olio", price: "4.50" },
+                            { name: "Panino Spavaldo", desc: "Farina 0, speck, emmenthal, paté di funghi", price: "4.50" },
+                            { name: "Panino Piazza Marconi", desc: "Farina 0, speck, Filadelfia, paté d'olive nere, rucola, pomodoro", price: "4.50", highlightTier: 1, tags: ["Signature"] },
+                            { name: "Panino Tonno", desc: "Farina 0, tonno, mozzarella, pomodoro, olio, origano e sale", price: "4.50" },
+                            { name: "Panino Hamburger di Vitello", desc: "Farina 0, hamburger, bacon, sottiletta cheddar, lattuga, salse a scelta", price: "6.50", highlightTier: 1, tags: ["Premium"] },
+                            { name: "Panino Hamburger di Vitello Barbecue", desc: "Farina 0, hamburger, mozzarella, pomodoro, funghi piccanti, salsa barbecue", price: "6.50" }
+                        ],
+                        extraOptions: [
+                            { name: "Variante Piadina", price: "2.00" },
+                            { name: "Variante Tortillas", price: "3.00" }
+                        ],
+                        addons: [
+                            { name: "Salumi e formaggi", price: "1.00" },
+                            { name: "Prodotti sott'olio", price: "1.00" },
+                            { name: "Bresaola", price: "1.50" },
+                            { name: "Tonno", price: "1.50" },
+                            { name: "Salmone", price: "2.00" }
+                        ]
+                    }
+                ],
+                cucina: [
+                    {
+                        title: "Le Insalate",
+                        subtitle: "Tutte le insalate includono una base di lattuga, pomodoro, carote e mais",
+                        items: [
+                            { name: "Insalata Base", desc: "Lattuga, pomodoro, carote e mais", price: "6.00" },
+                            { name: "Insalata Mozzarella", desc: "Insalata base + mozzarella", price: "7.50" },
+                            { name: "Insalata Tonno", desc: "Insalata base + tonno", price: "8.00" },
+                            { name: "Insalata Bufala", desc: "Insalata base + mozzarella di bufala", price: "8.00" },
+                            { name: "Insalata Salmone", desc: "Insalata base + salmone", price: "8.50", highlightTier: 1, tags: ["Premium"] }
+                        ]
+                    },
+                    {
+                        title: "I Bruschettoni",
+                        items: [
+                            { name: "Bruschettone Pomodoro", desc: "Pomodoro fresco, olio, sale, origano", price: "5.00" },
+                            { name: "Bruschettone Pomodoro e Mozzarella", desc: "Pomodoro fresco, mozzarella", price: "6.50", highlightTier: 2, tags: ["Popular"] },
+                            { name: "Bruschettone Vegetariano", desc: "Selezione di verdure", price: "6.50" },
+                            { name: "Bruschettone Salmone", desc: "Salmone, Filadelfia e rucola", price: "7.50", highlightTier: 1, tags: ["Consigliato"] }
+                        ]
+                    },
+                    {
+                        title: "Secondi & Specialità",
+                        subtitle: "Tutti i secondi comprendono insalata mista",
+                        items: [
+                            { name: "Pasta Fresca del Giorno", desc: "Chiedere al personale per la proposta dello Chef", price: "9.50/12.50", allergens: ["1", "3"] },
+                            { name: "Petto di Pollo Arrosto", price: "9.50" },
+                            { name: "Petto di Pollo Panato", price: "10.00" },
+                            { name: "Hamburger Arrosto (2 pz)", desc: "Doppio burger di manzo selezionato", price: "9.50", highlightTier: 2, tags: ["Value"] },
+                            { name: "Arrosto di Vitello", price: "10.00" },
+                            { name: "Cotoletta di Vitello", desc: "Panatura croccante alle erbe", price: "12.00", highlightTier: 1, tags: ["Chef's Choice"] }
+                        ]
+                    },
+                    {
+                        title: "Contorni",
+                        items: [
+                            { name: "Patatine Fritte*", desc: "Taglio classico, fritte in olio altoleico", price: "3.00", highlightTier: 2, tags: ["Best Seller"] },
+                        ]
+                    }
+                ],
+                gelati: [
+                    {
+                        title: "Granite Artigianali",
+                        subtitle: "Le nostre granite artigianali (N.B. non tutte le granite sono presenti tutta la stagione)",
+                        isGranite: true,
+                        items: [
+                            { name: "Limone", desc: "Succo di limone, acqua, zucchero", p1: "2.70", p2: "2.20" },
+                            { name: "Fragola", desc: "Fragole, acqua e zucchero", p1: "2.70", p2: "2.20" },
+                            { name: "Caffè", desc: "Caffè espresso e zucchero", p1: "2.70", p2: "2.20" },
+                            { name: "Cioccolato", desc: "Cacao amaro, acqua e zucchero", p1: "2.70", p2: "2.20" },
+                            { name: "Mandorla", desc: "Mandorla, zucchero e acqua", p1: "3.30", p2: "2.80", highlightTier: 2, tags: ["Popular"] },
+                            { name: "Pistacchio", desc: "Pistacchi, acqua e zucchero", p1: "4.80", p2: "3.90", highlightTier: 1, tags: ["Premium"] },
+                            { name: "Arancia Rossa", desc: "Succo arancia rossa e zucchero", p1: "3.30", p2: "2.80" },
+                            { name: "Cantalupo", desc: "Melone cantalupo, acqua e zucchero", p1: "3.30", p2: "2.80" },
+                            { name: "Frutti Rossi", desc: "Ribes, more e melograno, acqua e zucchero", p1: "3.30", p2: "2.80" },
+                            { name: "Gelsi", desc: "Gelsi, acqua e zucchero", p1: "3.50", p2: "3.00" },
+                            { name: "Fichi", desc: "Fichi, acqua e zucchero", p1: "3.50", p2: "3.00" },
+                            { name: "Ricotta", desc: "Ricotta fresca, acqua e zucchero", p1: "3.50", p2: "3.00", highlightTier: 2, tags: ["Special"] },
+                            { name: "Mojito", desc: "Rum bianco, menta e zucchero di canna", p1: "4.00", p2: "3.50" },
+                            { name: "Brioches Classica", desc: "Farina 00, zucchero, sale, uova, latte, acqua, aromi naturali", price: "1.00", allergens: ["1", "3", "7"], isHighlight: true, tags: ["Perfect Match"] }
+                        ],
+                        extraOptions: [
+                            { name: "Aggiunta Panna Montata Fresca", price: "1.00" }
+                        ]
+                    },
+                    {
+                        title: "Gelateria",
+                        items: [
+                            { name: "Brioches con Gelato", desc: "Soffice specialità, gusti a scelta", price: "3.80", allergens: ["1", "3", "7"], highlightTier: 2, tags: ["Best Seller"] },
+                            { name: "Babà con Gelato", desc: "Lievitato al rum, gelato artigianale a scelta", price: "5.00", allergens: ["1", "3", "7"], highlightTier: 1, tags: ["Consigliato"] },
+                            { name: "Cannolo con Gelato", desc: "Scorza croccante farcita al momento con gelato", price: "4.00", allergens: ["1", "7"], highlightTier: 2, tags: ["Smart Choice"] },
+                            { name: "Coppa Gelato Piccola", price: "3.00", allergens: ["7"] },
+                            { name: "Coppa Gelato Media", price: "4.50", allergens: ["7"], highlightTier: 2, tags: ["Popular"] },
+                            { name: "Coppa Gelato Grande", price: "6.00", allergens: ["7"], highlightTier: 1, tags: ["Premium Value"] }
+                        ]
+                    },
+                    {
+                        title: "Frappè",
+                        items: [
+                            { name: "Frappè con Gelato", desc: "Gusti a scelta", price: "4.50", allergens: ["7"] },
+                            { name: "Frappè con Granita", desc: "Gusti a scelta", price: "4.00" }
+                        ]
+                    }
+                ],
+                dolci: [
+                    {
+                        title: "Pasticceria",
+                        items: [
+                            { name: "Brioches con Nutella", price: "2.00", allergens: ["1", "3", "7"] },
+                            { name: "Brioches con Pistacchio", price: "2.50", allergens: ["1", "3", "7", "8"], highlightTier: 2, tags: ["Popular"] },
+                            { name: "Brioches Senza Glutine e Lattosio", price: "2.50" },
+                            { name: "Crepes Nutella", price: "4.00", allergens: ["1", "3", "7"] },
+                            { name: "Tiramisù", price: "4.00", allergens: ["1", "3", "7"], highlightTier: 1, tags: ["Consigliato"] },
+                            { name: "Babà con Crema", price: "4.00", allergens: ["1", "3", "7"] },
+                            { name: "Cannolo con Crema o Ricotta", price: "3.00", allergens: ["1", "7"], highlightTier: 2, tags: ["Best Seller"] },
+                            { name: "Dorayaki alla Nutella", desc: "Farcitura classica", price: "2.00", allergens: ["1", "3", "7"] },
+                            { name: "Dorayaki al Pistacchio", desc: "Crema 100% Pistacchio", price: "2.50", allergens: ["1", "3", "7", "8"] }
+                        ]
+                    }
+                ]
+            };
+
+            const themes = {
+                panini: { color: '#c0392b', icon: 'fa-burger' },
+                cucina: { color: '#e67e22', icon: 'fa-utensils' },
+                gelati: { color: '#3498db', icon: 'fa-ice-cream' },
+                dolci: { color: '#00d2d3', icon: 'fa-mug-hot' }
+            };
+
+            const fetchWithRetry = async (url, options, retries = 5) => {
+                let delay = 1000;
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const res = await fetch(url, options);
+                        if (!res.ok) throw new Error('API Error');
+                        return await res.json();
+                    } catch (err) {
+                        if (i === retries - 1) throw err;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                    }
+                }
+            };
+
+            const handleAiSubmit = async (e) => {
+                e.preventDefault();
+                if (!aiInput.trim()) return;
+
+                const userQuery = aiInput.trim();
+                setAiInput('');
+                setAiMessages(prev => [...prev, { role: 'user', content: userQuery }]);
+                setIsAiLoading(true);
+
+                const apiKey = "";
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                const systemPrompt = `Sei un assistente virtuale esperto per il Piazza Marconi Cafe. Il menu attuale è: ${JSON.stringify(menuData)}. Fornisci raccomandazioni basate sui dati correnti. Rispondi in italiano con un registro formale. Non inventare item o prezzi inesistenti.`;
+
+                try {
+                    const data = await fetchWithRetry(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userQuery }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
+                    });
+                    const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "Errore di parsing nella risposta dell'LLM.";
+                    setAiMessages(prev => [...prev, { role: 'model', content: textResponse }]);
+                } catch (error) {
+                    setAiMessages(prev => [...prev, { role: 'model', content: "Eccezione: Fallimento nella connessione all'endpoint API. Riprovare." }]);
+                } finally {
+                    setIsAiLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen pb-10">
+                    <header className="bg-[#0c2461] text-white pt-10 pb-16 px-6 text-center relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-5 pointer-events-none">
+                            <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/></pattern><rect width="100%" height="100%" fill="url(#grid)"/></svg>
+                        </div>
+                        
+                        <div className="relative z-10">
+                            <h1 className="text-3xl md:text-5xl font-serif tracking-widest uppercase mb-4 leading-tight">
+                                Piazza Marconi Cafe
+                            </h1>
+                            
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-[10px] tracking-widest uppercase opacity-90">
+                                    <span className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-yellow-400"></i> Piazza G. Marconi 20, CL</span>
+                                    <a href="tel:+393295405941" className="flex items-center gap-1"><i className="fa-solid fa-phone text-yellow-400"></i> +39 329 5405941</a>
+                                </div>
+                                <div className="flex gap-4 mt-3">
+                                    <a href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all"><i className="fa-brands fa-instagram text-base"></i></a>
+                                    <div className="bg-white/10 px-3 py-1 rounded-full flex items-center gap-1 text-[9px] uppercase tracking-tighter"><i className="fa-solid fa-star text-yellow-400"></i> Best in Caltanissetta</div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <nav className="flex justify-center -mt-8 relative z-20 px-4">
+                        <div className="bg-white rounded-2xl shadow-xl p-1.5 flex gap-1 w-full max-w-xl border border-gray-100 overflow-x-auto hide-scrollbar">
+                            {Object.keys(themes).map((tab) => (
+                                <button 
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`flex-1 py-3 px-2 min-w-[70px] rounded-xl flex flex-col items-center gap-1 transition-all duration-500 ${activeTab === tab ? 'text-white shadow-lg' : 'text-gray-400 hover:bg-gray-50'}`}
+                                    style={{ backgroundColor: activeTab === tab ? themes[tab].color : 'transparent' }}
+                                >
+                                    <i className={`fa-solid ${themes[tab].icon} text-lg`}></i>
+                                    <span className="font-bold uppercase tracking-tighter text-[9px] md:text-[10px] whitespace-nowrap">{tab}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    <main className="max-w-3xl mx-auto mt-12 px-4">
+                        {menuData[activeTab].map((section, idx) => (
+                            <section key={idx} className="mb-14">
+                                <div className="flex flex-col mb-6">
+                                    <h2 className="text-2xl font-serif text-[#0c2461] italic">{section.title}</h2>
+                                    {section.subtitle && <p className="text-xs text-gray-400 uppercase tracking-widest">{section.subtitle}</p>}
+                                    <div className="h-0.5 w-12 mt-2" style={{ backgroundColor: themes[activeTab].color }}></div>
+                                </div>
+                                
+                                <div className="grid gap-4 md:gap-5">
+                                    {section.items.map((item, i) => {
+                                        let cardStyle = "bg-white border-gray-100 shadow-sm";
+                                        let tagStyle = "bg-yellow-100 text-yellow-700";
+                                        let iconClass = null;
+
+                                        if (item.isHighlight) {
+                                            cardStyle = "bg-orange-50/40 border-[#e67e22]/50 shadow-md ring-1 ring-[#e67e22]/20";
+                                        } else if (item.highlightTier === 1) {
+                                            cardStyle = "bg-gradient-to-br from-amber-50 to-white border-amber-200 shadow-md ring-1 ring-amber-400/30";
+                                            tagStyle = "bg-amber-100 text-amber-800 border border-amber-200";
+                                            iconClass = "fa-solid fa-award";
+                                        } else if (item.highlightTier === 2) {
+                                            cardStyle = "bg-blue-50/30 border-blue-200 shadow-sm";
+                                            tagStyle = "bg-blue-100 text-blue-700 border border-blue-200";
+                                            iconClass = "fa-solid fa-arrow-trend-up";
+                                        }
+
+                                        return (
+                                            <div key={i} className={`group p-5 rounded-3xl border ${cardStyle} hover:shadow-xl transition-all duration-300 relative overflow-hidden`}>
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className="flex flex-col gap-1 pr-4">
+                                                        <div className="flex flex-wrap items-center gap-2">
+                                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase leading-none">
+                                                                {item.name}
+                                                            </h3>
+                                                            {item.tags?.map(tag => (
+                                                                <span key={tag} className={`flex items-center gap-1 text-[8px] md:text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter shadow-sm ${tagStyle}`}>
+                                                                    {iconClass && <i className={iconClass + " text-[10px]"}></i>}
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                        {item.desc && <p className="text-gray-400 text-xs md:text-sm italic">{item.desc}</p>}
+                                                    </div>
+                                                    
+                                                    <div className="text-right whitespace-nowrap">
+                                                        {section.isGranite && (item.p1 || item.p2) ? (
+                                                            <div className="flex gap-3">
+                                                                <div className="flex flex-col items-end">
+                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Intera</span>
+                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p1}</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-end border-l border-gray-100 pl-3">
+                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Mezza</span>
+                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p2}</span>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="font-black text-[#0c2461] text-base md:text-lg">€{item.price}</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                
+                                                {item.allergens && (
+                                                    <div className="flex gap-1 mt-3 opacity-40 group-hover:opacity-100 transition-opacity">
+                                                        {item.allergens.map(a => (
+                                                            <div key={a} className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center text-[8px] font-bold">{a}</div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                
+                                {(section.addons || section.extraOptions) && (
+                                    <div className="mt-4 p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <i className="fa-solid fa-plus text-[#0c2461] text-sm"></i>
+                                            <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#0c2461]">Personalizzazione & Aggiunte</h4>
+                                        </div>
+                                        
+                                        <div className="flex flex-col gap-3">
+                                            {section.extraOptions && (
+                                                <div className="flex flex-wrap gap-2">
+                                                    {section.extraOptions.map((opt, i) => (
+                                                        <span key={i} className="text-[10px] uppercase font-bold bg-blue-50 text-blue-800 px-3 py-1.5 rounded-lg border border-blue-100">
+                                                            {opt.name} <span className="opacity-60 ml-1">+€{opt.price}</span>
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            
+                                            {section.addons && (
+                                                <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
+                                                    {section.addons.map((addon, i) => (
+                                                        <span key={i} className="text-[10px] uppercase bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg border border-gray-100">
+                                                            {addon.name} <span className="font-bold text-[#e67e22] ml-1">+€{addon.price}</span>
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </section>
+                        ))}
+
+                        <div className="mt-20 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                            <div className="flex items-center gap-2 mb-4 text-[#0c2461]">
+                                <i className="fa-solid fa-shield-halved text-lg"></i>
+                                <h4 className="font-bold uppercase text-xs tracking-widest">Informazioni al Consumatore</h4>
+                            </div>
+                            <p className="text-[9px] text-gray-400 leading-relaxed uppercase">
+                                * I prodotti contrassegnati possono essere surgelati all'origine o abbattuti in loco per garantire la sicurezza alimentare. 
+                                Per consultare la tabella completa degli allergeni (1-14) rivolgersi al personale di sala. 
+                                Prezzi comprensivi di IVA e coperto.
+                            </p>
+                        </div>
+                    </main>
+
+                    <footer className="text-center mt-12 py-8 px-10 border-t border-gray-100">
+                        <p className="text-xs uppercase tracking-widest font-bold text-[#0c2461]">Piazza Marconi Cafe</p>
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Sicilian Hospitality & Quality since 2015</p>
+                    </footer>
+
+                    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+                        {isAiOpen && (
+                            <div className="bg-white border border-gray-200 shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden flex flex-col h-[400px]">
+                                <div className="bg-[#0c2461] text-white p-3 flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        <i className="fa-solid fa-robot"></i>
+                                        <span className="font-bold text-sm tracking-widest uppercase">AI Assistant</span>
+                                    </div>
+                                    <button onClick={() => setIsAiOpen(false)} className="hover:text-gray-300 transition-colors">
+                                        <i className="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 bg-gray-50">
+                                    {aiMessages.map((msg, idx) => (
+                                        <div key={idx} className={`p-3 rounded-xl text-xs md:text-sm shadow-sm ${msg.role === 'user' ? 'bg-[#e67e22] text-white self-end ml-6' : 'bg-white border border-gray-200 text-gray-700 self-start mr-6'}`}>
+                                            {msg.content}
+                                        </div>
+                                    ))}
+                                    {isAiLoading && (
+                                        <div className="bg-white border border-gray-200 p-3 rounded-xl self-start shadow-sm text-[#0c2461]">
+                                            <i className="fa-solid fa-spinner fa-spin"></i>
+                                        </div>
+                                    )}
+                                </div>
+                                <form onSubmit={handleAiSubmit} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+                                    <input 
+                                        type="text" 
+                                        value={aiInput}
+                                        onChange={(e) => setAiInput(e.target.value)}
+                                        placeholder="Invia query..." 
+                                        className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0c2461]"
+                                    />
+                                    <button type="submit" disabled={isAiLoading || !aiInput.trim()} className="bg-[#0c2461] text-white p-2 rounded-lg hover:bg-blue-900 disabled:opacity-50 transition-colors">
+                                        <i className="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+                        <button 
+                            onClick={() => setIsAiOpen(!isAiOpen)} 
+                            className="bg-[#e67e22] text-white p-4 rounded-full shadow-xl hover:bg-orange-600 transition-all hover:scale-105 active:scale-95"
+                        >
+                            {isAiOpen ? <i className="fa-solid fa-xmark text-xl"></i> : <i className="fa-solid fa-comment-dots text-xl"></i>}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
