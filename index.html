@@ -30,7 +30,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
         const App = () => {
             const [activeTab, setActiveTab] = useState('panini');
@@ -39,7 +39,7 @@
             const [aiInput, setAiInput] = useState('');
             const [isAiLoading, setIsAiLoading] = useState(false);
 
-            const menuData = {
+            const menuDataFallback = {
                 panini: [
                     {
                         title: "I Panini d'Autore",
@@ -174,6 +174,90 @@
                     }
                 ]
             };
+
+            const TSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSQT8iLoykuVzyNDOsZzHBo1HOWOFACzc947vzwZznsODoqiUXgt_0JMPi9jYhMinzo8DIqvwHNzufJ/pub?output=tsv";
+
+            const parseTSV = (tsvText) => {
+                const lines = tsvText.split('\n').map(l => l.trim()).filter(l => l);
+                const data = {};
+                ['panini', 'cucina', 'gelati', 'dolci'].forEach(cat => { data[cat] = []; });
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].split('\t');
+                    if (cols.length < 2) continue;
+                    const tab = cols[0];
+                    const sectionTitle = cols[1];
+                    const subtitle = cols[2];
+                    const name = cols[3];
+                    const desc = cols[4];
+                    const price = cols[5];
+                    const priceHalf = cols[6];
+                    const allergens = cols[7] ? cols[7].split(',').map(a => a.trim()) : undefined;
+                    const highlightTier = cols[8] ? parseInt(cols[8]) : undefined;
+                    const tags = cols[9] ? cols[9].split(',').map(t => t.trim()) : undefined;
+
+                    if (!data[tab]) data[tab] = [];
+                    
+                    let section = data[tab].find(s => s.title === sectionTitle);
+                    if (!section) {
+                        section = { title: sectionTitle, items: [] };
+                        if (subtitle) section.subtitle = subtitle;
+                        if (tab === 'gelati' && sectionTitle.toLowerCase().includes('granit')) section.isGranite = true;
+                        data[tab].push(section);
+                    }
+                    
+                    const item = { name };
+                    if (desc) item.desc = desc;
+                    if (price) {
+                       if (section.isGranite && priceHalf) {
+                           item.p1 = price;
+                           item.p2 = priceHalf;
+                       } else {
+                           item.price = price;
+                       }
+                    }
+                    if (allergens && allergens.length > 0) item.allergens = allergens.map(a => a === '2007' ? '7' : a);
+                    if (highlightTier) item.highlightTier = highlightTier;
+                    if (tags && tags.length > 0) item.tags = tags;
+                    
+                    section.items.push(item);
+                }
+                
+                Object.keys(menuDataFallback).forEach(t => {
+                    if(data[t]) {
+                        data[t].forEach(parsedSec => {
+                            const fallbackSec = menuDataFallback[t].find(s => s.title === parsedSec.title);
+                            if (fallbackSec) {
+                                if (fallbackSec.extraOptions) parsedSec.extraOptions = fallbackSec.extraOptions;
+                                if (fallbackSec.addons) parsedSec.addons = fallbackSec.addons;
+                            }
+                        });
+                    }
+                });
+
+                return data;
+            };
+
+            const [menuData, setMenuData] = useState(menuDataFallback);
+            const [isLoadingMenu, setIsLoadingMenu] = useState(true);
+
+            useEffect(() => {
+                fetch(TSV_URL)
+                    .then(res => {
+                        if (!res.ok) throw new Error("Failed to load TSV");
+                        return res.text();
+                    })
+                    .then(tsvText => {
+                        const parsedData = parseTSV(tsvText);
+                        setMenuData(parsedData);
+                    })
+                    .catch(err => {
+                        console.error("Using fallback menu data due to error:", err);
+                    })
+                    .finally(() => {
+                        setIsLoadingMenu(false);
+                    });
+            }, []);
 
             const themes = {
                 panini: { color: '#c0392b', icon: 'fa-burger' },
