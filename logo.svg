@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+    <!-- Background -->
+    <circle cx="200" cy="200" r="195" fill="#181818" />
+    
+    <!-- Outer Square for Coffee Cup -->
+    <rect x="155" y="65" width="90" height="90" fill="none" stroke="#ffffff" stroke-width="2.5" />
+    
+    <!-- Coffee Cup Saucer -->
+    <path d="M 165 140 C 185 148, 215 148, 235 140" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+    
+    <!-- Coffee Cup Body -->
+    <path d="M 172 105 C 172 135, 190 140, 200 140 C 210 140, 228 135, 228 105 Z" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" />
+    
+    <!-- Coffee Cup Handle -->
+    <path d="M 228 112 C 240 112, 240 128, 226 128" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+    
+    <!-- Coffee Cup Steam -->
+    <!-- Left Steam -->
+    <path d="M 185 95 C 190 85, 180 80, 185 72" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+    <!-- Middle Steam -->
+    <path d="M 200 97 C 205 87, 195 80, 200 70" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+    <!-- Right Steam -->
+    <path d="M 215 95 C 220 85, 210 80, 215 72" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Text: Piazza Marconi -->
+    <text x="200" y="205" font-family="'Playfair Display', Georgia, serif" font-size="34" fill="#ffffff" text-anchor="middle" font-weight="normal" letter-spacing="1">Piazza Marconi</text>
+    
+    <!-- Text: Cafe' with lines -->
+    <line x1="95" y1="238" x2="150" y2="238" stroke="#ffffff" stroke-width="1.5" />
+    <text x="200" y="250" font-family="'Playfair Display', Georgia, serif" font-size="36" fill="#ffffff" text-anchor="middle" font-weight="normal" letter-spacing="2">Cafe'</text>
+    <line x1="250" y1="238" x2="305" y2="238" stroke="#ffffff" stroke-width="1.5" />
+
+    <!-- Text: Caltanissetta -->
+    <text x="200" y="295" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#ffffff" text-anchor="middle" font-weight="bold" letter-spacing="0.5">Caltanissetta</text>
+    
+    <!-- Text: Tel -->
+    <text x="200" y="325" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="bold" letter-spacing="0.5">Tel. 329 5405941</text>
+</svg>
