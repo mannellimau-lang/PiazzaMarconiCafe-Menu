@@ -511,112 +511,145 @@
                                 </div>
                             </section>
                         ) : (
-                            menuData[activeTab].map((section, idx) => (
-                            <section key={idx} className="mb-14">
-                                <div className="flex flex-col mb-6">
-                                    <h2 className="text-2xl font-serif text-[#0c2461] italic">{section.title}</h2>
-                                    {section.subtitle && <p className="text-xs text-gray-400 uppercase tracking-widest">{section.subtitle}</p>}
-                                    <div className="h-0.5 w-12 mt-2" style={{ backgroundColor: themes[activeTab].color }}></div>
-                                </div>
+                            <>
+                                {activeTab === 'panini' && (
+                                    <div className="mb-8 p-5 bg-gradient-to-r from-orange-100 to-amber-50 rounded-3xl border border-amber-200 shadow-md flex flex-col md:flex-row items-center gap-4">
+                                        <div className="bg-white p-3 rounded-full shadow-sm text-amber-600">
+                                            <i className="fa-solid fa-martini-glass-citrus text-2xl"></i>
+                                        </div>
+                                        <div className="flex-1 text-center md:text-left">
+                                            <h3 className="font-bold text-amber-900 uppercase tracking-widest text-sm mb-1">Aperitivo & Finger Food?</h3>
+                                            <p className="text-amber-800 text-xs italic">Non c'è panino senza un buon fritto. Chiedi al personale i nostri Taglieri e Mix Croccanti per iniziare al meglio.</p>
+                                        </div>
+                                        <a href="https://wa.me/393295405941?text=Vorrei%20aggiungere%20dei%20fritti/sfizi%20all'ordine" target="_blank" className="bg-amber-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors shadow-sm text-center">
+                                            Aggiungi Sfizio
+                                        </a>
+                                    </div>
+                                )}
                                 
-                                <div className="grid gap-4 md:gap-5">
-                                    {section.items.map((item, i) => {
-                                        let cardStyle = "bg-white border-gray-100 shadow-sm";
-                                        let tagStyle = "bg-yellow-100 text-yellow-700";
-                                        let iconClass = null;
+                                {activeTab === 'dolci' && (
+                                    <div className="mb-8 p-5 bg-gradient-to-r from-pink-100 to-rose-50 rounded-3xl border border-rose-200 shadow-md flex flex-col md:flex-row items-center gap-4">
+                                        <div className="bg-white p-3 rounded-full shadow-sm text-rose-600">
+                                            <i className="fa-solid fa-ice-cream text-2xl"></i>
+                                        </div>
+                                        <div className="flex-1 text-center md:text-left">
+                                            <h3 className="font-bold text-rose-900 uppercase tracking-widest text-sm mb-1">Panna Fresca Artigianale?</h3>
+                                            <p className="text-rose-800 text-xs italic">Rendi unico il tuo dolce o gelato. Chiedi l'aggiunta della nostra panna fresca montata a mano.</p>
+                                        </div>
+                                        <a href="https://wa.me/393295405941?text=Vorrei%20ordinare%20dolci%20con%20aggiunta%20di%20panna" target="_blank" className="bg-rose-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-rose-600 transition-colors shadow-sm text-center">
+                                            Aggiungi Panna
+                                        </a>
+                                    </div>
+                                )}
 
-                                        if (item.isHighlight) {
-                                            cardStyle = "bg-orange-50/40 border-[#e67e22]/50 shadow-md ring-1 ring-[#e67e22]/20";
-                                        } else if (item.highlightTier === 1) {
-                                            cardStyle = "bg-gradient-to-br from-amber-50 to-white border-amber-200 shadow-md ring-1 ring-amber-400/30";
-                                            tagStyle = "bg-amber-100 text-amber-800 border border-amber-200";
-                                            iconClass = "fa-solid fa-award";
-                                        } else if (item.highlightTier === 2) {
-                                            cardStyle = "bg-blue-50/30 border-blue-200 shadow-sm";
-                                            tagStyle = "bg-blue-100 text-blue-700 border border-blue-200";
-                                            iconClass = "fa-solid fa-arrow-trend-up";
-                                        }
+                                {menuData[activeTab].map((section, idx) => (
+                                    <section key={idx} className="mb-14">
+                                        <div className="flex flex-col mb-6">
+                                            <h2 className="text-2xl font-serif text-[#0c2461] italic">{section.title}</h2>
+                                            {section.subtitle && <p className="text-xs text-gray-400 uppercase tracking-widest">{section.subtitle}</p>}
+                                            <div className="h-0.5 w-12 mt-2" style={{ backgroundColor: themes[activeTab].color }}></div>
+                                        </div>
+                                        
+                                        <div className="grid gap-4 md:gap-5">
+                                            {section.items.map((item, i) => {
+                                                let cardStyle = "bg-white border-gray-100 shadow-sm";
+                                                let tagStyle = "bg-yellow-100 text-yellow-700";
+                                                let iconClass = null;
 
-                                        return (
-                                            <div key={i} className={`group p-5 rounded-3xl border ${cardStyle} hover:shadow-xl transition-all duration-300 relative overflow-hidden`}>
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <div className="flex flex-col gap-1 pr-4">
-                                                        <div className="flex flex-wrap items-center gap-2">
-                                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase leading-none">
-                                                                {item.name}
-                                                            </h3>
-                                                            {item.tags?.map(tag => (
-                                                                <span key={tag} className={`flex items-center gap-1 text-[8px] md:text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter shadow-sm ${tagStyle}`}>
-                                                                    {iconClass && <i className={iconClass + " text-[10px]"}></i>}
-                                                                    {tag}
+                                                if (item.isHighlight) {
+                                                    cardStyle = "bg-orange-50/40 border-[#e67e22]/50 shadow-md ring-1 ring-[#e67e22]/20";
+                                                } else if (item.highlightTier === 1) {
+                                                    cardStyle = "bg-gradient-to-br from-amber-50 to-white border-amber-200 shadow-md ring-1 ring-amber-400/30";
+                                                    tagStyle = "bg-amber-100 text-amber-800 border border-amber-200";
+                                                    iconClass = "fa-solid fa-award";
+                                                } else if (item.highlightTier === 2) {
+                                                    cardStyle = "bg-blue-50/30 border-blue-200 shadow-sm";
+                                                    tagStyle = "bg-blue-100 text-blue-700 border border-blue-200";
+                                                    iconClass = "fa-solid fa-arrow-trend-up";
+                                                }
+
+                                                return (
+                                                    <div key={i} className={`group p-5 rounded-3xl border ${cardStyle} hover:shadow-xl transition-all duration-300 relative overflow-hidden`}>
+                                                        <div className="flex justify-between items-start mb-2">
+                                                            <div className="flex flex-col gap-1 pr-4">
+                                                                <div className="flex flex-wrap items-center gap-2">
+                                                                    <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase leading-none">
+                                                                        {item.name}
+                                                                    </h3>
+                                                                    {item.tags?.map(tag => (
+                                                                        <span key={tag} className={`flex items-center gap-1 text-[8px] md:text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter shadow-sm ${tagStyle}`}>
+                                                                            {iconClass && <i className={iconClass + " text-[10px]"}></i>}
+                                                                            {tag}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                                {item.desc && <p className="text-gray-400 text-xs md:text-sm italic">{item.desc}</p>}
+                                                            </div>
+                                                            
+                                                            <div className="text-right whitespace-nowrap">
+                                                                {section.isGranite && (item.p1 || item.p2) ? (
+                                                                    <div className="flex gap-3">
+                                                                        <div className="flex flex-col items-end">
+                                                                            <span className="text-[8px] text-gray-300 uppercase font-bold">Intera</span>
+                                                                            <span className="text-[#0c2461] font-bold text-sm">€{item.p1}</span>
+                                                                        </div>
+                                                                        <div className="flex flex-col items-end border-l border-gray-100 pl-3">
+                                                                            <span className="text-[8px] text-gray-300 uppercase font-bold">Mezza</span>
+                                                                            <span className="text-[#0c2461] font-bold text-sm">€{item.p2}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="font-black text-[#0c2461] text-base md:text-lg">€{item.price}</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {item.allergens && (
+                                                            <div className="flex gap-1 mt-3 opacity-40 group-hover:opacity-100 transition-opacity">
+                                                                {item.allergens.map(a => (
+                                                                    <div key={a} className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center text-[8px] font-bold">{a}</div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        
+                                        {(section.addons || section.extraOptions) && (
+                                            <div className="mt-4 p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <i className="fa-solid fa-plus text-[#0c2461] text-sm"></i>
+                                                    <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#0c2461]">Personalizzazione & Aggiunte</h4>
+                                                </div>
+                                                
+                                                <div className="flex flex-col gap-3">
+                                                    {section.extraOptions && (
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {section.extraOptions.map((opt, i) => (
+                                                                <span key={i} className="text-[10px] uppercase font-bold bg-blue-50 text-blue-800 px-3 py-1.5 rounded-lg border border-blue-100">
+                                                                    {opt.name} <span className="opacity-60 ml-1">+€{opt.price}</span>
                                                                 </span>
                                                             ))}
                                                         </div>
-                                                        {item.desc && <p className="text-gray-400 text-xs md:text-sm italic">{item.desc}</p>}
-                                                    </div>
+                                                    )}
                                                     
-                                                    <div className="text-right whitespace-nowrap">
-                                                        {section.isGranite && (item.p1 || item.p2) ? (
-                                                            <div className="flex gap-3">
-                                                                <div className="flex flex-col items-end">
-                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Intera</span>
-                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p1}</span>
-                                                                </div>
-                                                                <div className="flex flex-col items-end border-l border-gray-100 pl-3">
-                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Mezza</span>
-                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p2}</span>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <span className="font-black text-[#0c2461] text-base md:text-lg">€{item.price}</span>
-                                                        )}
-                                                    </div>
+                                                    {section.addons && (
+                                                        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
+                                                            {section.addons.map((addon, i) => (
+                                                                <span key={i} className="text-[10px] uppercase bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg border border-gray-100">
+                                                                    {addon.name} <span className="font-bold text-[#e67e22] ml-1">+€{addon.price}</span>
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                
-                                                {item.allergens && (
-                                                    <div className="flex gap-1 mt-3 opacity-40 group-hover:opacity-100 transition-opacity">
-                                                        {item.allergens.map(a => (
-                                                            <div key={a} className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center text-[8px] font-bold">{a}</div>
-                                                        ))}
-                                                    </div>
-                                                )}
                                             </div>
-                                        );
-                                    })}
-                                </div>
-                                
-                                {(section.addons || section.extraOptions) && (
-                                    <div className="mt-4 p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <i className="fa-solid fa-plus text-[#0c2461] text-sm"></i>
-                                            <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#0c2461]">Personalizzazione & Aggiunte</h4>
-                                        </div>
-                                        
-                                        <div className="flex flex-col gap-3">
-                                            {section.extraOptions && (
-                                                <div className="flex flex-wrap gap-2">
-                                                    {section.extraOptions.map((opt, i) => (
-                                                        <span key={i} className="text-[10px] uppercase font-bold bg-blue-50 text-blue-800 px-3 py-1.5 rounded-lg border border-blue-100">
-                                                            {opt.name} <span className="opacity-60 ml-1">+€{opt.price}</span>
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            
-                                            {section.addons && (
-                                                <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
-                                                    {section.addons.map((addon, i) => (
-                                                        <span key={i} className="text-[10px] uppercase bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg border border-gray-100">
-                                                            {addon.name} <span className="font-bold text-[#e67e22] ml-1">+€{addon.price}</span>
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </section>
-                        ))}
+                                        )}
+                                    </section>
+                                ))}
+                            </>
+                        )}
 
                         <div className="mt-20 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
                             <div className="flex items-center gap-2 mb-4 text-[#0c2461]">

@@ -13,11 +13,19 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Check for prefers-reduced-motion
+  // Check for prefers-reduced-motion and ensure autoplay plays programmatically
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mediaQuery.matches && videoRef.current) {
-      videoRef.current.pause();
+    if (mediaQuery.matches) {
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.play().catch(err => {
+          console.warn("Autoplay was prevented by browser security:", err);
+        });
+      }
     }
   }, []);
 
@@ -40,9 +48,10 @@ export default function Hero() {
           muted 
           playsInline 
           poster="/media/granita.jpg"
-          className="object-cover w-full h-full scale-105" 
-          src="/media/degustazione_granite.mp4"
-        />
+          className="object-cover w-full h-full scale-105"
+        >
+          <source src="/media/degustazione_granite.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/50 z-[1]" />
       </motion.div>
 
@@ -70,8 +79,8 @@ export default function Hero() {
         </h1>
         
         <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl font-light">
-          {"Dal 2015 l'eccellenza delle granite artigianali in Sicilia. "}
-          {"Scopri i nostri gelati, la nostra colazione, il salato e l'arte dell'aperitivo."}
+          {"Dal 2015 l'eccellenza della colazione siciliana: la vera granita artigianale servita con brioche col tuppo calda. "}
+          {"Scopri i nostri gelati, il salato e la magia dell'aperitivo lounge nel cuore di Caltanissetta."}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 mb-12">
