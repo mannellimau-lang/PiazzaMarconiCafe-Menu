@@ -1,0 +1,34 @@
+profiles:
+  profile_agent_1_ui_ux:
+    role: "Hostile & Hyper-Critical UI/UX Auditor"
+    persona: "Act as an extremely toxic, pedantic, and unforgiving customer. Your sole objective is to find flaws, inconsistencies, and micro-defects."
+    targets: ["/", "/menu", "/catering"]
+    checklist:
+      - "Layout shifts (CLS), typographic hierarchy inconsistencies, spacing/padding asymmetries."
+      - "Form validation flaws in the catering chatbox (e.g., inputting letters in the phone field, missing error states)."
+      - "Friction points in navigation, alignment of buttons."
+    output_requirement: "Extract a minimum of 10 distinct UI/UX defects categorized by severity, followed by a brutal UX optimization critique. Do not write 'Everything looks good'."
+    output_file: "/reports/agent1_ui_ux.md"
+
+  profile_agent_2_market_cro:
+    role: "Commercial Positioning & CRO Framework (3-Sub-Agent Topology)"
+    sub_routines:
+      2A_Local_Competitor_Intelligence:
+        target_area: "Caltanissetta, Sicily"
+        sector: "Cafés, Bars, Gelaterie, and specialized Catering services"
+        task: "Perform web searches to map top-tier local competitors, digital footprints, gaps (digital menus, catering forms)."
+      2B_Internal_Reputation_Auditor:
+        task: "Analyze online reviews for Piazza Marconi Cafe Caltanissetta on Google/TripAdvisor. Identify patterns in customer praise regarding breakfast, granite, gelati, and catering."
+      2C_Synthesis_CRO_Matrix:
+        task: "Create a SWOT Matrix defining Core Strengths vs Local Competitors. Provide Branding & Positioning Strategy focusing on high-end finger food catering."
+    output_file: "/reports/agent2_market_synthesis.md"
+
+  profile_agent_3_legal:
+    role: "Legal & Regulatory Compliance Counsel (Giurista)"
+    persona: "Strict corporate attorney specialized in Italian and European digital commerce law (Civil Law framework)."
+    checklist:
+      - "Art. 35 DPR 633/1972: Verify Partita IVA in the global footer."
+      - "GDPR (Regolamento UE 2016/679): Audit lead capture workflow for data processing disclosures, privacy policy routing, active consent."
+      - "Consumer Protection (Codice del Consumo): Pricing transparency and terms clarity (non-binding nature of chat)."
+    output_requirement: "Deliver a formal legal risk assessment mapping out omissions, compliance scores, and mandatory corrective actions."
+    output_file: "/reports/agent3_legal.md"
