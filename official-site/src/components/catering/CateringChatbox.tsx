@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, MessageSquare, Phone, RotateCcw, ArrowLeft } from "lucide-react";
 
-type Step = "NAME" | "EVENT_TYPE" | "DATE" | "GUESTS" | "PHONE" | "GDPR" | "DONE";
+type Step = "GDPR" | "NAME" | "EVENT_TYPE" | "DATE" | "GUESTS" | "PHONE" | "DONE";
 
 interface Message {
   id: string;
@@ -16,7 +16,7 @@ interface Message {
 const BUSINESS_NUMBER = "393295405941";
 
 export default function CateringChatbox() {
-  const [step, setStep] = useState<Step>("NAME");
+  const [step, setStep] = useState<Step>("GDPR");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -24,9 +24,9 @@ export default function CateringChatbox() {
       text: "Benvenuto nel servizio catering di Piazza Marconi Cafè. Per offrirti un'esperienza di altissimo livello, focalizzata sulle nostre specialità di Finger Food per eventi, ti guiderò nella richiesta."
     },
     {
-      id: "ask_name",
+      id: "ask_gdpr",
       sender: "bot",
-      text: "Come prima cosa, qual è il tuo nome e cognome?"
+      text: "Per iniziare, ti chiediamo di accettare la Privacy Policy e i Termini per poter trattare i tuoi dati in sicurezza."
     }
   ]);
   
@@ -64,7 +64,7 @@ export default function CateringChatbox() {
   };
 
   const resetChat = () => {
-    setStep("NAME");
+    setStep("GDPR");
     setData({
       full_name: "",
       event_description: "",
@@ -78,20 +78,20 @@ export default function CateringChatbox() {
     setPhoneError("");
     setMessages([
       { id: Date.now().toString() + "_1", sender: "bot", text: "Chat riavviata. Ricominciamo." },
-      { id: Date.now().toString() + "_2", sender: "bot", text: "Qual è il tuo nome e cognome?" }
+      { id: Date.now().toString() + "_2", sender: "bot", text: "Per iniziare, ti chiediamo di accettare la Privacy Policy e i Termini per poter trattare i tuoi dati in sicurezza." }
     ]);
   };
 
   const goBack = () => {
-    if (step === "NAME" || step === "DONE") return;
+    if (step === "GDPR" || step === "DONE") return;
     
-    let prevStep: Step = "NAME";
+    let prevStep: Step = "GDPR";
     switch(step) {
+      case "NAME": prevStep = "GDPR"; break;
       case "EVENT_TYPE": prevStep = "NAME"; break;
       case "DATE": prevStep = "EVENT_TYPE"; break;
       case "GUESTS": prevStep = "DATE"; break;
       case "PHONE": prevStep = "GUESTS"; break;
-      case "GDPR": prevStep = "PHONE"; break;
     }
     
     setStep(prevStep);
@@ -113,21 +113,44 @@ export default function CateringChatbox() {
         setPhoneError("Devi accettare sia la Privacy Policy che i Termini per procedere.");
         return;
       }
-      setMessages(prev => [...prev, { id: Date.now().toString(), sender: "user", text: "Acconsento al trattamento dei dati. Sono consapevole che questa chat non è vincolante." }]);
-      setStep("DONE");
-      addBotMessage("Grazie mille! Stiamo elaborando un preventivo non vincolante. Verrai reindirizzato a WhatsApp per confermare...");
-      setTimeout(() => dispatchToWhatsApp(data), 2000);
+      setMessages(prev => [...prev, { id: Date.now().toString(), sender: "user", text: "Accetto la Privacy Policy ed i Termini e Condizioni." }]);
+      setStep("NAME");
+      addBotMessage("Grazie per il consenso. Come prima cosa, qual è il tuo nome e cognome?");
       return;
     }
 
     if (!inputValue.trim()) return;
     const userText = inputValue.trim();
 
-    // Phone validation
+    // Validation rules
+    if (step === "NAME") {
+      if (userText.length < 2) {
+        setPhoneError("Inserisci un nome e cognome validi (almeno 2 caratteri).");
+        return;
+      }
+    }
+
+    if (step === "DATE") {
+      const today = new Date().toISOString().split("T")[0];
+      if (userText < today) {
+        setPhoneError("Inserisci una data valida (non antecedente a oggi).");
+        return;
+      }
+    }
+
+    if (step === "GUESTS") {
+      const guestsNum = parseInt(userText);
+      if (isNaN(guestsNum) || guestsNum < 1) {
+        setPhoneError("Inserisci un numero valido di ospiti (minimo 1).");
+        return;
+      }
+    }
+
     if (step === "PHONE") {
-      const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
-      if (!phoneRegex.test(userText) || userText.length < 8) {
-        setPhoneError("Inserisci un numero di telefono valido (es. +39 333 1234567).");
+      const cleanPhone = userText.replace(/[\s\-\(\)\.]/g, "");
+      const phoneRegex = /^\+?[0-9]{8,15}$/;
+      if (!phoneRegex.test(cleanPhone)) {
+        setPhoneError("Inserisci un numero di telefono valido (almeno 8 cifre).");
         return;
       }
     }
@@ -158,9 +181,13 @@ export default function CateringChatbox() {
         addBotMessage("Ottimo. Qual è il tuo numero di telefono per poterti inviare la nostra proposta?");
         break;
       case "PHONE":
-        setData(prev => ({ ...prev, phone_number: userText }));
-        setStep("GDPR");
-        addBotMessage("Ci siamo quasi. Per favore, leggi le condizioni e conferma il trattamento dei dati.");
+        setData(prev => {
+          const updated = { ...prev, phone_number: userText };
+          setStep("DONE");
+          addBotMessage("Grazie mille! Stiamo elaborando un preventivo non vincolante. Verrai reindirizzato a WhatsApp per confermare...");
+          setTimeout(() => dispatchToWhatsApp(updated), 2000);
+          return updated;
+        });
         break;
       default:
         break;
@@ -182,9 +209,9 @@ export default function CateringChatbox() {
   };
 
   return (
-    <section className="py-24 bg-zinc-50" id="richiedi-info">
+    <section className="py-12 md:py-24 bg-zinc-50" id="richiedi-info">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
           {/* Chatbox Container */}
           <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[80vh] min-h-[500px] max-h-[700px] md:h-[600px]">
@@ -200,7 +227,7 @@ export default function CateringChatbox() {
                 </div>
               </div>
               <div className="flex gap-2">
-                {step !== "NAME" && step !== "DONE" && (
+                {step !== "GDPR" && step !== "DONE" && (
                   <button 
                     onClick={goBack} 
                     className="p-2 hover:bg-white/10 rounded-full transition-colors flex items-center gap-2 text-sm opacity-80 hover:opacity-100"
@@ -258,7 +285,16 @@ export default function CateringChatbox() {
                 <p className="text-red-500 text-xs font-semibold mb-2 px-2" role="alert">{phoneError}</p>
               )}
               
-              {step === "GDPR" ? (
+              {step === "DONE" ? (
+                <div className="text-center p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+                  <p className="text-sm text-emerald-800 font-semibold">
+                    Grazie {data.full_name}! Richiesta inviata con successo.
+                  </p>
+                  <p className="text-xs text-emerald-600 mt-1">
+                    Verrai reindirizzato a WhatsApp al numero {data.phone_number} per confermare i dettagli.
+                  </p>
+                </div>
+              ) : step === "GDPR" ? (
                 <div className="flex flex-col gap-4">
                   <label className="flex items-start gap-3 text-sm text-gray-600">
                     <input 
@@ -286,9 +322,9 @@ export default function CateringChatbox() {
                   </label>
                   <button 
                     onClick={handleSend}
-                    className="w-full bg-primary text-white py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-[1.02] transition-transform shadow-md"
+                    className="w-full bg-primary text-white py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-[1.02] transition-transform shadow-md animate-pulse"
                   >
-                    Conferma e Invia
+                    Accetta e Inizia
                   </button>
                 </div>
               ) : (
@@ -300,13 +336,12 @@ export default function CateringChatbox() {
                     onKeyDown={(e) => e.key === "Enter" && handleSend()}
                     placeholder={step === "DATE" ? "" : "Scrivi qui la tua risposta..."}
                     aria-label="Rispondi all'assistente"
-                    disabled={step === "DONE"}
                     className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                   <button 
                     onClick={handleSend}
                     aria-label="Invia messaggio"
-                    disabled={step === "DONE" || !inputValue.trim()}
+                    disabled={!inputValue.trim()}
                     className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-md flex-shrink-0"
                   >
                     <Send className="w-5 h-5" />

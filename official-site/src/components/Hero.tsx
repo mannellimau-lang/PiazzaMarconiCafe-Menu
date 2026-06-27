@@ -1,13 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, MapPin, Play, Pause } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -17,24 +16,10 @@ export default function Hero() {
   // Check for prefers-reduced-motion
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mediaQuery.matches) {
-      setIsPlaying(false);
-      if (videoRef.current) {
-        videoRef.current.pause();
-      }
+    if (mediaQuery.matches && videoRef.current) {
+      videoRef.current.pause();
     }
   }, []);
-
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
 
   // Smooth Parallax Effects
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
@@ -79,14 +64,14 @@ export default function Hero() {
           <span>Caltanissetta</span>
         </a>
         
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 max-w-5xl drop-shadow-2xl leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 max-w-5xl drop-shadow-2xl leading-tight">
           Piazza Marconi <br />
-          <span className="font-sans font-light opacity-90 tracking-widest text-4xl md:text-6xl uppercase">Cafe</span>
+          <span className="font-sans font-light opacity-90 tracking-widest text-3xl sm:text-4xl md:text-6xl uppercase">Cafe</span>
         </h1>
         
         <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl font-light">
-          Dal 2015 l'eccellenza delle granite artigianali in Sicilia.
-          Scopri i nostri gelati, la nostra colazione, il salato e l'arte dell'aperitivo.
+          {"Dal 2015 l'eccellenza delle granite artigianali in Sicilia. "}
+          {"Scopri i nostri gelati, la nostra colazione, il salato e l'arte dell'aperitivo."}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 mb-12">
@@ -107,15 +92,6 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Accessibilità: Toggle Video */}
-        <button
-          onClick={togglePlay}
-          className="absolute bottom-10 left-6 text-white/50 hover:text-white flex items-center gap-2 text-xs uppercase tracking-widest bg-black/30 px-3 py-2 rounded-full border border-white/10 transition-colors backdrop-blur-sm"
-          aria-label={isPlaying ? "Pausa video di sfondo" : "Riproduci video di sfondo"}
-        >
-          {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-          <span className="hidden md:inline">{isPlaying ? "Pausa Video" : "Riproduci Video"}</span>
-        </button>
       </motion.div>
     </section>
   );

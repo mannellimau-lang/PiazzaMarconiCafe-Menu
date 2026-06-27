@@ -27,9 +27,11 @@ export default function Footer() {
         </div>
 
         {/* Original Slogan & VAT */}
-        <div className="flex flex-col items-center text-center text-white/70 mb-10 space-y-1">
+        <div className="flex flex-col items-center text-center text-white/70 mb-10 space-y-1 px-4">
           <p className="text-sm md:text-base uppercase tracking-[0.3em] font-light">Sicilian Hospitality & Quality since 2015</p>
-          <p className="text-xs uppercase tracking-widest font-light opacity-60">Piazza Marconi Cafe di Brivido Sonia Marisa - P.IVA: 01944580859</p>
+          <p className="text-xs uppercase tracking-widest font-light opacity-60">
+            Piazza Marconi Cafe di Brivido Sonia Marisa — Sede Legale: Piazza G. Marconi 20, 93100 Caltanissetta (CL) — P.IVA: 01944580859
+          </p>
         </div>
 
         {/* Social Icons */}

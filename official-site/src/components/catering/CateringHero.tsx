@@ -30,8 +30,8 @@ export default function CateringHero() {
           <span className="text-accent uppercase tracking-[0.3em] font-bold text-sm mb-6 block">
             Piazza Marconi Cafè
           </span>
-          <h1 className="text-5xl md:text-7xl font-serif mb-6 drop-shadow-lg">
-            Servizio Catering <br/><span className="text-3xl md:text-5xl italic font-light">di Eccellenza</span>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif mb-6 drop-shadow-lg">
+            Servizio Catering <br/><span className="text-2xl sm:text-3xl md:text-5xl italic font-light">di Eccellenza</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed mb-10">
             Dalle feste private agli eventi aziendali di gala. Offriamo soluzioni personalizzate, d'asporto o con servizio completo, con tovagliato di pregio e personale altamente qualificato.
