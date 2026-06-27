@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuUrl, setMenuUrl] = useState("https://piazza-marconi-cafe-menu.vercel.app");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -15,12 +16,20 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
+    
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname;
+      if (host.includes("-mannellimau-langs-projects.vercel.app") || host.includes("localhost") || host.includes("127.0.0.1")) {
+        setMenuUrl("https://piazza-marconi-cafe-menu-prlrmdf2s-mannellimau-langs-projects.vercel.app");
+      }
+    }
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Menu", href: "https://piazza-marconi-cafe-menu.vercel.app", target: "_blank" },
+    { name: "Menu", href: menuUrl, target: "_blank" },
     { name: "Intolleranze", href: "/intolleranze" },
     { name: "Catering", href: "/catering" },
     { name: "Gusto & Relax", href: "/lounge-aperitivo" },

@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [menuUrl, setMenuUrl] = useState("https://piazza-marconi-cafe-menu.vercel.app");
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -25,6 +26,13 @@ export default function Hero() {
         videoRef.current.play().catch(err => {
           console.warn("Autoplay was prevented by browser security:", err);
         });
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname;
+      if (host.includes("-mannellimau-langs-projects.vercel.app") || host.includes("localhost") || host.includes("127.0.0.1")) {
+        setMenuUrl("https://piazza-marconi-cafe-menu-prlrmdf2s-mannellimau-langs-projects.vercel.app");
       }
     }
   }, []);
@@ -85,7 +93,7 @@ export default function Hero() {
         
         <div className="flex flex-col sm:flex-row gap-6 mb-12">
           <a
-            href="https://piazza-marconi-cafe-menu.vercel.app"
+            href={menuUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]"
