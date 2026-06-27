@@ -21,6 +21,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Menu", href: "https://piazza-marconi-cafe-menu.vercel.app", target: "_blank" },
+    { name: "Intolleranze", href: "/intolleranze" },
     { name: "Catering", href: "/catering" },
     { name: "Gusto & Relax", href: "/lounge-aperitivo" },
     { name: "Lavora Con Noi", href: "/lavora-con-noi" },

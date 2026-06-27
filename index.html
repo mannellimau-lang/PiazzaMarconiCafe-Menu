@@ -282,7 +282,16 @@
                 panini: { color: '#c0392b', icon: 'fa-burger' },
                 cucina: { color: '#e67e22', icon: 'fa-utensils' },
                 gelati: { color: '#3498db', icon: 'fa-ice-cream' },
-                dolci: { color: '#00d2d3', icon: 'fa-mug-hot' }
+                dolci: { color: '#00d2d3', icon: 'fa-mug-hot' },
+                intolleranze: { color: '#27ae60', icon: 'fa-wheat-awn' }
+            };
+
+            const tabLabels = {
+                panini: 'Panini',
+                cucina: 'Cucina',
+                gelati: 'Gelati',
+                dolci: 'Dolci',
+                intolleranze: 'Intolleranze'
             };
 
             const fetchWithRetry = async (url, options, retries = 5) => {
@@ -339,18 +348,14 @@
                             <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/></pattern><rect width="100%" height="100%" fill="url(#grid)"/></svg>
                         </div>
                         
-<<<<<<< HEAD
-                        <div className="relative z-10">
-                            <h1 className="text-3xl md:text-5xl font-serif tracking-widest uppercase mb-2 leading-tight">
+                        <div className="relative z-10 flex flex-col items-center">
+                            <img src="./logo.svg" alt="Piazza Marconi Cafe Logo" className="w-48 md:w-64 mb-6 drop-shadow-2xl hover:scale-105 transition-transform duration-500 rounded-full" />
+                            <h1 className="text-3xl md:text-5xl font-serif tracking-widest uppercase mb-2 leading-tight text-white">
                                 Piazza Marconi Cafe
                             </h1>
                             <p className="text-sm md:text-base font-serif italic text-yellow-300 mb-6 drop-shadow-md">
                                 L'arte del gusto siciliano, dal primo morso all'ultimo brindisi.
                             </p>
-=======
-                        <div className="relative z-10 flex flex-col items-center">
-                            <img src="./logo.svg" alt="Piazza Marconi Cafe Logo" className="w-48 md:w-64 mb-6 drop-shadow-2xl hover:scale-105 transition-transform duration-500 rounded-full" />
->>>>>>> feature/vector-logo
                             
                             <div className="flex flex-col items-center gap-2">
                                 <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-xs tracking-widest uppercase opacity-90">
@@ -385,30 +390,13 @@
                                     style={{ backgroundColor: activeTab === tab ? themes[tab].color : 'transparent' }}
                                 >
                                     <i className={`fa-solid ${themes[tab].icon} text-xl md:text-2xl`}></i>
-                                    <span className="font-bold uppercase tracking-tighter text-[10px] md:text-xs whitespace-nowrap">{tab}</span>
+                                    <span className="font-bold uppercase tracking-tighter text-[10px] md:text-xs whitespace-nowrap">{tabLabels[tab] || tab}</span>
                                 </button>
                             ))}
                         </div>
                     </nav>
 
                     <main className="max-w-3xl mx-auto mt-12 px-4">
-<<<<<<< HEAD
-                        {activeTab === 'panini' && (
-                            <div className="mb-8 p-5 bg-gradient-to-r from-orange-100 to-amber-50 rounded-3xl border border-amber-200 shadow-md flex flex-col md:flex-row items-center gap-4">
-                                <div className="bg-white p-3 rounded-full shadow-sm text-amber-600">
-                                    <i className="fa-solid fa-martini-glass-citrus text-2xl"></i>
-                                </div>
-                                <div className="flex-1 text-center md:text-left">
-                                    <h3 className="font-bold text-amber-900 uppercase tracking-widest text-sm mb-1">Aperitivo & Finger Food?</h3>
-                                    <p className="text-amber-800 text-xs italic">Non c'è panino senza un buon fritto. Chiedi al personale i nostri Taglieri e Mix Croccanti per iniziare al meglio.</p>
-                                </div>
-                                <button className="bg-amber-500 text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors shadow-sm">
-                                    Aggiungi Sfizio
-                                </button>
-                            </div>
-                        )}
-                        {menuData[activeTab].map((section, idx) => (
-=======
                         {isLoadingMenu ? (
                             <div className="animate-pulse flex flex-col gap-14">
                                 {[1, 2].map(i => (
@@ -423,8 +411,107 @@
                                     </div>
                                 ))}
                             </div>
-                        ) : menuData[activeTab].map((section, idx) => (
->>>>>>> feature/vector-logo
+                        ) : activeTab === 'intolleranze' ? (
+                            <section className="mb-14 bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm">
+                                <div className="flex flex-col mb-6">
+                                    <h2 className="text-2xl font-serif text-[#0c2461] italic">Intolleranze & Scelte Alimentari</h2>
+                                    <p className="text-xs text-gray-400 uppercase tracking-widest">Sicurezza e Gusto senza compromessi</p>
+                                    <div className="h-0.5 w-12 mt-2 bg-[#27ae60]"></div>
+                                </div>
+
+                                <p className="text-sm text-gray-600 mb-8 leading-relaxed">
+                                    Al Piazza Marconi Cafe crediamo che tutti debbano godere dell'autentica ospitalità siciliana. Abbiamo progettato le nostre preparazioni per garantire la massima sicurezza a chi offre di intolleranze alimentari o segue specifiche scelte etiche. Il nostro personale è formato e a tua completa disposizione per qualsiasi chiarimento.
+                                </p>
+
+                                <div className="grid gap-6 md:gap-8">
+                                    {/* Granite Card */}
+                                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/20 hover:shadow-md transition-all">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-full flex items-center justify-center">
+                                                <i className="fa-solid fa-ice-cream text-lg"></i>
+                                            </div>
+                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Granite Artigianali</h3>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">100% Sicure</span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 font-bold mb-2">
+                                            100% Senza Glutine e Senza Lattosio.
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic font-light leading-relaxed">
+                                            Le nostre famose granite tradizionali siciliane sono preparate esclusivamente con frutta fresca, acqua e zucchero, prive di qualsiasi contaminazione da glutine o derivati del latte.
+                                        </p>
+                                    </div>
+
+                                    {/* Gelati Card */}
+                                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/20 hover:shadow-md transition-all">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-full flex items-center justify-center">
+                                                <i className="fa-solid fa-snowflake text-lg"></i>
+                                            </div>
+                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Gelati</h3>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Gluten Free</span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 font-bold mb-2">
+                                            100% Senza Glutine (Gusti selezionati disponibili anche Senza Lattosio).
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic font-light leading-relaxed">
+                                            Tutti i nostri gelati artigianali sono privi di glutine. Offriamo inoltre una raffinata selezione di gusti a base d'acqua o frutta totalmente privi di lattosio per soddisfare ogni esigenza.
+                                        </p>
+                                    </div>
+
+                                    {/* Brioches Card */}
+                                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/20 hover:shadow-md transition-all">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-full flex items-center justify-center">
+                                                <i className="fa-solid fa-bread-slice text-lg"></i>
+                                            </div>
+                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Brioches</h3>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Opzioni Dedicate</span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 font-bold mb-2">
+                                            Brioches dedicate disponibili in versione Senza Glutine e Senza Lattosio.
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic font-light leading-relaxed">
+                                            Non rinunciare alla colazione siciliana. Disponiamo di brioches appositamente confezionate per evitare qualsiasi tipo di contaminazione crociata, soffici ed eccezionali sia con granita che con gelato.
+                                        </p>
+                                    </div>
+
+                                    {/* Panini Card */}
+                                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/20 hover:shadow-md transition-all">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-full flex items-center justify-center">
+                                                <i className="fa-solid fa-burger text-lg"></i>
+                                            </div>
+                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Panini d'Autore</h3>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Pane Alternativo</span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 font-bold mb-2">
+                                            Disponibilità di opzioni di pane specializzato Senza Glutine.
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic font-light leading-relaxed">
+                                            Qualsiasi panino d'autore nel nostro menù può essere preparato utilizzando dell'ottimo pane gluten-free certificato, tostato separatamente per garantirti un pasto sicuro.
+                                        </p>
+                                    </div>
+
+                                    {/* Piatti Cucina Card */}
+                                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/20 hover:shadow-md transition-all">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-full flex items-center justify-center">
+                                                <i className="fa-solid fa-utensils text-lg"></i>
+                                            </div>
+                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Piatti della Cucina</h3>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Veg & Vegan</span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 font-bold mb-2">
+                                            Opzioni dedicate per diete Vegetariane e Vegane.
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic font-light leading-relaxed">
+                                            Dalle insalate sfiziose ai bruschettoni ricchi, proponiamo alternative interamente vegetali o vegetariane preparate al momento con materie prime freschissime di stagione.
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+                        ) : (
+                            menuData[activeTab].map((section, idx) => (
                             <section key={idx} className="mb-14">
                                 <div className="flex flex-col mb-6">
                                     <h2 className="text-2xl font-serif text-[#0c2461] italic">{section.title}</h2>
