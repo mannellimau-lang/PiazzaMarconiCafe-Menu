@@ -5,8 +5,11 @@ import { ArrowRight, Users } from "lucide-react";
 
 export default function PartnershipBanner() {
   return (
-    <section className="bg-black py-24 relative overflow-hidden border-t border-white/10">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black z-0" />
+    <section 
+      className="bg-black py-24 relative overflow-hidden border-t border-white/10 bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('/media/poster_finale.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black/70 z-0" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="bg-[#111] rounded-3xl border border-white/10 p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl">
@@ -39,7 +42,7 @@ export default function PartnershipBanner() {
           <div className="flex-1 w-full relative min-h-[300px] rounded-2xl overflow-hidden border border-white/10">
              <div 
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/media/esterno_bar.jpg')" }}
+              style={{ backgroundImage: "url('/media/lavora_con_noi.jpg')" }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#111] via-[#111]/80 to-transparent" />
           </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,15 +64,19 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          <GoogleTranslate />
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
-          className="lg:hidden text-white p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex items-center gap-4 lg:hidden">
+          <GoogleTranslate />
+          <button 
+            className="text-white p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

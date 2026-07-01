@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 const images = [
   "/media/catering/041a4db7-0dd4-4f61-b41a-d995e42e4960.JPG",
-  "/media/catering/04fcf12a-3522-4b2a-a9d0-0d4383fdbd74.JPG",
-  "/media/catering/e54b316c-695e-44ac-8176-3decbd61788f.JPG",
+  "/media/catering/catering.jpg",
+  "/media/catering/catering_2.jpg",
   "/media/catering/63df7dcc-18c2-4c2b-beaf-58d8a1f5f494.JPG",
   "/media/catering/72b52df0-8e2a-4053-915c-f6e5212fa862.JPG",
   "/media/catering/e4e74493-8a61-4f77-bad5-22d7d93aba08.JPG",

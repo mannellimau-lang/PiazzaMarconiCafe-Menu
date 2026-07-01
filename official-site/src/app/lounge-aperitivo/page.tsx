@@ -16,13 +16,13 @@ export default function LoungeAperitivoPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10" />
           <img 
-            src="/media/esterno_bar.jpg" 
+            src="/media/dal_mattino_alla_sera.jpg" 
             alt="Piazza Marconi Lounge" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-contain opacity-70"
           />
         </div>
 
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto mt-20">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto mt-20 opacity-90">
           <span className="text-accent uppercase tracking-[0.4em] font-bold text-sm mb-6 block drop-shadow-md">
             Il Gusto ad Ogni Ora
           </span>
@@ -103,12 +103,10 @@ export default function LoungeAperitivoPage() {
             Che sia per un pranzo veloce, una cena sfiziosa o semplicemente per la tua granita preferita con gli amici, prenota il tuo tavolo.
           </p>
           <a
-            href="https://wa.me/393295405941"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center justify-center bg-[#25D366] text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-lg"
+            href="tel:+393295405941"
+            className="inline-flex items-center justify-center bg-white text-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-lg"
           >
-            Prenota via WhatsApp
+            Chiama per Prenotare: +39 329 5405941
           </a>
         </div>
       </section>

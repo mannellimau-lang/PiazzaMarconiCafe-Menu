@@ -21,9 +21,9 @@ export default function IntolleranzePage() {
     },
     {
       title: "I Nostri Gelati",
-      badge: "Gluten Free",
-      desc: "100% Senza Glutine; gusti selezionati anche Senza Lattosio.",
-      details: "Tutta la produzione dei nostri gelati artigianali è rigorosamente Gluten-Free. Per gli intolleranti al lattosio o per chi segue una dieta vegana, proponiamo quotidianamente gusti alla frutta e varianti a base d'acqua straordinariamente cremose.",
+      badge: "Lactose Free",
+      desc: "Gusti selezionati disponibili Senza Lattosio.",
+      details: "Per gli intolleranti al lattosio o per chi segue una dieta vegana, proponiamo quotidianamente gusti alla frutta e varianti a base d'acqua totalmente prive di lattosio ma straordinariamente cremose, mantenendo il sapore tipico del vero artigianale.",
       icon: Cookie,
       color: "text-blue-400",
       bgColor: "bg-blue-500/10",
@@ -33,7 +33,7 @@ export default function IntolleranzePage() {
       title: "Brioches col Tuppo",
       badge: "Opzioni Dedicate",
       desc: "Disponibili varianti dedicate Senza Glutine e Senza Lattosio.",
-      details: "La colazione siciliana è sacra per tutti. Offriamo eccezionali brioches artigianali confezionate singolarmente all'origine per azzerare qualsiasi rischio di contatto, ideali da accompagnare alla tua granita preferita o da farcire con il gelato.",
+      details: "La colazione siciliana è sacra per tutti. Offriamo eccezionali brioches artigianali senza glutine preparate con la massima cura, ideali da accompagnare alla tua granita preferita o da farcire con il gelato.",
       icon: ShieldCheck,
       color: "text-amber-400",
       bgColor: "bg-amber-500/10",
@@ -120,7 +120,7 @@ export default function IntolleranzePage() {
           <div className="flex-1 text-center md:text-left">
             <h4 className="font-serif text-lg mb-2">Avviso Importante per gli Ospiti</h4>
             <p className="text-xs md:text-sm text-gray-400 font-light leading-relaxed">
-              Sebbene poniamo la massima attenzione nell'evitare contaminazioni incrociate per i prodotti non confezionati singolarmente, le nostre cucine manipolano diversi allergeni. In caso di celiachia o allergie severe, ti invitiamo a comunicarlo tempestivamente al personale di sala prima di effettuare l'ordine.
+              Sebbene poniamo la massima attenzione nell'evitare contaminazioni incrociate, le nostre cucine manipolano diversi allergeni. In caso di celiachia o allergie severe, ti invitiamo a comunicarlo tempestivamente al personale di sala prima di effettuare l'ordine.
             </p>
           </div>
           <Link 

@@ -8,7 +8,7 @@ export default function Footer() {
       {/* Background Image with Dark Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-        style={{ backgroundImage: "url('/media/esterno_bar.jpg')", filter: "grayscale(50%)" }}
+        style={{ backgroundImage: "url('/media/poster_finale.jpg')", filter: "grayscale(50%)" }}
       />
       <div className="absolute inset-0 bg-black/60" />
 
