@@ -25,6 +25,15 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C1VQEM2NDQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-C1VQEM2NDQ');
+    </script>
 </head>
 <body class="bg-[#faf9f6] text-[#2d3436]">
     <a href="/" class="fixed top-4 left-4 z-[999] bg-[#d4af37] text-white px-5 py-2.5 rounded-full font-serif text-sm shadow-xl border border-[#b28a2a] hover:bg-[#b28a2a] hover:scale-105 transition-all flex items-center gap-2 backdrop-blur-sm bg-opacity-90">
@@ -57,7 +66,7 @@
                             { name: "Panino Porchetta", desc: "Farina 0, porchetta, primo sale pepe rosso, funghi semi piccanti sott'olio", price: "4.50" },
                             { name: "Panino Pancetta", desc: "Farina 0, pancetta, primo sale pepe nero, filetti di melanzane sott'olio", price: "4.50" },
                             { name: "Panino Spavaldo", desc: "Farina 0, speck, emmenthal, paté di funghi", price: "4.50" },
-                            { name: "Panino Piazza Marconi", desc: "Farina 0, speck, Filadelfia, paté d'olive nere, rucola, pomodoro", price: "4.50", highlightTier: 1, tags: ["Signature"] },
+                            { name: "Panino Piazza Marconi", desc: "Farina 0, speck, Filadelfia, paté d'olive nere, rucola, pomodoro", price: "4.50", highlightTier: 1, tags: ["Signature", "Best Seller"], signatureDesc: "Il panino che porta il nostro nome. L'equilibrio perfetto tra il gusto deciso dello speck, la freschezza della rucola e la morbidezza del formaggio." },
                             { name: "Panino Tonno", desc: "Farina 0, tonno, mozzarella, pomodoro, olio, origano e sale", price: "4.50" },
                             { name: "Panino Hamburger di Vitello", desc: "Farina 0, hamburger, bacon, sottiletta cheddar, lattuga, salse a scelta", price: "6.50", highlightTier: 1, tags: ["Premium"] },
                             { name: "Panino Hamburger di Vitello Barbecue", desc: "Farina 0, hamburger, mozzarella, pomodoro, funghi piccanti, salsa barbecue", price: "6.50" }
@@ -125,7 +134,7 @@
                             { name: "Fragola", desc: "Fragole, acqua e zucchero", p1: "2.70", p2: "2.20" },
                             { name: "Caffè", desc: "Caffè espresso e zucchero", p1: "2.70", p2: "2.20" },
                             { name: "Cioccolato", desc: "Cacao amaro, acqua e zucchero", p1: "2.70", p2: "2.20" },
-                            { name: "Mandorla", desc: "Mandorla, zucchero e acqua", p1: "3.30", p2: "2.80", highlightTier: 2, tags: ["Popular"] },
+                            { name: "Mandorla", desc: "Mandorla, zucchero e acqua", p1: "3.30", p2: "2.80", highlightTier: 1, tags: ["Signature", "Best Seller"], signatureDesc: "Preparata artigianalmente con mandorle siciliane selezionate. Un procedimento attento e lento per mantenere intatti gli oli essenziali e offrirti il sapore più autentico della Sicilia in una consistenza setosa e inconfondibile." },
                             { name: "Pistacchio", desc: "Pistacchi, acqua e zucchero", p1: "4.80", p2: "3.90", highlightTier: 1, tags: ["Premium"] },
                             { name: "Arancia Rossa", desc: "Succo arancia rossa e zucchero", p1: "3.30", p2: "2.80" },
                             { name: "Cantalupo", desc: "Melone cantalupo, acqua e zucchero", p1: "3.30", p2: "2.80" },
@@ -249,6 +258,22 @@
                         if (allergens && allergens.length > 0) item.allergens = allergens.map(a => a === '2007' ? '7' : a);
                         if (highlightTier) item.highlightTier = highlightTier;
                         if (tags && tags.length > 0) item.tags = tags;
+                        
+                        // Hardcode signature descriptions for TSV fetched data just in case
+                        if (name === "Mandorla" && section.isGranite) {
+                            item.signatureDesc = "Preparata artigianalmente con mandorle siciliane selezionate. Un procedimento attento e lento per mantenere intatti gli oli essenziali e offrirti il sapore più autentico della Sicilia in una consistenza setosa e inconfondibile.";
+                            item.highlightTier = 1;
+                            if (!item.tags) item.tags = [];
+                            if (!item.tags.includes("Signature")) item.tags.push("Signature");
+                            if (!item.tags.includes("Best Seller")) item.tags.push("Best Seller");
+                        }
+                        if (name === "Panino Piazza Marconi") {
+                            item.signatureDesc = "Il panino che porta il nostro nome. L'equilibrio perfetto tra il gusto deciso dello speck, la freschezza della rucola e la morbidezza del formaggio.";
+                            item.highlightTier = 1;
+                            if (!item.tags) item.tags = [];
+                            if (!item.tags.includes("Signature")) item.tags.push("Signature");
+                            if (!item.tags.includes("Best Seller")) item.tags.push("Best Seller");
+                        }
                         
                         section.items.push(item);
                     }
@@ -448,13 +473,13 @@
                                                 <i className="fa-solid fa-snowflake text-lg"></i>
                                             </div>
                                             <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase tracking-wider">Gelati</h3>
-                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Gluten Free</span>
+                                            <span className="ml-auto text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-2 py-1 rounded-md uppercase">Lactose Free</span>
                                         </div>
                                         <p className="text-sm text-gray-700 font-bold mb-2">
-                                            100% Senza Glutine (Gusti selezionati disponibili anche Senza Lattosio).
+                                            Gusti selezionati disponibili Senza Lattosio.
                                         </p>
                                         <p className="text-xs text-gray-500 italic font-light leading-relaxed">
-                                            Tutti i nostri gelati artigianali sono privi di glutine. Offriamo inoltre una raffinata selezione di gusti a base d'acqua o frutta totalmente privi di lattosio per soddisfare ogni esigenza.
+                                            Offriamo una raffinata selezione di gusti a base d'acqua o frutta, totalmente privi di lattosio e ideali per intolleranti, mantenendo tutta la cremosità e il sapore tipico del vero artigianale.
                                         </p>
                                     </div>
 
@@ -559,9 +584,9 @@
                                                 if (item.isHighlight) {
                                                     cardStyle = "bg-orange-50/40 border-[#e67e22]/50 shadow-md ring-1 ring-[#e67e22]/20";
                                                 } else if (item.highlightTier === 1) {
-                                                    cardStyle = "bg-gradient-to-br from-amber-50 to-white border-amber-200 shadow-md ring-1 ring-amber-400/30";
-                                                    tagStyle = "bg-amber-100 text-amber-800 border border-amber-200";
-                                                    iconClass = "fa-solid fa-award";
+                                                    cardStyle = "bg-gradient-to-br from-[#fffdf0] via-white to-amber-50 border-amber-300 shadow-[0_8px_30px_rgb(212,175,55,0.2)] ring-2 ring-amber-400/50 scale-[1.01] relative overflow-hidden z-10";
+                                                    tagStyle = "bg-gradient-to-r from-amber-400 to-orange-500 text-white border-none shadow-md font-extrabold uppercase tracking-widest";
+                                                    iconClass = "fa-solid fa-crown text-white";
                                                 } else if (item.highlightTier === 2) {
                                                     cardStyle = "bg-blue-50/30 border-blue-200 shadow-sm";
                                                     tagStyle = "bg-blue-100 text-blue-700 border border-blue-200";
@@ -584,6 +609,16 @@
                                                                     ))}
                                                                 </div>
                                                                 {item.desc && <p className="text-gray-400 text-xs md:text-sm italic">{item.desc}</p>}
+                                                                {item.signatureDesc && (
+                                                                    <div className="mt-3 bg-gradient-to-r from-amber-50 to-orange-50/30 p-3.5 rounded-2xl border border-amber-200 flex items-start gap-3 shadow-inner">
+                                                                        <div className="bg-white p-1.5 rounded-full shadow-sm">
+                                                                            <i className="fa-solid fa-star text-amber-500 text-xs md:text-sm"></i>
+                                                                        </div>
+                                                                        <p className="text-amber-900 text-[11px] md:text-xs font-semibold italic leading-relaxed pt-0.5">
+                                                                            {item.signatureDesc}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                             
                                                             <div className="text-right whitespace-nowrap">
