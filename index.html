@@ -20,13 +20,25 @@
     <script src="https://unpkg.com/@babel/standalone@7.23.6/babel.min.js"></script>
 
     <style>
-        body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        :root {
+            --bg: oklch(1.000 0.000 0);
+            --surface: oklch(0.98 0.01 270);
+            --ink: oklch(0.15 0.05 270);
+            --primary: oklch(0.45 0.18 270);
+            --accent: oklch(0.65 0.15 45);
+            --muted: oklch(0.55 0.05 270);
+        }
+        body { 
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
+            background-color: var(--bg);
+            color: var(--ink);
+        }
         .font-serif { font-family: 'Playfair Display', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#faf9f6] text-[#2d3436]">
+<body class="antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -260,10 +272,10 @@
             }, []);
 
             const themes = {
-                panini: { color: '#c0392b', icon: 'fa-burger' },
-                cucina: { color: '#e67e22', icon: 'fa-utensils' },
-                gelati: { color: '#3498db', icon: 'fa-ice-cream' },
-                dolci: { color: '#00d2d3', icon: 'fa-mug-hot' }
+                panini: { color: 'var(--primary)', icon: 'fa-burger' },
+                cucina: { color: 'var(--accent)', icon: 'fa-utensils' },
+                gelati: { color: 'var(--primary)', icon: 'fa-ice-cream' },
+                dolci: { color: 'var(--accent)', icon: 'fa-mug-hot' }
             };
 
             const fetchWithRetry = async (url, options, retries = 5) => {
@@ -314,49 +326,36 @@
             };
 
             return (
-                <div className="min-h-screen pb-10">
-                    <header className="bg-[#0c2461] text-white pt-10 pb-16 px-6 text-center relative overflow-hidden">
-                        <div className="absolute inset-0 opacity-5 pointer-events-none">
-                            <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/></pattern><rect width="100%" height="100%" fill="url(#grid)"/></svg>
-                        </div>
-                        
-                        <div className="relative z-10">
-                            <h1 className="text-3xl md:text-5xl font-serif tracking-widest uppercase mb-4 leading-tight">
-                                Piazza Marconi Cafe
-                            </h1>
-                            
-                            <div className="flex flex-col items-center gap-2">
-                                <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-[10px] tracking-widest uppercase opacity-90">
-                                    <a href="https://www.google.com/maps/search/?api=1&query=Piazza+Marconi+Cafe,+Caltanissetta" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-yellow-400 transition-colors">
-                                        <i className="fa-solid fa-location-dot text-yellow-400"></i> Piazza G. Marconi 20, CL
-                                    </a>
-                                    <a href="tel:+393295405941" className="flex items-center gap-1 hover:text-yellow-400 transition-colors">
-                                        <i className="fa-solid fa-phone text-yellow-400"></i> +39 329 5405941
-                                    </a>
-                                </div>
-                                <div className="flex gap-4 mt-3">
-                                    <a href="https://instagram.com/piazzamarconicafe" target="_blank" rel="noopener noreferrer" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all">
-                                        <i className="fa-brands fa-instagram text-base"></i>
-                                    </a>
-                                    <div className="bg-white/10 px-3 py-1 rounded-full flex items-center gap-1 text-[9px] uppercase tracking-tighter">
-                                        <i className="fa-solid fa-star text-yellow-400"></i> Best in Caltanissetta
-                                    </div>
-                                </div>
+                <div className="min-h-screen pb-10" style={{ backgroundColor: 'var(--bg)' }}>
+                    <header className="pt-16 pb-12 px-6 text-center border-b" style={{ borderColor: 'var(--surface)' }}>
+                        <h1 className="text-4xl md:text-5xl font-serif mb-4" style={{ color: 'var(--primary)' }}>
+                            Piazza Marconi Cafe
+                        </h1>
+                        <div className="flex flex-col items-center gap-3">
+                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs uppercase tracking-widest" style={{ color: 'var(--muted)' }}>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Piazza+Marconi+Cafe,+Caltanissetta" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                                    <i className="fa-solid fa-location-dot"></i> Piazza G. Marconi 20, CL
+                                </a>
+                                <a href="tel:+393295405941" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                                    <i className="fa-solid fa-phone"></i> +39 329 5405941
+                                </a>
                             </div>
                         </div>
                     </header>
 
-                    <nav className="flex justify-center -mt-8 relative z-20 px-4">
-                        <div className="bg-white rounded-2xl shadow-xl p-1.5 flex gap-1 w-full max-w-xl border border-gray-100 overflow-x-auto hide-scrollbar">
+                    <nav className="sticky top-0 z-20 px-4 py-4 border-b backdrop-blur-md" style={{ backgroundColor: 'color-mix(in oklch, var(--bg) 90%, transparent)', borderColor: 'var(--surface)' }}>
+                        <div className="max-w-3xl mx-auto flex gap-6 overflow-x-auto hide-scrollbar justify-start md:justify-center">
                             {Object.keys(themes).map((tab) => (
                                 <button 
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`flex-1 py-3 px-2 min-w-[70px] rounded-xl flex flex-col items-center gap-1 transition-all duration-500 ${activeTab === tab ? 'text-white shadow-lg' : 'text-gray-400 hover:bg-gray-50'}`}
-                                    style={{ backgroundColor: activeTab === tab ? themes[tab].color : 'transparent' }}
+                                    className={`py-2 px-1 flex items-center gap-2 transition-all duration-300 border-b-2`}
+                                    style={{ 
+                                        borderColor: activeTab === tab ? themes[tab].color : 'transparent',
+                                        color: activeTab === tab ? 'var(--ink)' : 'var(--muted)'
+                                    }}
                                 >
-                                    <i className={`fa-solid ${themes[tab].icon} text-lg`}></i>
-                                    <span className="font-bold uppercase tracking-tighter text-[9px] md:text-[10px] whitespace-nowrap">{tab}</span>
+                                    <span className="font-medium uppercase tracking-widest text-xs md:text-sm whitespace-nowrap">{tab}</span>
                                 </button>
                             ))}
                         </div>
@@ -364,102 +363,82 @@
 
                     <main className="max-w-3xl mx-auto mt-12 px-4">
                         {menuData[activeTab].map((section, idx) => (
-                            <section key={idx} className="mb-14">
-                                <div className="flex flex-col mb-6">
-                                    <h2 className="text-2xl font-serif text-[#0c2461] italic">{section.title}</h2>
-                                    {section.subtitle && <p className="text-xs text-gray-400 uppercase tracking-widest">{section.subtitle}</p>}
-                                    <div className="h-0.5 w-12 mt-2" style={{ backgroundColor: themes[activeTab].color }}></div>
+                            <section key={idx} className="mb-16">
+                                <div className="flex flex-col mb-8 text-center items-center">
+                                    <h2 className="text-3xl font-serif" style={{ color: 'var(--primary)' }}>{section.title}</h2>
+                                    {section.subtitle && <p className="text-sm mt-3 uppercase tracking-widest" style={{ color: 'var(--muted)' }}>{section.subtitle}</p>}
+                                    <div className="h-px w-16 mt-6" style={{ backgroundColor: 'var(--accent)' }}></div>
                                 </div>
                                 
-                                <div className="grid gap-4 md:gap-5">
+                                <div className="flex flex-col gap-6">
                                     {section.items.map((item, i) => {
-                                        let cardStyle = "bg-white border-gray-100 shadow-sm";
-                                        let tagStyle = "bg-yellow-100 text-yellow-700";
-                                        let iconClass = null;
-
-                                        if (item.isHighlight) {
-                                            cardStyle = "bg-orange-50/40 border-[#e67e22]/50 shadow-md ring-1 ring-[#e67e22]/20";
-                                        } else if (item.highlightTier === 1) {
-                                            cardStyle = "bg-gradient-to-br from-amber-50 to-white border-amber-200 shadow-md ring-1 ring-amber-400/30";
-                                            tagStyle = "bg-amber-100 text-amber-800 border border-amber-200";
-                                            iconClass = "fa-solid fa-award";
-                                        } else if (item.highlightTier === 2) {
-                                            cardStyle = "bg-blue-50/30 border-blue-200 shadow-sm";
-                                            tagStyle = "bg-blue-100 text-blue-700 border border-blue-200";
-                                            iconClass = "fa-solid fa-arrow-trend-up";
+                                        let highlightBadge = null;
+                                        if (item.tags && item.tags.length > 0) {
+                                            highlightBadge = (
+                                                <span className="text-[10px] px-2 py-0.5 rounded-sm uppercase tracking-widest font-bold" style={{ backgroundColor: 'var(--surface)', color: 'var(--primary)' }}>
+                                                    {item.tags[0]}
+                                                </span>
+                                            );
                                         }
 
                                         return (
-                                            <div key={i} className={`group p-5 rounded-3xl border ${cardStyle} hover:shadow-xl transition-all duration-300 relative overflow-hidden`}>
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <div className="flex flex-col gap-1 pr-4">
-                                                        <div className="flex flex-wrap items-center gap-2">
-                                                            <h3 className="font-bold text-base md:text-lg text-gray-800 uppercase leading-none">
-                                                                {item.name}
-                                                            </h3>
-                                                            {item.tags?.map(tag => (
-                                                                <span key={tag} className={`flex items-center gap-1 text-[8px] md:text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-tighter shadow-sm ${tagStyle}`}>
-                                                                    {iconClass && <i className={iconClass + " text-[10px]"}></i>}
-                                                                    {tag}
-                                                                </span>
+                                            <div key={i} className="flex justify-between items-start py-4 border-b group" style={{ borderColor: 'var(--surface)' }}>
+                                                <div className="flex flex-col gap-2 pr-6 max-w-[75%]">
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <h3 className="text-lg font-medium" style={{ color: 'var(--ink)' }}>
+                                                            {item.name}
+                                                        </h3>
+                                                        {highlightBadge}
+                                                    </div>
+                                                    {item.desc && <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{item.desc}</p>}
+                                                    {item.allergens && (
+                                                        <div className="flex gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            {item.allergens.map(a => (
+                                                                <span key={a} className="text-[10px]" style={{ color: 'var(--muted)' }}>[{a}]</span>
                                                             ))}
                                                         </div>
-                                                        {item.desc && <p className="text-gray-400 text-xs md:text-sm italic">{item.desc}</p>}
-                                                    </div>
-                                                    
-                                                    <div className="text-right whitespace-nowrap">
-                                                        {section.isGranite && (item.p1 || item.p2) ? (
-                                                            <div className="flex gap-3">
-                                                                <div className="flex flex-col items-end">
-                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Intera</span>
-                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p1}</span>
-                                                                </div>
-                                                                <div className="flex flex-col items-end border-l border-gray-100 pl-3">
-                                                                    <span className="text-[8px] text-gray-300 uppercase font-bold">Mezza</span>
-                                                                    <span className="text-[#0c2461] font-bold text-sm">€{item.p2}</span>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <span className="font-black text-[#0c2461] text-base md:text-lg">€{item.price}</span>
-                                                        )}
-                                                    </div>
+                                                    )}
                                                 </div>
                                                 
-                                                {item.allergens && (
-                                                    <div className="flex gap-1 mt-3 opacity-40 group-hover:opacity-100 transition-opacity">
-                                                        {item.allergens.map(a => (
-                                                            <div key={a} className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center text-[8px] font-bold">{a}</div>
-                                                        ))}
-                                                    </div>
-                                                )}
+                                                <div className="text-right flex-shrink-0">
+                                                    {section.isGranite && (item.p1 || item.p2) ? (
+                                                        <div className="flex gap-4">
+                                                            <div className="flex flex-col items-end">
+                                                                <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--muted)' }}>Int</span>
+                                                                <span className="text-base" style={{ color: 'var(--ink)' }}>€{item.p1}</span>
+                                                            </div>
+                                                            <div className="flex flex-col items-end border-l pl-4" style={{ borderColor: 'var(--surface)' }}>
+                                                                <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--muted)' }}>Mezza</span>
+                                                                <span className="text-base" style={{ color: 'var(--ink)' }}>€{item.p2}</span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-lg font-medium" style={{ color: 'var(--ink)' }}>€{item.price}</span>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
                                 </div>
                                 
                                 {(section.addons || section.extraOptions) && (
-                                    <div className="mt-4 p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <i className="fa-solid fa-plus text-[#0c2461] text-sm"></i>
-                                            <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#0c2461]">Personalizzazione & Aggiunte</h4>
-                                        </div>
-                                        
+                                    <div className="mt-8 p-6 rounded-lg" style={{ backgroundColor: 'var(--surface)' }}>
+                                        <h4 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--primary)' }}>Personalizzazione & Aggiunte</h4>
                                         <div className="flex flex-col gap-3">
                                             {section.extraOptions && (
-                                                <div className="flex flex-wrap gap-2">
+                                                <div className="flex flex-wrap gap-4">
                                                     {section.extraOptions.map((opt, i) => (
-                                                        <span key={i} className="text-[10px] uppercase font-bold bg-blue-50 text-blue-800 px-3 py-1.5 rounded-lg border border-blue-100">
-                                                            {opt.name} <span className="opacity-60 ml-1">+€{opt.price}</span>
+                                                        <span key={i} className="text-xs" style={{ color: 'var(--ink)' }}>
+                                                            {opt.name} <span className="font-bold ml-1" style={{ color: 'var(--muted)' }}>+€{opt.price}</span>
                                                         </span>
                                                     ))}
                                                 </div>
                                             )}
-                                            
                                             {section.addons && (
-                                                <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
+                                                <div className="flex flex-wrap gap-4 pt-3 border-t" style={{ borderColor: 'color-mix(in oklch, var(--ink) 10%, transparent)' }}>
                                                     {section.addons.map((addon, i) => (
-                                                        <span key={i} className="text-[10px] uppercase bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg border border-gray-100">
-                                                            {addon.name} <span className="font-bold text-[#e67e22] ml-1">+€{addon.price}</span>
+                                                        <span key={i} className="text-xs" style={{ color: 'var(--ink)' }}>
+                                                            {addon.name} <span className="font-bold ml-1" style={{ color: 'var(--muted)' }}>+€{addon.price}</span>
                                                         </span>
                                                     ))}
                                                 </div>
@@ -470,67 +449,66 @@
                             </section>
                         ))}
 
-                        <div className="mt-20 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                            <div className="flex items-center gap-2 mb-4 text-[#0c2461]">
-                                <i className="fa-solid fa-shield-halved text-lg"></i>
-                                <h4 className="font-bold uppercase text-xs tracking-widest">Informazioni al Consumatore</h4>
-                            </div>
-                            <p className="text-[9px] text-gray-400 leading-relaxed uppercase">
-                                * I prodotti contrassegnati possono essere surgelati all'origine o abbattuti in loco per garantire la sicurezza alimentare. 
-                                Per consultare la tabella completa degli allergeni (1-14) rivolgersi al personale di sala. 
+                        <div className="mt-20 p-8 text-center">
+                            <h4 className="font-bold uppercase text-xs tracking-widest mb-4" style={{ color: 'var(--muted)' }}>Info Consumatore</h4>
+                            <p className="text-[10px] leading-relaxed uppercase max-w-xl mx-auto" style={{ color: 'var(--muted)' }}>
+                                * I prodotti contrassegnati possono essere surgelati all'origine o abbattuti in loco. 
+                                Per la tabella degli allergeni rivolgersi al personale. 
                                 Prezzi comprensivi di IVA e coperto.
                             </p>
                         </div>
                     </main>
 
-                    <footer className="text-center mt-12 py-8 px-10 border-t border-gray-100">
-                        <p className="text-xs uppercase tracking-widest font-bold text-[#0c2461]">Piazza Marconi Cafe</p>
-                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Sicilian Hospitality & Quality since 2015</p>
+                    <footer className="text-center mt-12 py-12 border-t" style={{ borderColor: 'var(--surface)' }}>
+                        <p className="text-xs uppercase tracking-widest font-bold" style={{ color: 'var(--primary)' }}>Piazza Marconi Cafe</p>
+                        <p className="text-[10px] mt-2 uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Sicilian Hospitality & Quality since 2015</p>
                     </footer>
 
                     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
                         {isAiOpen && (
-                            <div className="bg-white border border-gray-200 shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden flex flex-col h-[400px]">
-                                <div className="bg-[#0c2461] text-white p-3 flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <i className="fa-solid fa-robot"></i>
-                                        <span className="font-bold text-sm tracking-widest uppercase">AI Assistant</span>
-                                    </div>
-                                    <button onClick={() => setIsAiOpen(false)} className="hover:text-gray-300 transition-colors">
+                            <div className="shadow-2xl rounded-xl w-80 mb-4 flex flex-col h-[400px] overflow-hidden" style={{ backgroundColor: 'var(--bg)', border: '1px solid var(--surface)' }}>
+                                <div className="p-4 flex justify-between items-center border-b" style={{ borderColor: 'var(--surface)' }}>
+                                    <span className="font-bold text-xs tracking-widest uppercase" style={{ color: 'var(--primary)' }}>AI Assistant</span>
+                                    <button onClick={() => setIsAiOpen(false)} style={{ color: 'var(--muted)' }} className="hover:opacity-70 transition-opacity">
                                         <i className="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
-                                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 bg-gray-50">
+                                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4" style={{ backgroundColor: 'var(--bg)' }}>
                                     {aiMessages.map((msg, idx) => (
-                                        <div key={idx} className={`p-3 rounded-xl text-xs md:text-sm shadow-sm ${msg.role === 'user' ? 'bg-[#e67e22] text-white self-end ml-6' : 'bg-white border border-gray-200 text-gray-700 self-start mr-6'}`}>
+                                        <div key={idx} className={`p-4 rounded-lg text-sm ${msg.role === 'user' ? 'self-end ml-8' : 'self-start mr-8'}`} style={{ 
+                                            backgroundColor: msg.role === 'user' ? 'var(--primary)' : 'var(--surface)',
+                                            color: msg.role === 'user' ? 'var(--bg)' : 'var(--ink)'
+                                        }}>
                                             {msg.content}
                                         </div>
                                     ))}
                                     {isAiLoading && (
-                                        <div className="bg-white border border-gray-200 p-3 rounded-xl self-start shadow-sm text-[#0c2461]">
+                                        <div className="p-4 rounded-lg self-start" style={{ backgroundColor: 'var(--surface)', color: 'var(--ink)' }}>
                                             <i className="fa-solid fa-spinner fa-spin"></i>
                                         </div>
                                     )}
                                 </div>
-                                <form onSubmit={handleAiSubmit} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+                                <form onSubmit={handleAiSubmit} className="p-3 border-t flex gap-2" style={{ borderColor: 'var(--surface)', backgroundColor: 'var(--bg)' }}>
                                     <input 
                                         type="text" 
                                         value={aiInput}
                                         onChange={(e) => setAiInput(e.target.value)}
-                                        placeholder="Invia query..." 
-                                        className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0c2461]"
+                                        placeholder="Invia messaggio..." 
+                                        className="flex-1 rounded-md px-3 py-2 text-sm focus:outline-none"
+                                        style={{ backgroundColor: 'var(--surface)', color: 'var(--ink)' }}
                                     />
-                                    <button type="submit" disabled={isAiLoading || !aiInput.trim()} className="bg-[#0c2461] text-white p-2 rounded-lg hover:bg-blue-900 disabled:opacity-50 transition-colors">
-                                        <i className="fa-solid fa-paper-plane"></i>
+                                    <button type="submit" disabled={isAiLoading || !aiInput.trim()} className="px-4 rounded-md transition-colors disabled:opacity-50" style={{ backgroundColor: 'var(--primary)', color: 'var(--bg)' }}>
+                                        <i className="fa-solid fa-arrow-up"></i>
                                     </button>
                                 </form>
                             </div>
                         )}
                         <button 
                             onClick={() => setIsAiOpen(!isAiOpen)} 
-                            className="bg-[#e67e22] text-white p-4 rounded-full shadow-xl hover:bg-orange-600 transition-all hover:scale-105 active:scale-95"
+                            className="p-4 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
+                            style={{ backgroundColor: 'var(--primary)', color: 'var(--bg)' }}
                         >
-                            {isAiOpen ? <i className="fa-solid fa-xmark text-xl"></i> : <i className="fa-solid fa-comment-dots text-xl"></i>}
+                            {isAiOpen ? <i className="fa-solid fa-xmark text-lg"></i> : <i className="fa-solid fa-comment-dots text-lg"></i>}
                         </button>
                     </div>
                 </div>
