@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
 
 export default function Reviews() {
   const reviews = [
@@ -11,43 +10,40 @@ export default function Reviews() {
   ];
 
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <motion.h2 
+    <section className="py-32 lg:py-48 bg-muted relative overflow-hidden">
+      <div className="container mx-auto px-6 lg:px-16 max-w-7xl">
+        <div className="mb-32">
+          <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-serif text-primary mb-4"
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            className="text-primary uppercase tracking-[0.2em] text-sm font-semibold mb-6"
           >
-            Cosa Dicono di Noi
-          </motion.h2>
-          <p className="text-muted-foreground">Oltre 400 recensioni a 4.2+ stelle</p>
+            Dicono di Noi
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex flex-col gap-32">
           {reviews.map((review, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2, duration: 0.8 }}
-              className="bg-white p-8 rounded-3xl shadow-sm border border-muted hover:shadow-lg transition-shadow"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className={`flex flex-col relative w-full lg:w-4/5 ${i % 2 !== 0 ? 'lg:self-end' : ''}`}
             >
-              <div className="flex gap-1 mb-4">
-                {[1,2,3,4,5].map((s) => (
-                  <Star key={s} className="w-4 h-4 text-accent fill-accent" />
-                ))}
+              <span className="text-primary font-serif text-[10rem] leading-none absolute -top-16 -left-8 md:-top-24 md:-left-16 opacity-20 select-none">"</span>
+              <p className="text-foreground text-3xl md:text-5xl lg:text-6xl mb-12 leading-[1.2] font-serif font-light relative z-10">
+                {review.text}
+              </p>
+              <div className="flex items-center gap-6">
+                <div className="h-px w-12 bg-primary"></div>
+                <p className="font-bold text-xs tracking-[0.2em] uppercase text-foreground">
+                  {review.author}
+                </p>
               </div>
-              <Quote className="w-8 h-8 text-muted mb-4 opacity-50" />
-              <p className="text-foreground text-lg mb-6 leading-relaxed font-serif italic">
-                "{review.text}"
-              </p>
-              <p className="font-bold text-sm tracking-widest uppercase text-primary">
-                — {review.author}
-              </p>
             </motion.div>
           ))}
         </div>
