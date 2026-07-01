@@ -37,36 +37,28 @@ export default function Navbar() {
     { name: "Lavora Con Noi", href: "/lavora-con-noi" },
   ];
 
-  const isScrolledState = isScrolled || isMobileMenuOpen || pathname !== "/";
-
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isScrolledState 
-          ? "bg-background py-6 text-foreground shadow-[0_4px_30px_rgba(0,0,0,0.03)]" 
-          : "bg-transparent py-8 text-white"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled || isMobileMenuOpen || pathname !== "/" ? "bg-black border-b border-white/10 shadow-lg py-4" : "bg-transparent py-6"
       }`}
     >
-      <div className="container mx-auto px-6 lg:px-16 max-w-full flex items-center justify-between">
+      <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex flex-col group">
-          <span className={`text-2xl md:text-3xl font-serif tracking-tight transition-colors ${isScrolledState ? "text-foreground" : "text-white"}`}>
-            Piazza<span className="italic ml-2">Marconi</span>
-          </span>
-          <span className={`text-[10px] md:text-xs font-sans tracking-[0.4em] uppercase font-bold transition-colors ${isScrolledState ? "text-primary" : "text-white/80 group-hover:text-white"}`}>
-            Cafè
-          </span>
+        <Link href="/" className="flex flex-col items-center group">
+          <span className="text-xl md:text-2xl font-serif text-white tracking-[0.2em] uppercase">Piazza Marconi</span>
+          <span className="text-xs md:text-sm font-sans text-white/70 tracking-[0.4em] uppercase font-bold group-hover:text-accent transition-colors">Cafè</span>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-12">
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link 
               key={link.name} 
               href={link.href}
               target={link.target}
-              className={`text-xs uppercase tracking-[0.2em] font-semibold transition-colors hover:text-primary ${
-                pathname === link.href ? "text-primary" : ""
+              className={`text-sm uppercase tracking-widest font-semibold transition-colors ${
+                pathname === link.href ? "text-accent" : "text-white/80 hover:text-white"
               }`}
             >
               {link.name}
@@ -76,40 +68,35 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <div className="flex items-center gap-6 lg:hidden">
+        <div className="flex items-center gap-4 lg:hidden">
           <GoogleTranslate />
           <button 
-            className={`p-2 transition-colors hover:text-primary ${isScrolledState ? "text-foreground" : "text-white"}`}
+            className="text-white p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Menu"
           >
-            {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div 
-        className={`lg:hidden absolute top-full left-0 right-0 bg-background overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col items-center text-foreground ${
-          isMobileMenuOpen ? "max-h-[500px] py-12 border-b border-border/10 shadow-2xl" : "max-h-0 py-0 border-transparent shadow-none"
-        }`}
-      >
-        <div className="flex flex-col items-center gap-8 w-full px-6">
+      {isMobileMenuOpen && (
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-black border-b border-white/10 shadow-2xl py-6 flex flex-col items-center gap-6">
           {navLinks.map((link) => (
             <Link 
               key={link.name} 
               href={link.href}
               target={link.target}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`text-sm uppercase tracking-[0.2em] font-semibold transition-colors hover:text-primary w-full text-center ${
-                pathname === link.href ? "text-primary" : ""
+              className={`text-sm uppercase tracking-widest font-semibold transition-colors ${
+                pathname === link.href ? "text-accent" : "text-white/80 hover:text-white"
               }`}
             >
               {link.name}
             </Link>
           ))}
         </div>
-      </div>
+      )}
     </nav>
   );
 }
