@@ -1,0 +1,119 @@
+{
+  "lastUpdated": "2026-07-02T21:30:12.914Z",
+  "agents": {
+    "1": {
+      "name": "Social & Content Director",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[!] Errore AI: No module named 'bs4'",
+        "[2:18:46 AM] Calling Real AI Brain...",
+        "[2:18:46 AM] Queued AI Brain for execution...",
+        "[2:18:46 AM] Generated Staging Proposal.",
+        "[2:09:46 AM] Working on tasks... (ANALYZING)"
+      ],
+      "problemsFound": [
+        "Execution Error: No module named 'bs4'"
+      ],
+      "solutionsProposed": [
+        "Check python logic"
+      ]
+    },
+    "2": {
+      "name": "Market Intelligence & SEO Analyst",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[1:26:15 AM] Calling Real AI Brain...",
+        "[1:26:15 AM] Queued AI Brain for execution...",
+        "[1:26:15 AM] Generated Staging Proposal.",
+        "[1:15:39 AM] Working on tasks... (DRAFTING)",
+        "[1:11:39 AM] Working on tasks... (DRAFTING)"
+      ],
+      "problemsFound": [
+        "Errore di sistema: L'agente Python non ha risposto correttamente."
+      ],
+      "solutionsProposed": [
+        "Verificare i log del server."
+      ]
+    },
+    "3": {
+      "name": "Risk, UI/UX & Compliance Officer",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[2:08:46 AM] Calling Real AI Brain...",
+        "[2:08:46 AM] Queued AI Brain for execution...",
+        "[2:08:46 AM] Generated Staging Proposal.",
+        "[1:55:46 AM] Working on tasks... (ANALYZING)",
+        "[1:18:39 AM] Working on tasks... (ANALYZING)"
+      ],
+      "problemsFound": [
+        "Errore di sistema: L'agente Python non ha risposto correttamente."
+      ],
+      "solutionsProposed": [
+        "Verificare i log del server."
+      ]
+    },
+    "4": {
+      "name": "Strategy & Data Analyst",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[!] Errore AI: No module named 'bs4'",
+        "[1:20:39 AM] Calling Real AI Brain...",
+        "[1:20:39 AM] Queued AI Brain for execution...",
+        "[1:20:39 AM] Generated Staging Proposal.",
+        "[1:14:39 AM] Working on tasks... (DRAFTING)"
+      ],
+      "problemsFound": [
+        "Execution Error: No module named 'bs4'"
+      ],
+      "solutionsProposed": [
+        "Check python logic"
+      ]
+    },
+    "5": {
+      "name": "Continuous Improvement Motivator",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[!] Errore AI: google-antigravity not installed",
+        "[2:11:46 AM] Calling Real AI Brain...",
+        "[2:11:46 AM] Queued AI Brain for execution...",
+        "[2:11:46 AM] Generated Staging Proposal.",
+        "[1:54:46 AM] Working on tasks... (ANALYZING)"
+      ],
+      "problemsFound": [
+        "System Error: Python dependencies missing."
+      ],
+      "solutionsProposed": [
+        "Run pip install -r requirements.txt"
+      ]
+    },
+    "6": {
+      "name": "Chief Executive Supervisor",
+      "state": "STAGING",
+      "accumulatedMinutes": 55,
+      "dailyQuota": 60,
+      "logs": [
+        "[!] Errore AI: google-antigravity not installed",
+        "[1:12:39 AM] Calling Real AI Brain...",
+        "[1:12:39 AM] Queued AI Brain for execution...",
+        "[1:12:39 AM] Generated Staging Proposal.",
+        "[1:08:39 AM] Working on tasks... (ANALYZING)"
+      ],
+      "problemsFound": [
+        "System Error: Python dependencies missing."
+      ],
+      "solutionsProposed": [
+        "Run pip install -r requirements.txt"
+      ]
+    }
+  }
+}
