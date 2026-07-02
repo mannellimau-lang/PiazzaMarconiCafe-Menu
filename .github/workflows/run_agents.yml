@@ -65,7 +65,9 @@ jobs:
 
       # 6. Setup credenziali Google (se presenti)
       - name: "🔑 Setup Google Credentials"
-        if: ${{ secrets.GOOGLE_CREDENTIALS_JSON != '' }}
+        env:
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+        if: env.GOOGLE_CREDS != ''
         run: |
           echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > /tmp/google_credentials.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/google_credentials.json" >> $GITHUB_ENV
