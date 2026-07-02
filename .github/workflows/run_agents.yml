@@ -1,0 +1,90 @@
+# ==============================================================
+# Piazza Marconi Cafe — Virtual Company Agent Runner
+# Runs every morning at 08:00 UTC (10:00 ora italiana)
+# ==============================================================
+
+name: "☕ Morning Agent Report"
+
+on:
+  schedule:
+    # 08:00 UTC = 10:00 CEST (ora italiana estiva)
+    - cron: "0 8 * * *"
+  workflow_dispatch: # Permette anche l'esecuzione manuale da GitHub
+
+env:
+  # Secrets iniettati in modo sicuro da GitHub Repository Secrets
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+  NEXT_PUBLIC_CONTACT_EMAIL: ${{ secrets.NEXT_PUBLIC_CONTACT_EMAIL }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  META_READ_ONLY_ACCESS_TOKEN: ${{ secrets.META_READ_ONLY_ACCESS_TOKEN }}
+  INSTAGRAM_BUSINESS_ACCOUNT_ID: ${{ secrets.INSTAGRAM_BUSINESS_ACCOUNT_ID }}
+  FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+  INSTAGRAM_PROFILE_URL: ${{ secrets.INSTAGRAM_PROFILE_URL }}
+  FACEBOOK_PROFILE_URL: ${{ secrets.FACEBOOK_PROFILE_URL }}
+  # Flag per indicare agli script che siamo su GitHub Actions
+  CI: "true"
+
+jobs:
+  run-agents:
+    name: "Esegui Agenti e Invia Report"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # 1. Checkout del codice
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: "🟢 Setup Node.js 20"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 3. Setup Python
+      - name: "🐍 Setup Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # 4. Installa dipendenze Node.js
+      - name: "📦 Installa dipendenze Node.js"
+        working-directory: core/virtual-company
+        run: npm ci || npm install
+
+      # 5. Installa dipendenze Python
+      - name: "📦 Installa dipendenze Python"
+        working-directory: core/virtual-company/agents/python_brains
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install requests beautifulsoup4 duckduckgo_search
+          pip install google-analytics-data google-api-python-client google-auth
+
+      # 6. Setup credenziali Google (se presenti)
+      - name: "🔑 Setup Google Credentials"
+        if: ${{ secrets.GOOGLE_CREDENTIALS_JSON != '' }}
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > /tmp/google_credentials.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/google_credentials.json" >> $GITHUB_ENV
+
+      # 7. Crea la directory logs se non esiste
+      - name: "📁 Prepara directory logs"
+        run: mkdir -p core/virtual-company/logs
+
+      # 8. Esegui gli agenti
+      - name: "🚀 Esegui gli agenti"
+        working-directory: core/virtual-company
+        run: node run_all_now.js
+
+      # 9. Commit dei report aggiornati (opzionale)
+      - name: "💾 Commit report aggiornati"
+        if: always()
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add -A reports/ core/virtual-company/logs/ || true
+          git diff --staged --quiet || git commit -m "📊 Aggiornamento report agenti $(date +%Y-%m-%d)" || true
+          git push || true
