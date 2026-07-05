@@ -31,6 +31,8 @@ jobs:
     name: "Esegui Agenti e Invia Report"
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
 
     steps:
       # 1. Checkout del codice
