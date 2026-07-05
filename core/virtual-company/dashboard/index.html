@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Control | Virtual Company</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon"></div>
+                <h2>MATRIX<br><span>CONTROL</span></h2>
+            </div>
+            
+            <div class="telemetry">
+                <h3>SYSTEM TELEMETRY</h3>
+                <div class="metric">
+                    <span>Lavoro Agenti</span>
+                    <strong id="uptime-display">0 / 300m</strong>
+                </div>
+                <div class="metric">
+                    <span>Ultimo Update</span>
+                    <strong id="last-updated-display" style="font-size: 11px;">--:--</strong>
+                </div>
+                <div class="metric">
+                    <span>Status</span>
+                    <strong id="status-display" class="status-online">READY</strong>
+                </div>
+            </div>
+
+            <div class="telemetry">
+                <h3>AGENT 12 MANUAL FEED</h3>
+                <textarea id="social-metrics-input" placeholder="Incolla le metriche qui (es. Copertura 1500, follower 10)" rows="3" style="width:100%; border-radius:4px; padding:4px; margin-bottom:8px; border:1px solid #333; background:#000; color:#0f0;"></textarea>
+                <button class="action-btn" id="save-metrics-btn" style="background:#444; border-color:#0f0;">SALVA DATI SOCIAL</button>
+            </div>
+
+            <button class="action-btn" id="sync-btn" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; border: none; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);">📊 SINCRONIZZA DA GITHUB</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard">
+            <header class="top-nav">
+                <h1>Virtual Agent Roster</h1>
+                <div class="time-widget" id="clock-display">00:00:00</div>
+            </header>
+
+            <div class="agent-grid" id="agent-grid">
+                <!-- Agent cards injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Agent Detail Modal -->
+    <div id="agent-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modal-agent-name">Agent Name</h2>
+                <button id="modal-close" class="close-btn">&times;</button>
+            </header>
+            <div class="modal-body">
+                <div class="report-section problems">
+                    <h3>⚠️ Problemi Evidenziati</h3>
+                    <ul id="modal-problems-list"></ul>
+                </div>
+                <div class="report-section solutions">
+                    <h3>💡 Soluzioni Proposte</h3>
+                    <ul id="modal-solutions-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
