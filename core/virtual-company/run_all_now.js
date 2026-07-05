@@ -119,8 +119,8 @@ function sendEmail(ledgerData) {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.error("Errore invio email:", error);
-            reject(error);
+            console.error("⚠️ Email send failed (non-fatal):", error.message);
+            resolve(); // Don't crash the workflow if email fails
         } else {
             console.log("Email sent successfully: " + info.response);
             resolve(info);

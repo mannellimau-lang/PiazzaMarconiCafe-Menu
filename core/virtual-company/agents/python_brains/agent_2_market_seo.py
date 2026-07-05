@@ -27,7 +27,7 @@ class AgentReport(BaseModel):
 async def run_agent():
     try:
         config = LocalAgentConfig(
-            model="gemini-2.0-flash-lite",
+            model="gemini-2.5-flash",
             system_instruction="You are Agent 2, Market Intelligence & SEO Analyst for Piazza Marconi Cafe. You track local competition in Caltanissetta, search trends, and menu pricing. Use your web search and reading tools to verify your assumptions.",
             response_schema=AgentReport,
             tools=[read_website_text, search_web]
