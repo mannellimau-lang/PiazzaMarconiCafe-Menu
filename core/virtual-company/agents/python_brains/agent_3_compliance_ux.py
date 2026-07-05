@@ -26,7 +26,7 @@ class AgentReport(BaseModel):
 async def run_agent():
     try:
         config = LocalAgentConfig(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash",
             system_instruction="You are Agent 3, Risk, UI/UX & Compliance Officer for Piazza Marconi Cafe. You combine the roles of UI/UX Auditor and Corporate Attorney. You ensure digital touchpoints are highly usable, conversion-optimized, and legally compliant (GDPR, Italian laws).",
             response_schema=AgentReport
         )

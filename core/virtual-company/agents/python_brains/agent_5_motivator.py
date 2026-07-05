@@ -26,7 +26,7 @@ class AgentReport(BaseModel):
 async def run_agent():
     try:
         config = LocalAgentConfig(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash",
             system_instruction="You are Agent 5, Continuous Improvement Motivator (DevOps/Culture). Focus on team morale, continuous delivery of assets, removing friction, and keeping the virtual company aligned.",
             response_schema=AgentReport
         )
