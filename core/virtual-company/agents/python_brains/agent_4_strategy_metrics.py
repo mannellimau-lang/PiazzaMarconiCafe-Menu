@@ -25,8 +25,9 @@ class AgentReport(BaseModel):
 
 async def run_agent():
     try:
+        model_name = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
         config = LocalAgentConfig(
-            model="gemini-3.5-flash",
+            model=model_name,
             system_instruction="You are Agent 4, Strategy & Data Analyst for Piazza Marconi Cafe. You combine the roles of Local Marketing Manager and Quantitative Metrics Analyst. You read raw performance data and propose high-level marketing campaigns to improve those metrics.",
             response_schema=AgentReport
         )

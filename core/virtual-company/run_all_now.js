@@ -22,52 +22,77 @@ const pythonScriptsMap = {
 
 const ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8'));
 
+const FALLBACK_MODELS = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.5-flash-lite"];
+
 async function runAgent(id, scriptName) {
-    return new Promise((resolve) => {
-        const scriptPath = path.join(__dirname, 'agents', 'python_brains', scriptName);
-        console.log(`Running Agent ${id}...`);
-        exec(`${venvPython} ${scriptPath}`, (error, stdout, stderr) => {
-            const timestamp = new Date().toLocaleTimeString();
-            try {
-                if (!stdout || stdout.trim() === "null" || stdout.trim() === "") {
-                    console.error(`Agent ${id} returned empty or null stdout. Stderr:`, stderr);
+    const scriptPath = path.join(__dirname, 'agents', 'python_brains', scriptName);
+    
+    for (const model of FALLBACK_MODELS) {
+        console.log(`Running Agent ${id} with model ${model}...`);
+        const result = await new Promise((resolve) => {
+            const env = { ...process.env, GEMINI_MODEL: model };
+            exec(`${venvPython} ${scriptPath}`, { env }, (error, stdout, stderr) => {
+                const timestamp = new Date().toLocaleTimeString();
+                try {
+                    if (!stdout || stdout.trim() === "null" || stdout.trim() === "") {
+                        console.error(`Agent ${id} returned empty or null stdout with model ${model}. Stderr:`, stderr);
+                        resolve({
+                            retry: true,
+                            error: `Empty model output`
+                        });
+                        return;
+                    }
+                    const parsed = JSON.parse(stdout);
+                    if (parsed.error) {
+                        console.error(`Agent ${id} error with model ${model}:`, parsed.error);
+                        const errLower = parsed.error.toLowerCase();
+                        // If it's a rate limit, quota limit, or model availability error, trigger fallback retry
+                        if (errLower.includes('429') || errLower.includes('quota') || errLower.includes('exhausted') || errLower.includes('limit') || errLower.includes('unreachable') || errLower.includes('rate')) {
+                            resolve({ retry: true, error: parsed.error });
+                        } else {
+                            // Non-quota error, resolve as failure immediately
+                            resolve({
+                                id,
+                                problems: [parsed.error],
+                                solutions: ["Verify config"],
+                                logs: [`[${timestamp}] [!] Error: ${parsed.error.substring(0, 100)}...`]
+                            });
+                        }
+                    } else {
+                        console.log(`Agent ${id} success with model ${model}!`);
+                        resolve({
+                            id,
+                            problems: parsed.problemsFound,
+                            solutions: parsed.solutionsProposed,
+                            logs: [`[${timestamp}] [SUCCESS] Completed with ${model}.`]
+                        });
+                    }
+                } catch (e) {
+                    console.error(`Agent ${id} parse error with model ${model}:`, e, "stdout:", stdout, "stderr:", stderr);
                     resolve({
                         id,
-                        problems: [`Execution Error: Empty model output (quota limit or syntax error).`],
-                        solutions: ["Check API Key / quota limit"],
-                        logs: [`[${timestamp}] [!] Error: Empty model output.`]
+                        problems: ["Parse error"],
+                        solutions: ["Check logs"],
+                        logs: [`[${timestamp}] [!] Parse error on ${model}: ${e.message}`]
                     });
-                    return;
                 }
-                const result = JSON.parse(stdout);
-                if (result.error) {
-                    console.error(`Agent ${id} error:`, result.error);
-                    resolve({
-                        id,
-                        problems: [result.error],
-                        solutions: ["Verify config"],
-                        logs: [`[${timestamp}] [!] Error: ${result.error.substring(0, 100)}...`]
-                    });
-                } else {
-                    console.log(`Agent ${id} success!`);
-                    resolve({
-                        id,
-                        problems: result.problemsFound,
-                        solutions: result.solutionsProposed,
-                        logs: [`[${timestamp}] [SUCCESS] Analysis completed successfully.`]
-                    });
-                }
-            } catch (e) {
-                console.error(`Agent ${id} parse error:`, e, "stdout:", stdout, "stderr:", stderr);
-                resolve({
-                    id,
-                    problems: ["Parse error"],
-                    solutions: ["Check logs"],
-                    logs: [`[${timestamp}] [!] Parse error: ${e.message}`]
-                });
-            }
+            });
         });
-    });
+        
+        if (!result.retry) {
+            return result;
+        }
+        console.warn(`Agent ${id} hit quota limit on model ${model}. Attempting fallback model...`);
+    }
+    
+    // If all models failed
+    const timestamp = new Date().toLocaleTimeString();
+    return {
+        id,
+        problems: ["Execution Error: All fallback models exhausted (Quota Limit)."],
+        solutions: ["Check Gemini billing or usage limits"],
+        logs: [`[${timestamp}] [!] Quota exceeded on all models.`]
+    };
 }
 
 async function main() {
