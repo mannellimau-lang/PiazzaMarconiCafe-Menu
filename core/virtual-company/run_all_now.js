@@ -27,23 +27,44 @@ async function runAgent(id, scriptName) {
         const scriptPath = path.join(__dirname, 'agents', 'python_brains', scriptName);
         console.log(`Running Agent ${id}...`);
         exec(`${venvPython} ${scriptPath}`, (error, stdout, stderr) => {
+            const timestamp = new Date().toLocaleTimeString();
             try {
                 if (!stdout || stdout.trim() === "null" || stdout.trim() === "") {
                     console.error(`Agent ${id} returned empty or null stdout. Stderr:`, stderr);
-                    resolve({ id, problems: [`Execution Error: Empty model output (quota limit or syntax error).`], solutions: ["Check API Key / quota limit"] });
+                    resolve({
+                        id,
+                        problems: [`Execution Error: Empty model output (quota limit or syntax error).`],
+                        solutions: ["Check API Key / quota limit"],
+                        logs: [`[${timestamp}] [!] Error: Empty model output.`]
+                    });
                     return;
                 }
                 const result = JSON.parse(stdout);
                 if (result.error) {
                     console.error(`Agent ${id} error:`, result.error);
-                    resolve({ id, problems: [result.error], solutions: ["Verify config"] });
+                    resolve({
+                        id,
+                        problems: [result.error],
+                        solutions: ["Verify config"],
+                        logs: [`[${timestamp}] [!] Error: ${result.error.substring(0, 100)}...`]
+                    });
                 } else {
                     console.log(`Agent ${id} success!`);
-                    resolve({ id, problems: result.problemsFound, solutions: result.solutionsProposed });
+                    resolve({
+                        id,
+                        problems: result.problemsFound,
+                        solutions: result.solutionsProposed,
+                        logs: [`[${timestamp}] [SUCCESS] Analysis completed successfully.`]
+                    });
                 }
             } catch (e) {
                 console.error(`Agent ${id} parse error:`, e, "stdout:", stdout, "stderr:", stderr);
-                resolve({ id, problems: ["Parse error"], solutions: ["Check logs"] });
+                resolve({
+                    id,
+                    problems: ["Parse error"],
+                    solutions: ["Check logs"],
+                    logs: [`[${timestamp}] [!] Parse error: ${e.message}`]
+                });
             }
         });
     });
@@ -70,6 +91,10 @@ async function main() {
         agent.solutionsProposed = res.solutions;
         agent.state = 'STAGING';
         agent.accumulatedMinutes = 55;
+        if (res.logs) {
+            if (!agent.logs) agent.logs = [];
+            agent.logs = res.logs.concat(agent.logs).slice(0, 5); // Keep last 5 log entries
+        }
     });
     
     ledger.lastUpdated = new Date().toISOString();
