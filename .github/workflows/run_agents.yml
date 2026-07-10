@@ -50,6 +50,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: 'pip'
+          cache-dependency-path: 'core/virtual-company/requirements.txt'
 
       # 4. Installa dipendenze Node.js
       - name: "📦 Installa dipendenze Node.js"
@@ -58,12 +60,10 @@ jobs:
 
       # 5. Installa dipendenze Python
       - name: "📦 Installa dipendenze Python"
-        working-directory: core/virtual-company/agents/python_brains
+        working-directory: core/virtual-company
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install requests beautifulsoup4 duckduckgo_search
-          pip install google-analytics-data google-api-python-client google-auth
 
       # 6. Setup credenziali Google (se presenti)
       - name: "🔑 Setup Google Credentials"
