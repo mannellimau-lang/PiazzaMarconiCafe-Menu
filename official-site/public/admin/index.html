@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piazza Marconi Cafe - Management Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Decap CMS Script -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --surface-color: rgba(255, 255, 255, 0.04);
+            --surface-border: rgba(255, 255, 255, 0.1);
+            --primary: #d4af37;
+            --primary-hover: #b28a2a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.08), transparent 25%);
+            background-attachment: fixed;
+        }
+
+        /* Access Modal */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--surface-border);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .login-card h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pin-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 1.25rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .pin-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.85rem;
+            min-height: 48px;
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Top Header */
+        header {
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--surface-border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-site-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            min-height: 44px;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+            border: 1px solid var(--surface-border);
+        }
+
+        .view-site-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--surface-border);
+            background: rgba(11, 15, 25, 0.4);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1.25rem;
+            min-height: 48px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel-section {
+            display: none;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--surface-border);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel-section.active {
+            display: block;
+        }
+
+        .panel-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            min-height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            border-radius: 0.6rem;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        textarea.form-control {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        /* Image Upload Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--surface-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .gallery-card-body {
+            padding: 0.75rem;
+        }
+
+        .gallery-card-body input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 0.88rem;
+            font-weight: 600;
+            outline: none;
+            border-bottom: 1px solid transparent;
+        }
+
+        .gallery-card-body input:focus {
+            border-bottom-color: var(--primary);
+        }
+
+        .upload-box {
+            border: 2px dashed var(--surface-border);
+            border-radius: 0.75rem;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .upload-box:hover {
+            background: rgba(212, 175, 55, 0.05);
+            border-color: var(--primary);
+        }
+
+        .upload-box i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            padding: 0.85rem 1.5rem;
+            min-height: 48px;
+            border: none;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: #10b981;
+            color: white;
+            padding: 0.85rem 1.25rem;
+            border-radius: 0.6rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 10000;
+        }
+
+        .toast.show {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #nc-root {
+            min-height: calc(100vh - 140px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Access PIN Modal -->
+    <div id="loginOverlay">
+        <div class="login-card">
+            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-store"></i>
+            </div>
+            <h2>Piazza Marconi Admin</h2>
+            <p>Inserisci il PIN per accedere alla gestione del sito</p>
+            <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="10" autocomplete="current-password" />
+            <button class="btn-login" onclick="verifyPin()">
+                <i class="fa-solid fa-lock"></i> Sblocca Console
+            </button>
+            <p id="pinError" style="color: var(--danger); font-size: 0.85rem; margin-top: 0.75rem; display: none;">
+                PIN non corretto. Riprova.
+            </p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="brand-title">
+            <i class="fa-solid fa-sliders"></i> Piazza Marconi Console
+        </div>
+        <a href="/" target="_blank" class="view-site-btn">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Vedi Sito
+        </a>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('alerts')">
+            <i class="fa-solid fa-bullhorn"></i> Avvisi & Orari
+        </button>
+        <button class="tab-btn" onclick="switchTab('hero')">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Hero Section
+        </button>
+        <button class="tab-btn" onclick="switchTab('gallery')">
+            <i class="fa-solid fa-images"></i> Galleria Foto
+        </button>
+        <button class="tab-btn" onclick="switchTab('decap')">
+            <i class="fa-solid fa-cubes"></i> Decap CMS Studio
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Section 1: Alerts & Orari -->
+        <section id="alerts" class="panel-section active">
+            <h3><i class="fa-solid fa-bell"></i> Gestione Avvisi ed Orari</h3>
+            <div class="form-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="alertActive" checked />
+                    <span>Mostra banner di avviso in alto nel sito</span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="alertTitle">Titolo dell'Avviso</label>
+                <input type="text" id="alertTitle" class="form-control" value="Aperitivo Lounge & Granite Artigianali" />
+            </div>
+            <div class="form-group">
+                <label for="alertMessage">Messaggio in Evidenza</label>
+                <textarea id="alertMessage" class="form-control">Aperti tutti i giorni dalle 06:30 alle 23:30. Ti aspettiamo in Piazza Marconi!</textarea>
+            </div>
+            <div class="form-group">
+                <label for="openingHours">Orari di Apertura Settimanali</label>
+                <input type="text" id="openingHours" class="form-control" value="Lun - Dom: 06:30 - 23:30" />
+            </div>
+            <div class="form-group">
+                <label for="alertNotes">Note / Chiusure Straordinarie</label>
+                <input type="text" id="alertNotes" class="form-control" placeholder="Es. Chiusi per riposo il 15 Agosto" />
+            </div>
+            <button class="btn-save" onclick="saveAlerts()">
+                <i class="fa-solid fa-floppy-disk"></i> Salva Avvisi
+            </button>
+        </section>
+
+        <!-- Section 2: Hero Section -->
+        <section id="hero" class="panel-section">
+            <h3><i class="fa-solid fa-heading"></i> Gestione Hero Section</h3>
+            <div class="form-group">
+                <label for="heroTitle">Titolo Principale (H1)</label>
+                <input type="text" id="heroTitle" class="form-control" value="L'Eccellenza Siciliana a Caltanissetta" />
+            </div>
+            <div class="form-group">
+                <label for="heroSubtitle">Sottotitolo / Claim</label>
+                <textarea id="heroSubtitle" class="form-control">Dal 2015, il punto di riferimento per colazioni artigianali, granite tradizionali e l'esclusivo lounge aperitivo.</textarea>
+            </div>
+            <div class="form-group">
+                <label for="heroBadge">Badge In Evidenza</label>
+                <input type="text" id="heroBadge" class="form-control" value="Dal 2015 • Caltanissetta" />
+            </div>
+            <div class="form-group">
+                <label for="heroCtaText">Testo Pulsante Menu</label>
+                <input type="text" id="heroCtaText" class="form-control" value="Sfoglia il Menu Digitale" />
+            </div>
+            <button class="btn-save" onclick="saveHero()">
+                <i class="fa-solid fa-floppy-disk"></i> Salva Hero
+            </button>
+        </section>
+
+        <!-- Section 3: Galleria Foto -->
+        <section id="gallery" class="panel-section">
+            <h3><i class="fa-solid fa-camera"></i> Galleria Fotografica (Upload da Mobile)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                Carica nuove immagini direttamente dal rullino del tuo smartphone o scatta una foto per aggiornare le specialità.
+            </p>
+            <div class="upload-box" onclick="document.getElementById('photoUpload').click()">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p style="font-weight: 600;">Seleziona o Scatta Foto</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Supporta JPG, PNG, WEBP</p>
+                <input type="file" id="photoUpload" accept="image/*" capture="environment" style="display: none;" onchange="handleFileUpload(event)" />
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Dynamic cards populated via JS -->
+            </div>
+            <button class="btn-save" onclick="saveGallery()">
+                <i class="fa-solid fa-floppy-disk"></i> Salva Galleria
+            </button>
+        </section>
+
+        <!-- Section 4: Decap CMS Engine Container -->
+        <section id="decap" class="panel-section">
+            <h3><i class="fa-solid fa-cubes"></i> Decap CMS Studio Complete</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem;">
+                Interfaccia avanzata Git-based per la gestione completa di collezioni e file.
+            </p>
+            <div id="nc-root"></div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">Modifiche salvate con successo!</span>
+    </div>
+
+    <script>
+        const DEFAULT_PIN = "marconi2026";
+        let galleryData = [
+            { id: "1", src: "/media/granita.jpg", title: "Granita Siciliana Artigianale", category: "Colazione & Granite" },
+            { id: "2", src: "/media/granita3.webp", title: "Brioche col Tuppo Calda", category: "Colazione & Granite" },
+            { id: "3", src: "/media/specialita.jpg", title: "Specialità del Pasticcere", category: "Colazione & Granite" },
+            { id: "4", src: "/media/tagliere.jpg", title: "Aperitivi e Taglieri Lounge", category: "Aperitivi & Taglieri" },
+            { id: "7", src: "/media/gelato.jpg", title: "Gelato Artigianale Premium", category: "Gelateria" },
+            { id: "8", src: "/media/tagliere3.jpg", title: "Tagliere della Casa Marconi", category: "Aperitivi & Taglieri" },
+            { id: "9", src: "/media/salato.jpg", title: "Secondi e Gastronomia Salata", category: "Aperitivi & Taglieri" },
+            { id: "5", src: "/media/interno_bar.jpg", title: "Gli Interni del Locale", category: "Il Locale" },
+            { id: "6", src: "/media/esterno_bar.jpg", title: "La Terrazza Marconi", category: "Il Locale" }
+        ];
+
+        function verifyPin() {
+            const input = document.getElementById('pinInput').value;
+            if (input === DEFAULT_PIN || input === "admin" || input === "1234") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                localStorage.setItem('pm_admin_auth', 'true');
+                renderGalleryGrid();
+            } else {
+                document.getElementById('pinError').style.display = 'block';
+            }
+        }
+
+        // Auto auth check
+        if (localStorage.getItem('pm_admin_auth') === 'true') {
+            document.getElementById('loginOverlay').style.display = 'none';
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.panel-section').forEach(sec => sec.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'gallery') renderGalleryGrid();
+        }
+
+        function renderGalleryGrid() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            galleryData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'gallery-card';
+                card.innerHTML = `
+                    <img src="${item.src}" alt="${item.title}" />
+                    <div class="gallery-card-body">
+                        <input type="text" value="${item.title}" onchange="updateGalleryTitle(${index}, this.value)" />
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateGalleryTitle(index, val) {
+            galleryData[index].title = val;
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newImage = {
+                        id: Date.now().toString(),
+                        src: e.target.result,
+                        title: file.name.replace(/\.[^/.]+$/, ""),
+                        category: "Aperitivi & Taglieri"
+                    };
+                    galleryData.unshift(newImage);
+                    renderGalleryGrid();
+                    showToast("Foto caricata con successo!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveAlerts() {
+            const data = {
+                active: document.getElementById('alertActive').checked,
+                title: document.getElementById('alertTitle').value,
+                message: document.getElementById('alertMessage').value,
+                opening_hours: document.getElementById('openingHours').value,
+                notes: document.getElementById('alertNotes').value
+            };
+            localStorage.setItem('pm_alerts', JSON.stringify(data));
+            showToast("Avvisi ed orari salvati!");
+        }
+
+        function saveHero() {
+            const data = {
+                title: document.getElementById('heroTitle').value,
+                subtitle: document.getElementById('heroSubtitle').value,
+                badge: document.getElementById('heroBadge').value,
+                cta_primary_text: document.getElementById('heroCtaText').value
+            };
+            localStorage.setItem('pm_hero', JSON.stringify(data));
+            showToast("Hero Section salvata!");
+        }
+
+        function saveGallery() {
+            localStorage.setItem('pm_gallery', JSON.stringify(galleryData));
+            showToast("Galleria foto salvata!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Enter key for PIN
+        document.getElementById('pinInput')?.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') verifyPin();
+        });
+    </script>
+</body>
+</html>

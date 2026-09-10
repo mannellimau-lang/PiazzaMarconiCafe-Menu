@@ -1,0 +1,13 @@
+{
+  "items": [
+    { "id": "1", "src": "/media/granita.jpg", "title": "Granita Siciliana Artigianale", "category": "Colazione & Granite" },
+    { "id": "2", "src": "/media/granita3.webp", "title": "Brioche col Tuppo Calda", "category": "Colazione & Granite" },
+    { "id": "3", "src": "/media/specialita.jpg", "title": "Specialità del Pasticcere", "category": "Colazione & Granite" },
+    { "id": "4", "src": "/media/tagliere.jpg", "title": "Aperitivi e Taglieri Lounge", "category": "Aperitivi & Taglieri" },
+    { "id": "7", "src": "/media/gelato.jpg", "title": "Gelato Artigianale Premium", "category": "Gelateria" },
+    { "id": "8", "src": "/media/tagliere3.jpg", "title": "Tagliere della Casa Marconi", "category": "Aperitivi & Taglieri" },
+    { "id": "9", "src": "/media/salato.jpg", "title": "Secondi e Gastronomia Salata", "category": "Aperitivi & Taglieri" },
+    { "id": "5", "src": "/media/interno_bar.jpg", "title": "Gli Interni del Locale", "category": "Il Locale" },
+    { "id": "6", "src": "/media/esterno_bar.jpg", "title": "La Terrazza Marconi", "category": "Il Locale" }
+  ]
+}

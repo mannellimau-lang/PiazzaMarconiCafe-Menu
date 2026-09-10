@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 
+import heroContent from "@/content/hero.json";
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -124,7 +126,7 @@ export default function Hero() {
           className="group flex items-center justify-center gap-2 text-white/90 uppercase tracking-[0.2em] text-sm md:text-base mb-6 font-bold hover:text-white hover:bg-white/10 px-4 py-2 rounded-full border border-white/20 hover:border-white/50 transition-all cursor-pointer inline-flex"
         >
           <MapPin className="w-4 h-4" />
-          <span>Caltanissetta</span>
+          <span>{heroContent.badge || "Caltanissetta"}</span>
         </a>
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 max-w-5xl drop-shadow-2xl leading-tight">
@@ -135,29 +137,29 @@ export default function Hero() {
         </h1>
 
         <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl font-light">
-          {"Dal 2015 l'eccellenza della colazione siciliana: la vera granita artigianale servita con brioche col tuppo calda. "}
-          {"Scopri i nostri gelati, il salato e la magia dell'aperitivo lounge nel cuore di Caltanissetta."}
+          {heroContent.subtitle || "Dal 2015 l'eccellenza della colazione siciliana: la vera granita artigianale servita con brioche col tuppo calda."}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 mb-12">
           <a
-            href={menuUrl}
+            href={heroContent.cta_primary_link || menuUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]"
           >
-            Esplora il Menu
+            {heroContent.cta_primary_text || "Esplora il Menu"}
             <ArrowRight className="w-5 h-5" />
           </a>
           <a
             href="#prenotazioni"
             className="inline-flex items-center justify-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-colors"
           >
-            Prenota un Tavolo
+            {heroContent.cta_secondary_text || "Prenota un Tavolo"}
           </a>
         </div>
       </motion.div>
     </section>
   );
 }
+
 

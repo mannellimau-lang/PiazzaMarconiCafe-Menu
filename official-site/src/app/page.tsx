@@ -1,3 +1,4 @@
+import AlertBanner from "@/components/AlertBanner";
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
 import Reviews from "@/components/Reviews";
@@ -7,6 +8,7 @@ import PartnershipBanner from "@/components/PartnershipBanner";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
+      <AlertBanner />
       <Hero />
       <Gallery />
       <CateringReservation />
@@ -15,3 +17,4 @@ export default function Home() {
     </div>
   );
 }
+

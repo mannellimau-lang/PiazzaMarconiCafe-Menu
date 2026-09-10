@@ -1,9 +1,11 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import galleryData from "@/content/gallery.json";
+
 
 export default function Gallery() {
-  const items = [
+  const items = galleryData.items || [
     { id: "1", src: "/media/granita.jpg", title: "Granita" },
     { id: "2", src: "/media/granita3.webp", title: "Brioche col tuppo" },
     { id: "3", src: "/media/specialita.jpg", title: "Specialità" },
@@ -14,6 +16,7 @@ export default function Gallery() {
     { id: "5", src: "/media/interno_bar.jpg", title: "Il Locale" },
     { id: "6", src: "/media/esterno_bar.jpg", title: "La Terrazza" }
   ];
+
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },

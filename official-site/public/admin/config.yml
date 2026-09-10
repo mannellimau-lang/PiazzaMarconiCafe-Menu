@@ -1,0 +1,58 @@
+backend:
+  name: github
+  repo: mannellimau-lang/piazzamarconicafe-menu
+  branch: feature/visual-cms
+  base_url: https://piazza-marconi-cafe.vercel.app
+
+local_backend: true
+
+media_folder: "official-site/public/media/uploads"
+public_folder: "/media/uploads"
+
+display_url: https://piazza-marconi-cafe.vercel.app
+locale: 'it'
+
+collections:
+  - name: "alerts"
+    label: "Avvisi & Orari"
+    files:
+      - name: "alerts_config"
+        label: "Configurazione Avvisi ed Orari"
+        file: "official-site/src/content/alerts.json"
+        fields:
+          - { label: "Avviso Attivo", name: "active", widget: "boolean", default: true }
+          - { label: "Titolo Avviso", name: "title", widget: "string" }
+          - { label: "Messaggio", name: "message", widget: "text" }
+          - { label: "Tipo Avviso", name: "type", widget: "select", options: ["info", "warning", "success", "promo"], default: "info" }
+          - { label: "Orari di Apertura Settimanali", name: "opening_hours", widget: "string" }
+          - { label: "Note Chiusura / Eventi", name: "notes", widget: "string", required: false }
+
+  - name: "hero"
+    label: "Hero Section"
+    files:
+      - name: "hero_config"
+        label: "Testi e Claim Hero"
+        file: "official-site/src/content/hero.json"
+        fields:
+          - { label: "Titolo Principale", name: "title", widget: "string" }
+          - { label: "Sottotitolo / Claim", name: "subtitle", widget: "text" }
+          - { label: "Testo Pulsante Primario", name: "cta_primary_text", widget: "string" }
+          - { label: "Link Pulsante Primario", name: "cta_primary_link", widget: "string" }
+          - { label: "Testo Pulsante Secondario", name: "cta_secondary_text", widget: "string" }
+          - { label: "Badge In Evidenza", name: "badge", widget: "string" }
+
+  - name: "gallery"
+    label: "Galleria Fotografica"
+    files:
+      - name: "gallery_config"
+        label: "Gestione Immagini & Specialità"
+        file: "official-site/src/content/gallery.json"
+        fields:
+          - label: "Lista Immagini Galleria"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "ID Univoco", name: "id", widget: "string" }
+              - { label: "Immagine (Fotocamera / Rullino)", name: "src", widget: "image" }
+              - { label: "Titolo / Descrizione Foto", name: "title", widget: "string" }
+              - { label: "Categoria", name: "category", widget: "select", options: ["Colazione & Granite", "Aperitivi & Taglieri", "Gelateria", "Il Locale"] }
