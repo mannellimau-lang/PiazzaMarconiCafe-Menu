@@ -1,0 +1,33 @@
+{
+  "categories": [
+    {
+      "id": "granite",
+      "title": "Le Granite Artigianali Siciliane",
+      "items": [
+        { "id": "g1", "name": "Mandorla Siciliana", "desc": "Preparata artigianalmente con mandorle siciliane selezionate. Un procedimento attento per una consistenza setosa.", "price": "3.30", "price2": "2.80", "tags": ["Signature", "Best Seller"], "photoUrl": "/media/granita.jpg" },
+        { "id": "g2", "name": "Pistacchio Puro", "desc": "Pistacchi siciliani, acqua e zucchero. Gusto intenso e naturale.", "price": "4.80", "price2": "3.90", "tags": ["Premium"], "photoUrl": "/media/granita.jpg" },
+        { "id": "g3", "name": "Limone di Sicilia", "desc": "Succo di limoni freschi siciliani, acqua e zucchero.", "price": "2.70", "price2": "2.20", "tags": ["Classico"], "photoUrl": "/media/granita.jpg" },
+        { "id": "g4", "name": "Gelsi di Sicilia", "desc": "Gelsi neri freschi, acqua e zucchero.", "price": "3.50", "price2": "3.00", "tags": ["Stagionale"], "photoUrl": "/media/granita.jpg" },
+        { "id": "g5", "name": "Ricotta Fresca", "desc": "Ricotta di pecora fresca mantecata a freddo.", "price": "3.50", "price2": "3.00", "tags": ["Special"], "photoUrl": "/media/granita.jpg" }
+      ]
+    },
+    {
+      "id": "panini",
+      "title": "I Panini d'Autore",
+      "items": [
+        { "id": "p1", "name": "Panino Piazza Marconi", "desc": "Farina 0, speck, Filadelfia, paté d'olive nere, rucola, pomodoro.", "price": "4.50", "allergens": ["1", "7"], "tags": ["Signature", "Best Seller"], "photoUrl": "/media/salato.jpg" },
+        { "id": "p2", "name": "Panino Poldo", "desc": "Pollo arrostito, pomodoro, lattuga, salse artigianali. Pane farina tipo 0.", "price": "6.00", "allergens": ["1", "3", "7"], "tags": ["Best Seller"], "photoUrl": "/media/salato.jpg" },
+        { "id": "p3", "name": "Panino Fish", "desc": "Filetto di merluzzo panato, pomodoro, Emmenthal, lattuga.", "price": "6.00", "allergens": ["1", "4", "7"], "tags": ["Gourmet"], "photoUrl": "/media/salato.jpg" },
+        { "id": "p4", "name": "Panino Caprese", "desc": "Mozzarella di bufala, pomodoro, olio EVO, origano e sale.", "price": "3.50", "allergens": ["1", "7"], "tags": ["Vegetariano"], "photoUrl": "/media/salato.jpg" }
+      ]
+    },
+    {
+      "id": "aperitivi",
+      "title": "Lounge Aperitivo & Taglieri",
+      "items": [
+        { "id": "a1", "name": "Tagliere della Casa Marconi", "desc": "Selezione di salumi e formaggi siciliani DOP, sfizi caldi, bruschette e focaccine.", "price": "12.00", "allergens": ["1", "7"], "tags": ["Consigliato"], "photoUrl": "/media/tagliere.jpg" },
+        { "id": "a2", "name": "Aperitivo Aperol / Campari Spritz", "desc": "Spritz classico servito con stuzzichini e patatine gourmet.", "price": "6.00", "tags": ["Popular"], "photoUrl": "/media/tagliere.jpg" }
+      ]
+    }
+  ]
+}
