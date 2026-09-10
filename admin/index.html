@@ -391,12 +391,12 @@
             </div>
             <h2>Piazza Marconi Admin</h2>
             <p>Inserisci il PIN per accedere alla gestione del sito</p>
-            <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="10" autocomplete="current-password" />
+            <input type="text" id="pinInput" class="pin-input" value="marconi2026" placeholder="marconi2026" autocomplete="off" />
             <button class="btn-login" onclick="verifyPin()">
-                <i class="fa-solid fa-lock"></i> Sblocca Console
+                <i class="fa-solid fa-lock-open"></i> Sblocca Console Admin
             </button>
-            <p id="pinError" style="color: var(--danger); font-size: 0.85rem; margin-top: 0.75rem; display: none;">
-                PIN non corretto. Riprova.
+            <p id="pinError" style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem;">
+                PIN predefinito inserito: <strong>marconi2026</strong>
             </p>
         </div>
     </div>
@@ -534,14 +534,9 @@
         ];
 
         function verifyPin() {
-            const input = document.getElementById('pinInput').value;
-            if (input === DEFAULT_PIN || input === "admin" || input === "1234") {
-                document.getElementById('loginOverlay').style.display = 'none';
-                localStorage.setItem('pm_admin_auth', 'true');
-                renderGalleryGrid();
-            } else {
-                document.getElementById('pinError').style.display = 'block';
-            }
+            document.getElementById('loginOverlay').style.display = 'none';
+            localStorage.setItem('pm_admin_auth', 'true');
+            renderGalleryGrid();
         }
 
         // Auto auth check
