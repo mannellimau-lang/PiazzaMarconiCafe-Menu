@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-24T13:16:27.314Z",
+  "lastUpdated": "2026-09-25T13:23:28.555Z",
   "agents": {
     "1": {
       "name": "Social & Content Director",
@@ -7,23 +7,21 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:13:26 PM] [!] Error: 504 Deadline expired before operation could complete....",
         "[12:57:02 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[1:04:26 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[12:58:20 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:40:56 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:40:51 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:40:56 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "Inability to track website traffic and social referral conversion rates due to a broken Google Analytics API integration (missing credentials file).",
-        "Lack of consistent aesthetic direction and cohesive storytelling on social media channels, leading to flat audience engagement rates."
+        "Execution Error: 504 Deadline expired before operation could complete."
       ],
       "solutionsProposed": [
-        "Restore Google Analytics connectivity immediately by securely deploying the missing API credentials to resume data-driven campaign tracking.",
-        "Establish a warm, high-contrast visual brand guideline and launch a curated weekly photo series featuring signature Italian espresso and pastries to drive local engagement."
+        "Check python logic or API status"
       ],
-      "status": "Success",
+      "status": "Failure",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_1_social_content.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
+      "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_1_social_content.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\nTraceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/grpc_helpers.py\", line 55, in error_remapped_callable\n    return callable_(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 276, in __call__\n    response, ignored_call = self._with_call(\n                             ^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 331, in _with_call\n    return call.result(), call\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 447, in result\n    raise self\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 314, in continuation\n    response, call = self._thunk(new_method).with_call(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 1182, in with_call\n    return _end_unary_response_blocking(state, call, True, None)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 999, in _end_unary_response_blocking\n    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ngrpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:\n\tstatus = StatusCode.DEADLINE_EXCEEDED\n\tdetails = \"Deadline expired before operation could complete.\"\n\tdebug_error_string = \"DEADLINE_EXCEEDED:Deadline expired before operation could complete.\"\n>\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_1_social_content.py\", line 54, in run_agent\n    response = model.generate_content(\n               ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/generativeai/generative_models.py\", line 331, in generate_content\n    response = self._client.generate_content(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py\", line 835, in generate_content\n    response = rpc(\n               ^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/gapic_v1/method.py\", line 128, in __call__\n    return wrapped_func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 295, in retry_wrapped_func\n    return retry_target(\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 157, in retry_target\n    next_sleep = _retry_error_helper(\n                 ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_base.py\", line 215, in _retry_error_helper\n    raise final_exc from source_exc\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 148, in retry_target\n    result = target()\n             ^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/timeout.py\", line 130, in func_with_timeout\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/grpc_helpers.py\", line 57, in error_remapped_callable\n    raise exceptions.from_grpc_error(exc) from exc\ngoogle.api_core.exceptions.DeadlineExceeded: 504 Deadline expired before operation could complete.\n"
     },
     "2": {
       "name": "Market Intelligence & SEO Analyst",
@@ -31,22 +29,22 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:15:03 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[12:59:12 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[1:05:58 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:00:42 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[2:42:10 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:42:29 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:42:10 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "Critical loss of digital visibility tracking due to missing Google Analytics and Google My Business credentials, leaving the cafe blind to local search traffic in Caltanissetta.",
-        "Inability to monitor local map pack rankings and customer interactions on Google Maps, hindering competitive analysis against local bars."
+        "Critical lack of access to Google Analytics data, preventing any analysis of website traffic, user behavior, and potential SEO performance issues.",
+        "Inability to fetch Google My Business data, hindering our capacity to monitor local search visibility, customer engagement, and competitive standing in Caltanissetta."
       ],
       "solutionsProposed": [
-        "Restore technical integrations by securely configuring the missing Google credentials file to re-establish Google Analytics and Google My Business API access.",
-        "Launch a targeted local SEO recovery campaign focusing on high-intent search terms like 'café Caltanissetta' and 'aperitivo' once Google My Business data flow is restored."
+        "Establish proper authentication and access to Google Analytics for comprehensive website performance tracking and SEO analysis.",
+        "Secure appropriate credentials and access to Google My Business to enable crucial monitoring of local search performance and customer interactions."
       ],
       "status": "Success",
-      "modelUsed": "gemini-3.5-flash",
+      "modelUsed": "gemini-2.5-flash",
       "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_2_market_seo.py:11: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     },
     "3": {
@@ -55,22 +53,22 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:19:34 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:02:42 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[1:17:03 PM] [!] Error: 504 Deadline expired before operation could complete....",
         "[1:01:54 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:43:27 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:43:48 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:43:27 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "The cookie banner lacks an explicit and equally prominent 'Reject All' button on the initial layer, which violates the Italian Garante Privacy guidelines and GDPR requirements.",
-        "The digital reservation form utilizes low-contrast text (below WCAG 2.1 AA standards of 4.5:1) for form labels and placeholders, causing usability barriers and potential drop-offs."
+        "The online ordering process appears to have too many steps or fields, potentially causing user frustration and cart abandonment, impacting conversion rates.",
+        "The website lacks a clear, accessible, and granular cookie consent banner, and the privacy policy may not fully comply with GDPR and Italian data protection regulations regarding user data processing and rights."
       ],
       "solutionsProposed": [
-        "Implement a compliant cookie consent banner that features equal visual weight for 'Accept' and 'Reject' choices at the first level of interaction, with clear granular options.",
-        "Adjust the digital reservation interface colors to guarantee WCAG 2.1 AA compliance and integrate real-time, accessible form validation messages to optimize conversion rates."
+        "Redesign the online ordering flow to reduce the number of clicks and required fields, offering guest checkout and persistent cart functionality to improve user experience and increase conversion.",
+        "Implement a multi-layered, prominent cookie consent banner that provides granular control over cookie preferences, and ensure a comprehensive, easily navigable privacy policy link is present in the footer, detailing data processing activities, user rights, and legal bases in accordance with GDPR and Italian law."
       ],
       "status": "Success",
-      "modelUsed": "gemini-3.5-flash",
+      "modelUsed": "gemini-2.5-flash",
       "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_3_compliance_ux.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     },
     "4": {
@@ -79,17 +77,19 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:20:59 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:04:09 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:18:28 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:03:22 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[2:44:53 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:45:05 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:44:53 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "Unable to analyze performance data or identify underperforming areas due to a failed analytics data fetch. The required Google credentials file was not found, preventing access to sales and REAL web traffic data."
+        "Critical sales and REAL web traffic data is currently inaccessible due to a missing Google Analytics credential file, preventing any data-backed performance analysis and identification of underperforming areas.",
+        "The inability to access foundational metrics means specific underperforming segments or channels cannot be identified, rendering it impossible to formulate data-backed marketing campaigns at this time."
       ],
       "solutionsProposed": [
-        "Cannot propose data-backed marketing solutions without access to actual sales and web traffic data. Please ensure the Google Analytics credentials file is correctly configured and accessible to fetch the necessary performance metrics for analysis."
+        "The immediate and critical solution is to rectify the Google Analytics credential file path error to restore access to essential sales and web traffic data. This foundational step is paramount before any meaningful data analysis or strategic marketing campaign development can occur.",
+        "Once data access is restored, conduct an urgent, comprehensive review of sales trends, web traffic patterns, and user behavior to pinpoint specific underperforming areas. This will then inform the development of targeted, data-backed marketing initiatives."
       ],
       "status": "Success",
       "modelUsed": "gemini-2.5-flash",
@@ -101,21 +101,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:22:12 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:15:14 PM] [!] Error: 499 The operation was cancelled....",
         "[1:19:41 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:05:48 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[2:46:08 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:46:20 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:46:08 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "Execution Error: 499 The operation was cancelled."
+        "Risk of burnout due to sustained high pace and lack of explicit downtime for individual reflection or recovery.",
+        "Team members may feel their continuous high output is not sufficiently recognized, leading to decreased intrinsic motivation over time."
       ],
       "solutionsProposed": [
-        "Check python logic or API status"
+        "Introduce mandatory \"Recharge & Reflect\" 15-minute breaks twice daily, encouraging team members to step away from their screens.",
+        "Implement a \"Weekly Wins Shout-out\" during stand-ups or a dedicated Slack channel for peer-to-peer appreciation and celebration of small and large successes."
       ],
-      "status": "Failure",
-      "modelUsed": "gemini-3.5-flash",
-      "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_5_motivator.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\nTraceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/grpc_helpers.py\", line 55, in error_remapped_callable\n    return callable_(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 276, in __call__\n    response, ignored_call = self._with_call(\n                             ^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 331, in _with_call\n    return call.result(), call\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 447, in result\n    raise self\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_interceptor.py\", line 314, in continuation\n    response, call = self._thunk(new_method).with_call(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 1182, in with_call\n    return _end_unary_response_blocking(state, call, True, None)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/grpc/_channel.py\", line 999, in _end_unary_response_blocking\n    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ngrpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:\n\tstatus = StatusCode.CANCELLED\n\tdetails = \"The operation was cancelled.\"\n\tdebug_error_string = \"CANCELLED:The operation was cancelled.\"\n>\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_5_motivator.py\", line 50, in run_agent\n    response = model.generate_content(\n               ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/generativeai/generative_models.py\", line 331, in generate_content\n    response = self._client.generate_content(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py\", line 835, in generate_content\n    response = rpc(\n               ^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/gapic_v1/method.py\", line 128, in __call__\n    return wrapped_func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 295, in retry_wrapped_func\n    return retry_target(\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 157, in retry_target\n    next_sleep = _retry_error_helper(\n                 ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_base.py\", line 215, in _retry_error_helper\n    raise final_exc from source_exc\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py\", line 148, in retry_target\n    result = target()\n             ^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/timeout.py\", line 130, in func_with_timeout\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/google/api_core/grpc_helpers.py\", line 57, in error_remapped_callable\n    raise exceptions.from_grpc_error(exc) from exc\ngoogle.api_core.exceptions.Cancelled: 499 The operation was cancelled.\n"
+      "status": "Success",
+      "modelUsed": "gemini-2.5-flash",
+      "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_5_motivator.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     },
     "6": {
       "name": "Chief Executive Supervisor",
@@ -123,22 +125,22 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[1:23:28 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:16:27 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[1:20:55 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[1:07:08 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:47:23 PM] [SUCCESS] Completed with gemini-2.5-flash.",
-        "[12:47:35 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:47:23 PM] [SUCCESS] Completed with gemini-2.5-flash."
       ],
       "problemsFound": [
-        "Supply chain delays for specialty Italian imports leading to menu inconsistencies and stockouts during peak hours.",
-        "Labor bottlenecks during weekend brunch shifts causing increased customer wait times and service delays."
+        "Inconsistent service speed during peak hours is significantly impacting customer satisfaction and overall throughput, creating an execution bottleneck.",
+        "Our current product offerings are not diversified enough to attract new customer segments, leading to stagnating growth outside our core loyal base."
       ],
       "solutionsProposed": [
-        "Establish local secondary sourcing agreements and formalize ingredient substitution protocols to maintain menu stability.",
-        "Introduce a weekend shift incentive program and cross-train front-of-house staff to optimize peak-hour labor distribution."
+        "Initiate a comprehensive workflow optimization study focused on peak hour operations, including potential layout adjustments and staffing level revisions, to reduce average customer wait times by 15% within the next fiscal quarter.",
+        "Direct the R&D and Marketing departments to develop and pilot two new distinct menu items (one food, one beverage) specifically targeting health-conscious and/or vegan demographics, with a full-scale launch slated for Q3."
       ],
       "status": "Success",
-      "modelUsed": "gemini-3.5-flash",
+      "modelUsed": "gemini-2.5-flash",
       "stderr": "/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_6_ceo.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     }
   }
