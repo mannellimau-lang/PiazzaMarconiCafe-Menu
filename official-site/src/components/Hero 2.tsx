@@ -3,19 +3,18 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
-import { useInSituAdmin } from "@/context/InSituAdminContext";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [menuUrl, setMenuUrl] = useState("https://piazza-marconi-cafe-menu.vercel.app");
-  const { isEditMode, hero, setHero } = useInSituAdmin();
 
   // Ensure autoplay works on all browsers including Safari
   useEffect(() => {
     const vid = videoRef.current;
     if (!vid) return;
 
+    // Force attributes via JS for maximum Safari compatibility
     vid.muted = true;
     vid.defaultMuted = true;
     vid.playsInline = true;
@@ -29,24 +28,25 @@ export default function Hero() {
       const playPromise = vid.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
+          // Safari sometimes needs multiple attempts with increasing delays
           setTimeout(() => {
             vid.muted = true;
             vid.play().catch(() => {
-              setTimeout(() => {
-                vid.muted = true;
-                vid.play().catch(() => {});
-              }, 1000);
+              setTimeout(() => { vid.muted = true; vid.play().catch(() => {}); }, 1000);
             });
           }, 300);
         });
       }
     };
 
+    // Try immediately
     tryPlay();
 
+    // Also try on loadeddata
     vid.addEventListener("loadeddata", tryPlay, { once: true });
     vid.addEventListener("canplay", tryPlay, { once: true });
 
+    // Also try when the section becomes visible (IntersectionObserver)
     if (containerRef.current && typeof IntersectionObserver !== "undefined") {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -61,6 +61,7 @@ export default function Hero() {
     }
   }, []);
 
+  // Set correct menu URL
   useEffect(() => {
     if (typeof window !== "undefined") {
       const host = window.location.hostname;
@@ -81,7 +82,7 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-screen overflow-hidden bg-black flex items-center justify-center"
     >
-      {/* Background Video */}
+      {/* Background Video — always visible, no scroll-driven opacity */}
       <div
         className="absolute inset-0 z-0 w-full h-full"
         style={{
@@ -96,7 +97,7 @@ export default function Hero() {
           loop
           muted
           playsInline
-          // @ts-ignore
+          // @ts-ignore — needed for older Safari
           webkit-playsinline=""
           poster="/media/granita.jpg"
           preload="auto"
@@ -105,10 +106,11 @@ export default function Hero() {
         >
           <source src="/media/degustazione_granite.mp4" type="video/mp4" />
         </video>
+        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/50 z-[1]" />
       </div>
 
-      {/* Hero Content */}
+      {/* Hero Content — entrance animation only, no scroll opacity */}
       <motion.div
         className="relative z-10 container mx-auto px-6 text-center flex flex-col items-center pt-24"
         initial={{ opacity: 0, y: 30 }}
@@ -122,20 +124,7 @@ export default function Hero() {
           className="group flex items-center justify-center gap-2 text-white/90 uppercase tracking-[0.2em] text-sm md:text-base mb-6 font-bold hover:text-white hover:bg-white/10 px-4 py-2 rounded-full border border-white/20 hover:border-white/50 transition-all cursor-pointer inline-flex"
         >
           <MapPin className="w-4 h-4" />
-          <span
-            contentEditable={isEditMode}
-            suppressContentEditableWarning
-            onBlur={(e) =>
-              setHero((prev) => ({ ...prev, badge: e.currentTarget.innerText }))
-            }
-            className={
-              isEditMode
-                ? "outline-dashed outline-1 outline-amber-400 bg-amber-500/20 px-2 rounded cursor-text"
-                : ""
-            }
-          >
-            {hero.badge || "Caltanissetta"}
-          </span>
+          <span>Caltanissetta</span>
         </a>
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 max-w-5xl drop-shadow-2xl leading-tight">
@@ -145,72 +134,30 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p
-          contentEditable={isEditMode}
-          suppressContentEditableWarning
-          onBlur={(e) =>
-            setHero((prev) => ({ ...prev, subtitle: e.currentTarget.innerText }))
-          }
-          className={`text-lg md:text-xl text-white/90 mb-12 max-w-2xl font-light ${
-            isEditMode
-              ? "outline-dashed outline-1 outline-amber-400 bg-amber-500/20 p-2 rounded cursor-text"
-              : ""
-          }`}
-        >
-          {hero.subtitle ||
-            "Dal 2015 l'eccellenza della colazione siciliana: la vera granita artigianale servita con brioche col tuppo calda."}
+        <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl font-light">
+          {"Dal 2015 l'eccellenza della colazione siciliana: la vera granita artigianale servita con brioche col tuppo calda. "}
+          {"Scopri i nostri gelati, il salato e la magia dell'aperitivo lounge nel cuore di Caltanissetta."}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 mb-12">
           <a
-            href={hero.cta_primary_link || menuUrl}
+            href={menuUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]"
           >
-            <span
-              contentEditable={isEditMode}
-              suppressContentEditableWarning
-              onBlur={(e) =>
-                setHero((prev) => ({
-                  ...prev,
-                  cta_primary_text: e.currentTarget.innerText,
-                }))
-              }
-              className={
-                isEditMode
-                  ? "outline-dashed outline-1 outline-amber-400 bg-amber-100 px-1 rounded cursor-text"
-                  : ""
-              }
-            >
-              {hero.cta_primary_text || "Esplora il Menu"}
-            </span>
+            Esplora il Menu
             <ArrowRight className="w-5 h-5" />
           </a>
           <a
             href="#prenotazioni"
             className="inline-flex items-center justify-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-colors"
           >
-            <span
-              contentEditable={isEditMode}
-              suppressContentEditableWarning
-              onBlur={(e) =>
-                setHero((prev) => ({
-                  ...prev,
-                  cta_secondary_text: e.currentTarget.innerText,
-                }))
-              }
-              className={
-                isEditMode
-                  ? "outline-dashed outline-1 outline-amber-400 bg-amber-500/20 px-1 rounded cursor-text"
-                  : ""
-              }
-            >
-              {hero.cta_secondary_text || "Prenota un Tavolo"}
-            </span>
+            Prenota un Tavolo
           </a>
         </div>
       </motion.div>
     </section>
   );
 }
+

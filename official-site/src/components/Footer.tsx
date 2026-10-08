@@ -1,8 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { Lock, LockOpen } from "lucide-react";
+import { useInSituAdmin } from "@/context/InSituAdminContext";
 
 export default function Footer() {
+  const { isEditMode, setIsEditMode, showToast } = useInSituAdmin();
+
+  const handleToggleAdmin = () => {
+    if (!isEditMode) {
+      const pin = prompt("Inserisci PIN Amministratore:");
+      if (pin === "marconi2026") {
+        sessionStorage.setItem("in_situ_edit_mode", "true");
+        setIsEditMode(true);
+        showToast("🔓 Modalità In-Situ Direct Admin Attivata!");
+      } else if (pin) {
+        alert("PIN Errato! Accesso negato.");
+      }
+    } else {
+      sessionStorage.removeItem("in_situ_edit_mode");
+      setIsEditMode(false);
+      showToast("🔒 Modalità Edit Disattivata.");
+    }
+  };
+
   return (
     <footer className="relative bg-black w-full overflow-hidden border-t border-white/10">
       {/* Background Image with Dark Overlay */}
@@ -83,16 +104,34 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="w-full bg-black/90 py-5 border-t border-white/10 mt-auto">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center text-white/50 text-xs md:text-sm tracking-wider gap-4 md:gap-8 text-center">
-            <span>© Copyright {new Date().getFullYear()}</span>
-            <span className="hidden md:block">|</span>
-            <Link href="/privacy-policy" className="hover:text-white transition-colors underline underline-offset-4 decoration-white/20">
-              Privacy Policy
-            </Link>
-            <span className="hidden md:block">|</span>
-            <Link href="/termini-catering" className="hover:text-white transition-colors underline underline-offset-4 decoration-white/20">
-              Termini e Condizioni
-            </Link>
+          <div className="container mx-auto px-4 flex flex-col items-center justify-center gap-4 text-center">
+            <div className="flex flex-wrap items-center justify-center text-white/50 text-xs md:text-sm tracking-wider gap-4 md:gap-8">
+              <span>© Copyright {new Date().getFullYear()}</span>
+              <span className="hidden md:block">|</span>
+              <Link href="/privacy-policy" className="hover:text-white transition-colors underline underline-offset-4 decoration-white/20">
+                Privacy Policy
+              </Link>
+              <span className="hidden md:block">|</span>
+              <Link href="/termini-catering" className="hover:text-white transition-colors underline underline-offset-4 decoration-white/20">
+                Termini e Condizioni
+              </Link>
+            </div>
+
+            <button
+              onClick={handleToggleAdmin}
+              className="mt-2 text-white/40 hover:text-amber-400 text-xs flex items-center gap-2 transition-colors cursor-pointer py-1.5 px-4 rounded-full border border-white/10 hover:border-amber-400/40"
+            >
+              {isEditMode ? (
+                <LockOpen className="w-3.5 h-3.5 text-amber-400" />
+              ) : (
+                <Lock className="w-3.5 h-3.5" />
+              )}
+              <span>
+                {isEditMode
+                  ? "Area Riservata (Modifica Attiva)"
+                  : "Area Riservata Amministratore"}
+              </span>
+            </button>
           </div>
         </div>
       </div>

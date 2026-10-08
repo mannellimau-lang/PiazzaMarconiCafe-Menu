@@ -5,7 +5,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
-import { InSituAdminProvider } from "@/context/InSituAdminContext";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -33,15 +32,13 @@ export default function RootLayout({
       className={`${playfair.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground overflow-x-hidden">
-        <InSituAdminProvider>
-          <Navbar />
-          <div className="flex-1">
-            {children}
-          </div>
-          <Footer />
-          <CookieBanner />
-          <Analytics />
-        </InSituAdminProvider>
+        <Navbar />
+        <div className="flex-1">
+          {children}
+        </div>
+        <Footer />
+        <CookieBanner />
+        <Analytics />
       </body>
     </html>
   );

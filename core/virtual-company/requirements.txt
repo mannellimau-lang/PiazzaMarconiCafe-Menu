@@ -1,9 +1,0 @@
-google-generativeai
-pydantic
-python-dotenv
-requests
-beautifulsoup4
-duckduckgo_search
-google-analytics-data
-google-api-python-client
-google-auth
