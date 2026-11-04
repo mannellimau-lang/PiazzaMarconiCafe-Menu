@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-03T15:39:09.801Z",
+  "lastUpdated": "2026-11-04T15:56:13.032Z",
   "agents": {
     "1": {
       "name": "Social & Content Director",
@@ -7,23 +7,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:49:36 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:32:01 PM] [SUCCESS] Completed with gemini-2.5-flash.",
         "[5:29:32 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:33:53 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[1:56:53 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:38:18 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[1:56:53 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Inability to access crucial website traffic and social media analytics data due to missing credentials, preventing data-driven insights into engagement and content performance.",
-        "Lack of a systematic feedback loop from performance metrics to content strategy, potentially leading to suboptimal aesthetic and engagement quality across platforms."
+        "Website traffic analytics pipeline is currently broken due to missing API credentials, halting data-driven content scheduling.",
+        "Lack of direct attribution tracking from social media engagement to online menu views."
       ],
       "solutionsProposed": [
-        "Prioritize resolving the 'google_credentials.json was not found' error to immediately re-establish access to Google Analytics and other relevant social media platform insights.",
-        "Implement a regular (e.g., weekly/monthly) review process for newly accessible analytics data to identify top-performing content, engagement patterns, and areas for aesthetic or strategic improvement."
+        "Restore the Google Analytics API credential pipeline to resume real-time traffic and engagement tracking.",
+        "Launch an aesthetic 'Morning Coffee Routine' reel series to maintain social engagement while technical analytics are fixed."
       ],
       "status": "Success",
-      "modelUsed": "gemini-2.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_1_social_content.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
+      "modelUsed": "gemini-3.5-flash",
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_1_social_content.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
     },
     "2": {
       "name": "Market Intelligence & SEO Analyst",
@@ -31,23 +31,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:51:02 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:33:15 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[5:30:48 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:35:04 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[1:58:38 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:39:29 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[1:58:38 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Analytics and Google Business Profile integrations are completely unlinked due to missing API credentials file.",
-        "Lack of automated data tracking prevents monitoring of local Caltanissetta search trends and customer traffic metrics."
+        "Unable to track website SEO traffic, user behavior, and keyword performance due to missing Google Analytics API credentials.",
+        "Complete lack of visibility into Google Maps local search impressions and Google Business Profile interactions for the Caltanissetta market."
       ],
       "solutionsProposed": [
-        "Re-authenticate and configure the google_credentials.json file to restore automated Google Analytics and GMB performance tracking.",
-        "Execute a manual local SEO audit targeting Caltanissetta keywords such as 'colazione Caltanissetta' and 'pasticceria Piazza Marconi' in the interim."
+        "Provision and configure the missing google_credentials.json file to restore automated Google Analytics and Google Business Profile API data feeds.",
+        "Conduct an immediate manual local search audit of top Caltanissetta cafe competitors on Google Maps to assess visibility while API integrations are restored."
       ],
       "status": "Success",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_2_market_seo.py:11: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_2_market_seo.py:11: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
     },
     "3": {
       "name": "Risk, UI/UX & Compliance Officer",
@@ -55,23 +55,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:52:18 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:34:27 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[5:31:59 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:36:16 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:00:02 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:40:55 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:00:02 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Missing explicit consent banners for tracking cookies in accordance with GDPR and Italian Garante Privacy guidelines.",
-        "Low contrast ratio on the online menu navigation buttons, causing accessibility friction and potential WCAG compliance issues."
+        "Missing mandatory Italian business registration details (Partita IVA and REA number) in the website footer, alongside a non-compliant GDPR cookie banner lacking an explicit 'Reject All' option.",
+        "Low color contrast on the mobile menu ordering modal (violating WCAG 2.1 AA standards) creating cognitive friction and accessible checkout drop-offs."
       ],
       "solutionsProposed": [
-        "Implement a compliant Cookie Consent Management Platform with granular opt-in controls and an easily accessible Privacy Policy.",
-        "Redesign menu UI elements to meet WCAG 2.1 AA contrast standards and add appropriate ARIA attributes for screen readers."
+        "Update footer to display full legal entity details including P.IVA, and deploy an ePrivacy-compliant banner featuring equal-prominence 'Accept' and 'Reject' consent buttons.",
+        "Enhance UI contrast ratios to a minimum of 4.5:1 across the digital menu and introduce a sticky bottom-bar CTA button to streamline mobile guest checkout."
       ],
       "status": "Success",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_3_compliance_ux.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_3_compliance_ux.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     },
     "4": {
       "name": "Strategy & Data Analyst",
@@ -79,23 +79,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:53:52 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:36:23 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[5:33:10 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:37:27 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:01:36 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:42:28 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:01:36 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Google Analytics integration failure due to missing API credentials, preventing real-time web traffic tracking and digital conversion analysis.",
-        "Inability to measure digital marketing ROI and online-to-offline customer acquisition for Piazza Marconi Cafe."
+        "Analytics tracking pipeline is broken due to a missing Google Analytics credential file, leading to zero visibility into real web traffic and online conversion metrics.",
+        "Inability to evaluate customer acquisition performance or optimize digital marketing spend without real-time analytics data."
       ],
       "solutionsProposed": [
-        "Restore Google Analytics API credentials and deploy UTM-tagged QR codes on physical tables to track physical-to-digital engagement.",
-        "Launch a localized social media promo offering a trackable digital coupon to capture baseline visitor metrics and drive afternoon foot traffic."
+        "Restore the Analytics API credential file to immediately re-establish real-time web traffic data ingestion and automated conversion tracking.",
+        "Deploy a localized, QR-code-driven table menu promotion to capture customer engagement and track conversion rates directly while online analytics tools are being restored."
       ],
       "status": "Success",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_4_strategy_metrics.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_4_strategy_metrics.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.analytics.data_v1beta once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.analytics.data_v1beta past that date.\n  warnings.warn(message, FutureWarning)\n"
     },
     "5": {
       "name": "Continuous Improvement Motivator",
@@ -103,23 +103,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:55:03 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:37:43 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[5:34:21 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:38:36 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:02:59 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:43:38 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:02:59 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Friction in hand-off procedures between functional pods causing deployment bottlenecks and developer burnout.",
-        "Lack of real-time visibility into continuous integration achievements, leading to team fatigue during rapid sprint cycles."
+        "High deployment friction and manual release gates are causing developer fatigue and burnout during sprint cycles.",
+        "Siloed communication between engineering and product teams leads to frequent context switching and low team morale."
       ],
       "solutionsProposed": [
-        "Automate deployment feedback loops using integrated ChatOps channels to instantly celebrate successful builds and ease release tension.",
-        "Establish weekly blameless retrospectives paired with peer micro-recognition shout-outs to eliminate friction and elevate team morale."
+        "Automate CI/CD pipelines with integrated testing to enable painless, continuous delivery and reduce developer toil.",
+        "Establish weekly cross-functional retrospectives with peer appreciation shout-outs to celebrate wins and realign team priorities."
       ],
       "status": "Success",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_5_motivator.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_5_motivator.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     },
     "6": {
       "name": "Chief Executive Supervisor",
@@ -127,23 +127,23 @@
       "accumulatedMinutes": 55,
       "dailyQuota": 60,
       "logs": [
+        "[3:56:13 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[3:39:09 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[5:35:32 PM] [SUCCESS] Completed with gemini-3.5-flash.",
         "[2:39:45 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:04:26 PM] [SUCCESS] Completed with gemini-3.5-flash.",
-        "[2:44:48 PM] [SUCCESS] Completed with gemini-3.5-flash."
+        "[2:04:26 PM] [SUCCESS] Completed with gemini-3.5-flash."
       ],
       "problemsFound": [
-        "Inter-departmental communication gaps causing delays in menu updates and inventory alignment.",
-        "Inconsistent foot traffic during weekday afternoon lulls impacting overall daily margin targets."
+        "Inconsistent cross-departmental alignment between morning peak labor scheduling and supply chain inventory replenishment.",
+        "Rising waste metrics in fresh pastry inventory due to uncalibrated daily sales forecasting."
       ],
       "solutionsProposed": [
-        "Implement a mandatory weekly cross-departmental sync led by operations to streamline supply and menu updates.",
-        "Launch targeted off-peak loyalty promotions and afternoon combo deals to drive traffic and stabilize weekday revenue."
+        "Implement a synchronized real-time inventory management protocol linked directly to shift scheduling.",
+        "Mandate a revised weekly sales forecasting model to optimize daily fresh item procurement and minimize waste."
       ],
       "status": "Success",
       "modelUsed": "gemini-3.5-flash",
-      "stderr": "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.18) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_6_ceo.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
+      "stderr": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.11.17) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2027-10-24). Please upgrade to the latest Python version, or at least Python 3.12, to continue receiving updates for google.api_core past that date.\n  warnings.warn(message, FutureWarning)\n/home/runner/work/PiazzaMarconiCafe-Menu/PiazzaMarconiCafe-Menu/core/virtual-company/agents/python_brains/agent_6_ceo.py:10: FutureWarning: \n\nAll support for the `google.generativeai` package has ended. It will no longer be receiving \nupdates or bug fixes. Please switch to the `google.genai` package as soon as possible.\nSee README for more details:\n\nhttps://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n\n  import google.generativeai as genai\n"
     }
   }
 }
