@@ -18,7 +18,8 @@ esatto dell'utente: **APPROVATO**.
 | 3 | Decidere se rendere **privato** il repository GitHub | Il repo è pubblico: contiene report interni (`reports/`), cronologia e documentazione operativa | Da decidere |
 | 4 | **Spostare il progetto fuori da Desktop/iCloud** (es. `~/Developer/bar`) e reinstallare le dipendenze | Vedi §3.1: è la causa dei blocchi di build e script | Da fare |
 | 5 | Verificare i dati legali segnati "da verificare" in §2.5 | Dati presi da fonti pubbliche non ufficiali | Da fare |
-| 6 | Aggiungere il secret GitHub `REPORT_RECIPIENT_EMAIL` (facoltativo) | Il destinatario del report non è più scritto nel codice; senza secret il report va al mittente | Facoltativo |
+| 6 | **Installare il nuovo workflow**: copiare `docs/ci/run_agents.proposed.yml` su `.github/workflows/run_agents.yml` e fare push con un token che abbia lo scope `workflow` (`gh auth refresh -s workflow`) | Il token Git di questo Mac non può modificare i workflow, quindi nel branch il file in `.github/workflows/` è rimasto identico a `main`. Il vecchio workflow funziona comunque con il nuovo codice, ma ha ancora `contents: write` e prova a committare i report | Da fare |
+| 7 | Aggiungere il secret GitHub `REPORT_RECIPIENT_EMAIL` (facoltativo) | Il destinatario del report non è più scritto nel codice; senza secret il report va al mittente | Facoltativo |
 
 ---
 
@@ -41,7 +42,7 @@ esatto dell'utente: **APPROVATO**.
 | Copia obsoleta del menu servita dal sito ufficiale | `official-site/public/index.html` | Rimossa |
 | Output del modello inserito senza escape nell'email HTML | `run_all_now.js` | Escape HTML |
 | Indirizzo email personale e percorso locale nel codice | `run_all_now.js`, `agent_tools.py` | Spostati in variabili d'ambiente / rimossi |
-| Workflow con `contents: write` che committava i report nel repo pubblico | `.github/workflows/run_agents.yml` | Permessi di sola lettura; il report viene solo inviato via email |
+| Workflow con `contents: write` che committava i report nel repo pubblico | `.github/workflows/run_agents.yml` | Versione corretta pronta in `docs/ci/run_agents.proposed.yml` (sola lettura, nessun commit dei report): **da installare a mano, vedi azione 6** |
 | CSP del sito ufficiale bloccava il salvataggio admin e il traduttore | `official-site/next.config.ts` | Aggiunti solo gli host necessari; aggiunto HSTS |
 
 ### 1.3 Residui noti
@@ -166,7 +167,7 @@ Codice di uscita di `run_all_now.js`: `0` se almeno un agente ha un'analisi AI, 
 ### 4.4 Stato delle verifiche
 - Verificato: flusso completo in `--dry-run`; 8 test del client contro un server finto (404, 429, quota giornaliera, 503, JSON troncato, modelli ritirati, chiave rifiutata); modalità degradata reale senza chiave (25 s, termina sempre).
 - **Non eseguito: un report reale con la chiave Gemini** (per non consumare quota né inviare email senza conferma). Primo passo consigliato: `node run_all_now.js --no-email`.
-- Il workflow GitHub aggiornato non è stato eseguito: lanciarlo a mano con `dry_run` attivo dopo il merge.
+- Il workflow GitHub aggiornato (`docs/ci/run_agents.proposed.yml`) non è installato né eseguito: installarlo (azione 6) e lanciarlo a mano con `dry_run` attivo.
 
 ---
 

@@ -1,0 +1,81 @@
+# ==============================================================
+# Piazza Marconi Cafe — Virtual Company Agent Runner
+# Ogni mattina alle 08:00 UTC (09:00 ora solare / 10:00 ora legale italiana)
+#
+# NOTA DI SICUREZZA: il repository è pubblico. Il report contiene analisi interne
+# dell'attività, quindi NON viene più committato nel repo né caricato come artifact:
+# viene solo inviato via email. I segreti arrivano dai GitHub Repository Secrets.
+# ==============================================================
+
+name: "☕ Morning Agent Report"
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Prova a secco (nessuna chiamata AI, nessuna email)"
+        type: boolean
+        default: false
+
+# Mai due esecuzioni in parallelo: raddoppierebbero il consumo di quota.
+concurrency:
+  group: agent-report
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  run-agents:
+    name: "Esegui Agenti e Invia Report"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      AGENT_MODELS: ${{ vars.AGENT_MODELS }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      NEXT_PUBLIC_CONTACT_EMAIL: ${{ secrets.NEXT_PUBLIC_CONTACT_EMAIL }}
+      REPORT_RECIPIENT_EMAIL: ${{ secrets.REPORT_RECIPIENT_EMAIL }}
+      GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+      CI: "true"
+
+    steps:
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "🟢 Setup Node.js 20"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: "🐍 Setup Python 3.12"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "core/virtual-company/requirements*.txt"
+
+      - name: "📦 Dipendenze Node.js"
+        working-directory: core/virtual-company
+        run: npm ci --omit=dev || npm install --omit=dev
+
+      - name: "📦 Dipendenze Python (essenziali)"
+        working-directory: core/virtual-company
+        run: pip install -r requirements.txt
+
+      # Le librerie Google Analytics sono facoltative: se l'installazione fallisce il report parte lo stesso.
+      - name: "📦 Dipendenze Python (facoltative: Google Analytics)"
+        if: env.GOOGLE_CREDENTIALS_JSON != ''
+        continue-on-error: true
+        timeout-minutes: 5
+        working-directory: core/virtual-company
+        run: |
+          pip install -r requirements-optional.txt
+          printf '%s' "$GOOGLE_CREDENTIALS_JSON" > "$RUNNER_TEMP/google_credentials.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/google_credentials.json" >> "$GITHUB_ENV"
+
+      - name: "🚀 Esegui gli agenti"
+        working-directory: core/virtual-company
+        run: node run_all_now.js ${{ inputs.dry_run && '--dry-run' || '' }}
