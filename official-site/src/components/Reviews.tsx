@@ -24,6 +24,10 @@ export default function Reviews() {
             Cosa Dicono di Noi
           </motion.h2>
           <p className="text-muted-foreground">Oltre 400 recensioni a 4.2+ stelle</p>
+          <p className="text-xs text-muted-foreground mt-2 max-w-xl mx-auto">
+            Estratti di opinioni dei nostri clienti, selezionati da noi e non sottoposti a una procedura di verifica.{" "}
+            <a href="https://www.tripadvisor.it/Restaurant_Review-g194706-d10325190-Reviews-Piazza_Marconi_Cafe-Caltanissetta_Province_of_Caltanissetta_Sicily.html" target="_blank" rel="noopener noreferrer" className="underline">Leggi tutte le recensioni su TripAdvisor</a>.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

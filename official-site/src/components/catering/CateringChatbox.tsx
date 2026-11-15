@@ -223,7 +223,7 @@ export default function CateringChatbox() {
                 </div>
                 <div>
                   <h2 className="font-serif text-xl font-bold">Catering & Finger Food</h2>
-                  <p className="text-sm opacity-80">Assistente virtuale Piazza Marconi</p>
+                  <p className="text-sm opacity-80">Percorso guidato automatico · poi ti risponde una persona su WhatsApp</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -288,10 +288,10 @@ export default function CateringChatbox() {
               {step === "DONE" ? (
                 <div className="text-center p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
                   <p className="text-sm text-emerald-800 font-semibold">
-                    Grazie {data.full_name}! Richiesta inviata con successo.
+                    Grazie {data.full_name}! La tua richiesta è pronta.
                   </p>
                   <p className="text-xs text-emerald-600 mt-1">
-                    Verrai reindirizzato a WhatsApp al numero {data.phone_number} per confermare i dettagli.
+                    Si apre WhatsApp con il messaggio già compilato: premi Invia per farcelo arrivare. Nessun dato viene salvato dal sito.
                   </p>
                 </div>
               ) : step === "GDPR" ? (

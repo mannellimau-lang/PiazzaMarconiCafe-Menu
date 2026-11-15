@@ -20,7 +20,7 @@ export default function TerminiCateringPage() {
           <h1 className="text-3xl md:text-5xl font-serif text-primary mb-8 border-b pb-6">Termini e Condizioni</h1>
           
           <div className="prose prose-zinc max-w-none">
-            <p className="text-sm text-gray-500 mb-8">Ultimo aggiornamento: Giugno 2026</p>
+            <p className="text-sm text-gray-500 mb-8">Ultimo aggiornamento: 15 novembre 2026</p>
             
             <h2 className="text-2xl font-serif text-primary mt-8 mb-4">1. Natura del Servizio Informativo</h2>
             <p className="text-gray-700 leading-relaxed">
@@ -43,9 +43,29 @@ export default function TerminiCateringPage() {
               I prezzi finali del servizio catering saranno comunicati in modo chiaro, trasparente e comprensivi di IVA nel preventivo formale. Informazioni specifiche su allergeni, ingredienti e preparazione del nostro Finger Food e dei prodotti da forno (granite, brioches) sono disponibili su richiesta e saranno fornite dettagliatamente in fase contrattuale.
             </p>
 
+            <h2 className="text-2xl font-serif text-primary mt-8 mb-4">5. Strumenti automatici e intelligenza artificiale</h2>
+            <p className="text-gray-700 leading-relaxed">
+              L&apos;assistente della pagina Catering è un <strong>percorso guidato automatico a domande predefinite</strong>: non è una persona e non prende decisioni.
+              L&apos;assistente presente nel Menu Digitale è invece un <strong>sistema di intelligenza artificiale</strong>, sempre segnalato come tale (art. 50 Reg. UE 2024/1689):
+              le sue risposte sono generate automaticamente, possono contenere errori e non hanno valore di offerta, preventivo o conferma.
+              In ogni momento puoi parlare direttamente con il nostro staff al numero +39 329 540 5941 (telefono e WhatsApp).
+            </p>
+
+            <h2 className="text-2xl font-serif text-primary mt-8 mb-4">6. Diritti del consumatore</h2>
+            <p className="text-gray-700 leading-relaxed">
+              Restano fermi tutti i diritti riconosciuti ai consumatori dal Codice del Consumo (D.Lgs. 206/2005). Il contratto di catering si conclude solo con il preventivo
+              formale accettato per iscritto, che indica prezzo totale IVA inclusa, eventuale caparra, modalità di pagamento e condizioni di disdetta.
+              Trattandosi di servizi di ristorazione forniti a una data specifica, il diritto di recesso previsto per i contratti a distanza non si applica (art. 59, lett. n, Codice del Consumo);
+              le condizioni di disdetta sono quelle indicate nel preventivo. Per i contratti con consumatori è competente il giudice del luogo di residenza o domicilio del consumatore.
+            </p>
+
             <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-100">
-              <p className="text-sm text-gray-600 font-semibold mb-2">Contatti per la Privacy</p>
-              <p className="text-sm text-gray-600">Per esercitare i tuoi diritti o per qualsiasi domanda sulla gestione dei dati, puoi contattarci presso il nostro locale a Caltanissetta o tramite i canali di contatto ufficiali.</p>
+              <p className="text-sm text-gray-600 font-semibold mb-2">Chi siamo e come contattarci</p>
+              <p className="text-sm text-gray-600">
+                Piazza Marconi Cafe di Brivido Sonia Marisa — Sede legale: Piazza G. Marconi 20, 93100 Caltanissetta (CL) — P.IVA 01944580859 — REA CL-109889.
+                Email: <a href="mailto:piazzamarconicafe@gmail.com" className="underline">piazzamarconicafe@gmail.com</a> — Telefono/WhatsApp: +39 329 540 5941.
+                Per il trattamento dei dati personali consulta la <Link href="/privacy-policy" className="underline">Privacy Policy</Link>.
+              </p>
             </div>
           </div>
         </div>

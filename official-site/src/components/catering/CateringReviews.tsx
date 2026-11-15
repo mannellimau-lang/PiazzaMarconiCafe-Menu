@@ -32,6 +32,9 @@ export default function CateringReviews() {
           <p className="text-gray-400 max-w-2xl mx-auto">
             La soddisfazione dei nostri clienti è la nostra migliore garanzia.
           </p>
+          <p className="text-xs text-gray-400 mt-3 max-w-xl mx-auto">
+            Opinioni di clienti selezionate da noi, non sottoposte a una procedura di verifica.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
