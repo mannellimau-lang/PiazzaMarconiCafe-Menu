@@ -1,0 +1,4 @@
+# Facoltative: servono SOLO per leggere Google Analytics (property GA4) con un service account.
+# Senza queste librerie il report funziona comunque e segnala "DATI NON DISPONIBILI".
+google-analytics-data>=0.18
+google-auth>=2.30

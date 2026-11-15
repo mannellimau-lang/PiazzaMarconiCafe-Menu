@@ -1,208 +1,147 @@
-const { exec } = require('child_process');
+#!/usr/bin/env node
+/**
+ * run_all_now.js — punto d'ingresso del report agentico "Virtual Company".
+ *
+ *   node run_all_now.js              esecuzione reale + invio email
+ *   node run_all_now.js --no-email   esecuzione reale senza email
+ *   node run_all_now.js --dry-run    nessuna chiamata AI, nessuna email: verifica che il flusso funzioni
+ *
+ * Flusso: questo script avvia UNA volta `agents/python_brains/run_report.py` (che gestisce modelli,
+ * fallback e retry), aggiorna il registro logs/time_ledger.json e invia l'email di riepilogo.
+ * Garanzie di robustezza:
+ *   - timeout rigido sul processo Python (niente più esecuzioni appese);
+ *   - il registro viene creato da zero se manca o è corrotto;
+ *   - l'email parte SEMPRE, anche se l'AI non è disponibile (report "degradato" ed esplicito);
+ *   - codice di uscita 1 solo se nessun agente ha prodotto un'analisi AI (così il cron lo segnala).
+ *
+ * Variabili d'ambiente: vedi .env.example nella radice del repository.
+ */
+const { execFile } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const nodemailer = require('nodemailer');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
-const LEDGER_PATH = path.join(__dirname, 'logs', 'time_ledger.json');
+const args = new Set(process.argv.slice(2));
+const DRY_RUN = args.has('--dry-run');
+const NO_EMAIL = args.has('--no-email') || DRY_RUN;
 
-// On CI (GitHub Actions), use system python3; locally, use the venv
-const venvPython = process.env.CI
-    ? 'python3'
-    : path.join(__dirname, 'agents', 'python_brains', 'venv', 'bin', 'python3');
+// In dry-run si scrive su un file separato per non sporcare il registro reale.
+const LEDGER_PATH = path.join(__dirname, 'logs', DRY_RUN ? 'time_ledger.dry-run.json' : 'time_ledger.json');
+const BRAINS_DIR = path.join(__dirname, 'agents', 'python_brains');
+const PROCESS_TIMEOUT_MS = Number(process.env.AGENT_PROCESS_TIMEOUT_MS || 12 * 60 * 1000);
 
-const pythonScriptsMap = {
-    '1': 'agent_1_social_content.py',
-    '2': 'agent_2_market_seo.py',
-    '3': 'agent_3_compliance_ux.py',
-    '4': 'agent_4_strategy_metrics.py',
-    '5': 'agent_5_motivator.py',
-    '6': 'agent_6_ceo.py'
+const AGENT_NAMES = {
+    '1': 'Social & Content Director',
+    '2': 'Market Intelligence & SEO Analyst',
+    '3': 'Risk, UI/UX & Compliance Officer',
+    '4': 'Strategy & Data Analyst',
+    '5': 'Continuous Improvement Motivator',
+    '6': 'Chief Executive Supervisor'
 };
 
-const ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8'));
+function resolvePython() {
+    if (process.env.AGENT_PYTHON) return process.env.AGENT_PYTHON;
+    const venv = path.join(BRAINS_DIR, 'venv', 'bin', 'python3');
+    return !process.env.CI && fs.existsSync(venv) ? venv : 'python3';
+}
 
-const FALLBACK_MODELS = process.env.GEMINI_MODEL 
-    ? [process.env.GEMINI_MODEL, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
-    : ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
-
-async function runAgent(id, scriptName) {
-    const scriptPath = path.join(__dirname, 'agents', 'python_brains', scriptName);
-    let lastError = null;
-    let lastStderr = "";
-    
-    for (const model of FALLBACK_MODELS) {
-        console.log(`Running Agent ${id} with model ${model}...`);
-        const result = await new Promise((resolve) => {
-            const env = { ...process.env, GEMINI_MODEL: model };
-            exec(`${venvPython} ${scriptPath}`, { env }, (error, stdout, stderr) => {
-                const timestamp = new Date().toLocaleTimeString();
-                lastStderr = stderr || "";
-                try {
-                    if (!stdout || stdout.trim() === "null" || stdout.trim() === "") {
-                        console.error(`Agent ${id} returned empty or null stdout with model ${model}. Stderr:`, stderr);
-                        
-                        const isPythonCodeCrash = stderr && (
-                            stderr.includes("ModuleNotFoundError") ||
-                            stderr.includes("SyntaxError") ||
-                            stderr.includes("IndentationError") ||
-                            stderr.includes("NameError") ||
-                            stderr.includes("ImportError") ||
-                            stderr.includes("AttributeError") ||
-                            stderr.includes("TypeError") ||
-                            stderr.includes("FileNotFoundError")
-                        );
-                        
-                        if (isPythonCodeCrash) {
-                            resolve({
-                                id,
-                                problems: [`Python Runtime/Dependency Error: ${stderr.split('\n').filter(Boolean).pop() || 'Crash'}`],
-                                solutions: ["Check python code syntax and dependencies in requirements.txt"],
-                                stderr: stderr || "",
-                                status: 'Failure',
-                                modelUsed: model,
-                                logs: [`[${timestamp}] [!] Python Code Crash: ${stderr.substring(0, 100)}...`]
-                            });
-                        } else {
-                            resolve({
-                                retry: true,
-                                error: `Empty model output. Stderr: ${stderr}`
-                            });
-                        }
-                        return;
-                    }
-                    
-                    const parsed = JSON.parse(stdout);
-                    if (parsed.error) {
-                        console.error(`Agent ${id} error with model ${model}:`, parsed.error);
-                        const errLower = parsed.error.toLowerCase();
-                        // If it's a rate limit, quota limit, model availability, 404, or deprecation error, trigger fallback retry
-                        if (
-                            errLower.includes('429') || 
-                            errLower.includes('quota') || 
-                            errLower.includes('exhausted') || 
-                            errLower.includes('limit') || 
-                            errLower.includes('unreachable') || 
-                            errLower.includes('rate') ||
-                            errLower.includes('404') ||
-                            errLower.includes('not found') ||
-                            errLower.includes('available') ||
-                            errLower.includes('deprecated')
-                        ) {
-                            resolve({ retry: true, error: parsed.error });
-                        } else {
-                            // Non-quota/non-model error, resolve as failure immediately
-                            resolve({
-                                id,
-                                problems: parsed.problemsFound || [parsed.error],
-                                solutions: parsed.solutionsProposed || ["Verify config"],
-                                stderr: stderr || "",
-                                status: 'Failure',
-                                modelUsed: model,
-                                logs: [`[${timestamp}] [!] Error: ${parsed.error.substring(0, 100)}...`]
-                            });
-                        }
-                    } else {
-                        console.log(`Agent ${id} success with model ${model}!`);
-                        resolve({
-                            id,
-                            problems: parsed.problemsFound || [],
-                            solutions: parsed.solutionsProposed || [],
-                            stderr: stderr || "",
-                            status: 'Success',
-                            modelUsed: model,
-                            logs: [`[${timestamp}] [SUCCESS] Completed with ${model}.`]
-                        });
-                    }
-                } catch (e) {
-                    console.error(`Agent ${id} parse error with model ${model}:`, e, "stdout:", stdout, "stderr:", stderr);
-                    resolve({
-                        id,
-                        problems: ["Parse error"],
-                        solutions: ["Check logs"],
-                        stderr: stderr || "",
-                        status: 'Failure',
-                        modelUsed: model,
-                        logs: [`[${timestamp}] [!] Parse error on ${model}: ${e.message}`]
-                    });
-                }
-            });
-        });
-        
-        if (!result.retry) {
-            return result;
-        }
-        lastError = result.error;
-        console.warn(`Agent ${id} hit quota limit on model ${model}. Attempting fallback model...`);
-        // Wait 5 seconds to respect rate limits before fallback retry
-        await new Promise(r => setTimeout(r, 5000));
+function loadLedger() {
+    try {
+        const ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8'));
+        if (ledger && ledger.agents) return ledger;
+    } catch (e) { /* mancante o corrotto: si ricrea */ }
+    const agents = {};
+    for (const [id, name] of Object.entries(AGENT_NAMES)) {
+        agents[id] = { name, state: 'IDLE', accumulatedMinutes: 0, dailyQuota: 60, logs: [] };
     }
-    
-    // If all models failed
-    const timestamp = new Date().toLocaleTimeString();
-    return {
-        id,
-        problems: [`Execution Error: All fallback models exhausted. Last error: ${lastError || "Quota Limit"}`],
-        solutions: ["Check Gemini billing or usage limits"],
-        stderr: lastStderr,
-        status: 'Failure',
-        modelUsed: "None",
-        logs: [`[${timestamp}] [!] Quota exceeded on all models.`]
-    };
+    return { lastUpdated: null, agents };
+}
+
+function saveLedger(ledger) {
+    fs.mkdirSync(path.dirname(LEDGER_PATH), { recursive: true });
+    const tmp = LEDGER_PATH + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(ledger, null, 2));
+    fs.renameSync(tmp, LEDGER_PATH); // scrittura atomica: mai un file a metà
+}
+
+function runPythonReport() {
+    return new Promise((resolve) => {
+        const pyArgs = [path.join(BRAINS_DIR, 'run_report.py')];
+        if (DRY_RUN) pyArgs.push('--dry-run');
+        const child = execFile(resolvePython(), pyArgs, {
+            env: process.env,
+            timeout: PROCESS_TIMEOUT_MS,
+            killSignal: 'SIGKILL',
+            maxBuffer: 20 * 1024 * 1024
+        }, (error, stdout, stderr) => {
+            let report = null;
+            try { report = JSON.parse(String(stdout).trim().split('\n').pop()); } catch (e) { /* gestito sotto */ }
+            if (report && report.agents) return resolve({ report });
+            const reason = error && error.killed
+                ? `Timeout: il processo Python non ha risposto entro ${Math.round(PROCESS_TIMEOUT_MS / 60000)} minuti`
+                : error && error.code === 'ENOENT'
+                    ? 'Python non trovato: installa Python 3 o imposta AGENT_PYTHON'
+                    : `Il processo Python non ha prodotto un report valido${error ? ` (exit ${error.code})` : ''}`;
+            resolve({ report: null, reason, stderr: String(stderr || '').slice(-1500) });
+        });
+        child.stderr.on('data', (d) => process.stderr.write(d)); // log in tempo reale
+    });
 }
 
 async function main() {
-    const ids = ['1', '2', '3', '4', '5', '6'];
-    const results = [];
-    
-    // Run them sequentially with a 65-second delay to avoid 429 rate limit
-    for (const id of ids) {
-        const res = await runAgent(id, pythonScriptsMap[id]);
-        results.push(res);
-        if (id !== '6') {
-            console.log("Waiting 65 seconds to respect rate limits...");
-            await new Promise(r => setTimeout(r, 65000));
-        }
-    }
-    
-    // Update ledger
-    results.forEach(res => {
-        const agent = ledger.agents[res.id];
-        agent.problemsFound = res.problems;
-        agent.solutionsProposed = res.solutions;
-        agent.state = 'STAGING';
-        agent.accumulatedMinutes = 55;
-        agent.status = res.status;
-        agent.modelUsed = res.modelUsed;
-        agent.stderr = res.stderr;
-        if (res.logs) {
-            if (!agent.logs) agent.logs = [];
-            agent.logs = res.logs.concat(agent.logs).slice(0, 5); // Keep last 5 log entries
-        }
-    });
-    
-    ledger.lastUpdated = new Date().toISOString();
-    fs.writeFileSync(LEDGER_PATH, JSON.stringify(ledger, null, 2));
-    console.log("Ledger updated!");
-    
-    // Send email
-    await sendEmail(ledger);
+    console.log(`▶ Report agentico${DRY_RUN ? ' (DRY-RUN)' : ''} avviato...`);
+    const ledger = loadLedger();
+    const { report, reason, stderr } = await runPythonReport();
+    const timestamp = new Date().toLocaleTimeString('it-IT');
 
-    console.log("✅ All agents execution completed!");
-    process.exit(0);
+    for (const [id, name] of Object.entries(AGENT_NAMES)) {
+        const agent = ledger.agents[id] || (ledger.agents[id] = { name, logs: [] });
+        const res = report ? report.agents[id] : null;
+        agent.name = name;
+        agent.state = 'STAGING';
+        agent.status = res ? res.status : 'Failure';
+        agent.modelUsed = res ? res.modelUsed : 'nessuno';
+        agent.problemsFound = res ? res.problemsFound : [`Errore di esecuzione: ${reason}`];
+        agent.solutionsProposed = res ? res.solutionsProposed : ['Eseguire "node run_all_now.js --dry-run" e controllare i log.'];
+        agent.stderr = res ? '' : (stderr || '');
+        const line = `[${timestamp}] [${agent.status === 'Success' ? 'SUCCESS' : '!'}] ${agent.status} (${agent.modelUsed})`;
+        agent.logs = [line].concat(agent.logs || []).slice(0, 5);
+    }
+    ledger.lastUpdated = new Date().toISOString();
+    ledger.lastRun = report
+        ? { mode: report.mode, llmCalls: report.llmCalls, durationSeconds: report.durationSeconds, siteHealth: report.siteHealth }
+        : { mode: 'failed', reason };
+    saveLedger(ledger);
+
+    const statuses = Object.values(ledger.agents).map((a) => a.status);
+    const ok = statuses.filter((st) => st === 'Success').length;
+    console.log(`Registro aggiornato. Agenti con analisi AI: ${ok}/${statuses.length} — modalità: ${ledger.lastRun.mode}`);
+
+    if (NO_EMAIL) console.log('Email non inviata (--no-email / --dry-run).');
+    else await sendEmail(ledger);
+
+    process.exit(ok > 0 ? 0 : 1);
+}
+
+function escapeHtml(value) {
+    return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function sendEmail(ledgerData) {
     return new Promise((resolve, reject) => {
-        if (!process.env.GMAIL_APP_PASSWORD) {
-            console.log("Skipping email: GMAIL_APP_PASSWORD is not set in .env");
+        const nodemailer = require('nodemailer');
+        const sender = process.env.REPORT_SENDER_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+        const recipient = process.env.REPORT_RECIPIENT_EMAIL || sender;
+        if (!process.env.GMAIL_APP_PASSWORD || !sender) {
+            console.log("Email non inviata: impostare GMAIL_APP_PASSWORD e NEXT_PUBLIC_CONTACT_EMAIL (o REPORT_SENDER_EMAIL).");
             return resolve();
         }
         
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'simonemannellimaria@gmail.com',
+                user: sender,
                 pass: process.env.GMAIL_APP_PASSWORD
             }
         });
@@ -361,32 +300,38 @@ function sendEmail(ledgerData) {
         <div class="content">
         `;
 
+        const run = ledgerData.lastRun || {};
+        emailHtml += `
+            <div class="model-info">Modalità: ${escapeHtml(run.mode || 'n/d')} · chiamate AI: ${escapeHtml(run.llmCalls ?? 'n/d')} · durata: ${escapeHtml(run.durationSeconds ?? 'n/d')}s</div>
+            ${run.siteHealth ? `<div class="section-title">Stato dei siti (controllo automatico)</div><pre class="traceback">${escapeHtml(run.siteHealth)}</pre><br>` : ''}
+        `;
+
         Object.keys(ledgerData.agents).forEach(id => {
             const agent = ledgerData.agents[id];
             const isSuccess = agent.status === 'Success';
             const badgeClass = isSuccess ? 'badge-success' : 'badge-failure';
-            const badgeText = isSuccess ? 'Success' : 'Failure';
+            const badgeText = isSuccess ? 'Success' : (agent.status === 'Degraded' ? 'AI non disponibile' : 'Failure');
             
             emailHtml += `
             <div class="agent-card">
                 <div class="agent-header">
-                    <span class="agent-name">Agent ${id}: ${agent.name}</span>
+                    <span class="agent-name">Agent ${id}: ${escapeHtml(agent.name)}</span>
                     <span class="badge ${badgeClass}">${badgeText}</span>
                 </div>
                 <div class="agent-body">
-                    <div class="model-info">Model: ${agent.modelUsed || 'N/A'}</div>
+                    <div class="model-info">Model: ${escapeHtml(agent.modelUsed || 'N/A')}</div>
                     
                     <div class="section-title">Problems Found</div>
                     <ul>
                         ${agent.problemsFound && agent.problemsFound.length > 0 
-                            ? agent.problemsFound.map(p => `<li>${p}</li>`).join('') 
+                            ? agent.problemsFound.map(p => `<li>${escapeHtml(p)}</li>`).join('') 
                             : '<li>None</li>'}
                     </ul>
                     
                     <div class="section-title">Solutions Proposed</div>
                     <ul>
                         ${agent.solutionsProposed && agent.solutionsProposed.length > 0 
-                            ? agent.solutionsProposed.map(s => `<li>${s}</li>`).join('') 
+                            ? agent.solutionsProposed.map(s => `<li>${escapeHtml(s)}</li>`).join('') 
                             : '<li>None</li>'}
                     </ul>
             `;
@@ -415,8 +360,8 @@ function sendEmail(ledgerData) {
         `;
 
         const mailOptions = {
-            from: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'simonemannellimaria@gmail.com',
-            to: 'simonemannellimaria@gmail.com',
+            from: sender,
+            to: recipient,
             subject: '☕️ Morning Report: Piazza Marconi Cafe',
             text: emailText,
             html: emailHtml
@@ -435,6 +380,6 @@ function sendEmail(ledgerData) {
 }
 
 main().catch(err => {
-    console.error("❌ Fatal error:", err);
+    console.error("❌ Errore fatale:", err);
     process.exit(1);
 });
