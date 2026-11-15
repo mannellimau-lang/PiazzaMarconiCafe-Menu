@@ -1,0 +1,58 @@
+# --- Segreti e credenziali: MAI nel repository (il repo GitHub è PUBBLICO) ---
+.env
+.env.*
+!.env.example
+google_credentials.json
+token.json
+auth.py
+refresh_token.py
+*.pem
+*.key
+service-account*.json
+
+# --- Dipendenze, build, cache ---
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+.next/
+dist/
+.vercel
+*.tsbuildinfo
+.DS_Store
+.Rhistory
+
+# --- Archivi locali e copie di lavoro (non devono essere pubblicati) ---
+.local-archive/
+official-site-backup/
+official-site-preview*/
+graphify-out/
+* 2
+* 2.*
+temp.html
+agent*_content.txt
+
+# --- Script locali una-tantum (contengono ID/endpoint privati) ---
+/*.scpt
+/build_admin*.py
+/create_script.py
+/update_script.py
+/update_orchestrator.py
+/revert_orchestrator.py
+/recover_*.py
+/generate_instant_report.py
+/generate_matrix.js
+/find_element.js
+/parse_ui.js
+/send_reports.py
+/script/
+/admin/
+/proposte-logo*.html
+
+# --- Output runtime degli agenti (generati a ogni esecuzione) ---
+core/virtual-company/logs/
+core/virtual-company/staging/
+core/virtual-company/agents/python_brains/output.json
+core/virtual-company/agents/python_brains/screenshots/
+core/social-agents/

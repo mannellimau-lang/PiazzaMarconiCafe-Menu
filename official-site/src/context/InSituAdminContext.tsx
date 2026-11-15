@@ -8,6 +8,8 @@ import initialGallery from "@/content/gallery.json";
 interface InSituAdminContextType {
   isEditMode: boolean;
   setIsEditMode: (val: boolean) => void;
+  unlockAdmin: () => Promise<void>;
+  lockAdmin: () => void;
   alerts: typeof initialAlerts;
   setAlerts: React.Dispatch<React.SetStateAction<typeof initialAlerts>>;
   hero: typeof initialHero;
@@ -22,6 +24,8 @@ interface InSituAdminContextType {
   setPreviewImageModal: (val: { src: string; onConfirm: () => void } | null) => void;
 }
 
+const ADMIN_REPO = "mannellimau-lang/piazzamarconicafe-official";
+
 const InSituAdminContext = createContext<InSituAdminContextType | null>(null);
 
 export function InSituAdminProvider({ children }: { children: React.ReactNode }) {
@@ -34,13 +38,13 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
   const [previewImageModal, setPreviewImageModal] = useState<{ src: string; onConfirm: () => void } | null>(null);
 
   useEffect(() => {
+    // Sicurezza: nessun PIN nel codice e nessuno sblocco via URL. La modalità admin è valida
+    // solo se in questa sessione è presente un token GitHub già verificato (vedi unlockAdmin).
     if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const isEditParam = urlParams.get("edit") === "true";
-      const isEditStorage = sessionStorage.getItem("in_situ_edit_mode") === "true";
-      if (isEditParam || isEditStorage) {
-        setIsEditMode(true);
-      }
+      const active =
+        sessionStorage.getItem("in_situ_edit_mode") === "true" &&
+        !!sessionStorage.getItem("github_token");
+      if (active) setIsEditMode(true);
     }
   }, []);
 
@@ -49,22 +53,52 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
     setTimeout(() => setToastMessage(null), 4000);
   };
 
+  const lockAdmin = () => {
+    sessionStorage.removeItem("github_token");
+    sessionStorage.removeItem("in_situ_edit_mode");
+    setIsEditMode(false);
+  };
+
+  // L'accesso admin è concesso solo a chi possiede un token GitHub con permesso di scrittura
+  // sul repository: la verifica la fa GitHub, il token resta nella sola sessione del browser.
+  const unlockAdmin = async () => {
+    try {
+      localStorage.removeItem("github_token");
+    } catch {}
+    const token = (
+      prompt(
+        "Area riservata allo staff.\nInserisci il tuo token GitHub personale (permesso di scrittura sul repository):"
+      ) || ""
+    ).trim();
+    if (!token) return;
+    try {
+      const res = await fetch(`https://api.github.com/repos/${ADMIN_REPO}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+      });
+      const info = res.ok ? await res.json() : null;
+      if (!info?.permissions?.push) {
+        alert("Accesso negato: token non valido o senza permesso di scrittura.");
+        return;
+      }
+      sessionStorage.setItem("github_token", token);
+      sessionStorage.setItem("in_situ_edit_mode", "true");
+      setIsEditMode(true);
+      showToast("🔓 Modalità modifica attivata.");
+    } catch {
+      alert("Verifica non riuscita (rete assente?). Riprova.");
+    }
+  };
+
   const saveToGitHub = async () => {
     setIsSaving(true);
     try {
-      let token = localStorage.getItem("github_token");
+      const token = sessionStorage.getItem("github_token");
       if (!token) {
-        token = prompt(
-          "Inserisci il tuo GITHUB_TOKEN per salvare sul repository Sito Ufficiale (branch feature/in-situ-admin):"
-        );
-        if (!token) {
-          setIsSaving(false);
-          return;
-        }
-        localStorage.setItem("github_token", token);
+        lockAdmin();
+        throw new Error("Sessione admin scaduta. Riattiva la modalità modifica.");
       }
 
-      const repo = "mannellimau-lang/piazzamarconicafe-official";
+      const repo = ADMIN_REPO;
       const branch = "feature/in-situ-admin";
 
       const filesToUpdate = [
@@ -87,7 +121,7 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
         }
 
         const base64Content = btoa(unescape(encodeURIComponent(file.content)));
-        const body: any = {
+        const body: { message: string; content: string; branch: string; sha?: string } = {
           message: `chore(content): update ${file.path} via in-situ admin`,
           content: base64Content,
           branch,
@@ -109,17 +143,17 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
         if (!putRes.ok) {
           const errText = await putRes.text();
           if (putRes.status === 401) {
-            localStorage.removeItem("github_token");
-            throw new Error("Token non valido o scaduto. Salva di nuovo per inserire il token corretto.");
+            lockAdmin();
+            throw new Error("Token non valido o scaduto. Riattiva la modalità modifica.");
           }
           throw new Error(`Errore salvataggio ${file.path}: ${errText}`);
         }
       }
 
       showToast("✅ Modifiche al Sito Ufficiale salvate con successo su GitHub (branch feature/in-situ-admin)!");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Save error:", err);
-      showToast(`❌ Salvataggio fallito: ${err.message}`, true);
+      showToast(`❌ Salvataggio fallito: ${err instanceof Error ? err.message : "errore sconosciuto"}`, true);
     } finally {
       setIsSaving(false);
     }
@@ -130,6 +164,8 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
       value={{
         isEditMode,
         setIsEditMode,
+        unlockAdmin,
+        lockAdmin,
         alerts,
         setAlerts,
         hero,
@@ -214,9 +250,8 @@ export function InSituAdminProvider({ children }: { children: React.ReactNode })
 
             <button
               onClick={() => {
-                sessionStorage.removeItem("in_situ_edit_mode");
-                setIsEditMode(false);
-                showToast("🔒 Modalità Edit Disattivata.");
+                lockAdmin();
+                showToast("🔒 Modalità modifica disattivata.");
               }}
               className="bg-red-500/20 hover:bg-red-500/40 text-red-300 text-xs font-bold px-3 py-2 rounded-xl border border-red-500/30 transition-all cursor-pointer"
             >

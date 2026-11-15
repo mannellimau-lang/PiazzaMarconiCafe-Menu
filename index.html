@@ -315,8 +315,8 @@
             const [menuData, setMenuData] = useState(menuDataFallback);
             const [isLoadingMenu, setIsLoadingMenu] = useState(true);
             const [isEditMode, setIsEditMode] = useState(() => {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get('edit') === 'true' || sessionStorage.getItem('in_situ_edit_mode') === 'true';
+                // Sicurezza: la modalità admin si attiva SOLO con un token GitHub verificato (vedi unlockAdmin).
+                return sessionStorage.getItem('in_situ_edit_mode') === 'true' && !!sessionStorage.getItem('github_token');
             });
             const [isSaving, setIsSaving] = useState(false);
             const [toastMessage, setToastMessage] = useState(null);
@@ -394,20 +394,51 @@
                 showToast("➕ Nuovo piatto aggiunto in cima alla sezione!");
             };
 
+            const ADMIN_REPO = "mannellimau-lang/PiazzaMarconiCafe-Menu";
+
+            // Nessun PIN nel codice: l'accesso admin è concesso solo a chi possiede un token GitHub
+            // con permesso di scrittura sul repository. Il token è verificato da GitHub, resta nella
+            // sola sessione del browser (sessionStorage) e non viene mai inviato ad altri server.
+            const unlockAdmin = async () => {
+                try { localStorage.removeItem('github_token'); } catch (e) {}
+                const token = (prompt("Area riservata allo staff.\nInserisci il tuo token GitHub personale (permesso di scrittura sul repository):") || '').trim();
+                if (!token) return;
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${ADMIN_REPO}`, {
+                        headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
+                    });
+                    const info = res.ok ? await res.json() : null;
+                    if (!info || !info.permissions || !info.permissions.push) {
+                        alert("Accesso negato: token non valido o senza permesso di scrittura.");
+                        return;
+                    }
+                    sessionStorage.setItem('github_token', token);
+                    sessionStorage.setItem('in_situ_edit_mode', 'true');
+                    setIsEditMode(true);
+                    showToast("🔓 Modalità modifica attivata.");
+                } catch (err) {
+                    alert("Verifica non riuscita (rete assente?). Riprova.");
+                }
+            };
+
+            const lockAdmin = () => {
+                sessionStorage.removeItem('github_token');
+                sessionStorage.removeItem('in_situ_edit_mode');
+                setIsEditMode(false);
+                showToast("🔒 Modalità modifica disattivata.");
+            };
+
             const handleSaveToGitHub = async () => {
                 setIsSaving(true);
                 try {
-                    let token = localStorage.getItem('github_token');
+                    const token = sessionStorage.getItem('github_token');
                     if (!token) {
-                        token = prompt("Inserisci il tuo GITHUB_TOKEN per salvare su GitHub (branch feature/in-situ-admin):");
-                        if (!token) {
-                            setIsSaving(false);
-                            return;
-                        }
-                        localStorage.setItem('github_token', token);
+                        sessionStorage.removeItem('in_situ_edit_mode');
+                        setIsEditMode(false);
+                        throw new Error("Sessione admin scaduta. Riattiva la modalità modifica.");
                     }
 
-                    const repo = "mannellimau-lang/PiazzaMarconiCafe-Menu";
+                    const repo = ADMIN_REPO;
                     const path = "content/full_menu_catalog.json";
                     const branch = "feature/in-situ-admin";
 
@@ -445,8 +476,10 @@
                     if (!putRes.ok) {
                         const errText = await putRes.text();
                         if (putRes.status === 401) {
-                            localStorage.removeItem('github_token');
-                            throw new Error("Token non valido o scaduto. Riprova salvando nuovamente.");
+                            sessionStorage.removeItem('github_token');
+                            sessionStorage.removeItem('in_situ_edit_mode');
+                            setIsEditMode(false);
+                            throw new Error("Token non valido o scaduto. Riattiva la modalità modifica.");
                         }
                         throw new Error(`Errore GitHub (${putRes.status}): ${errText}`);
                     }
@@ -494,21 +527,6 @@
                 intolleranze: 'Intolleranze'
             };
 
-            const fetchWithRetry = async (url, options, retries = 5) => {
-                let delay = 1000;
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        const res = await fetch(url, options);
-                        if (!res.ok) throw new Error('API Error');
-                        return await res.json();
-                    } catch (err) {
-                        if (i === retries - 1) throw err;
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2;
-                    }
-                }
-            };
-
             const handleAiSubmit = async (e) => {
                 e.preventDefault();
                 if (!aiInput.trim()) return;
@@ -518,24 +536,26 @@
                 setAiMessages(prev => [...prev, { role: 'user', content: userQuery }]);
                 setIsAiLoading(true);
 
-                const apiKey = "";
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                
-                const systemPrompt = `Sei l'esperto alle vendite del Piazza Marconi Cafe. Menu: ${JSON.stringify(menuData)}. Il tuo OBIETTIVO è convertire spingendo prenotazioni, asporto e servizi di CATERING. Usa un tono persuasivo, crea urgenza (\"posti limitati per il weekend\", \"preparazioni espresse\") e concludi ogni messaggio proponendo un'azione (es. \"Vuoi che ti riservi un tavolo?\" o \"Desideri un preventivo rapido per il catering?\"). Rispondi in italiano.`;
-
+                // La chiave API e il prompt di sistema vivono SOLO lato server (/api/chat).
+                const HUMAN_FALLBACK = "L'assistente AI non è al momento disponibile. Per ordini, prenotazioni e catering scrivici su WhatsApp o chiamaci al +39 329 5405941: ti risponde una persona.";
                 try {
-                    const data = await fetchWithRetry(url, {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 32000);
+                    const res = await fetch('/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        signal: controller.signal,
                         body: JSON.stringify({
-                            contents: [{ parts: [{ text: userQuery }] }],
-                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                            message: userQuery.slice(0, 600),
+                            history: aiMessages.slice(1).slice(-6).map(m => ({ role: m.role, content: m.content }))
                         })
                     });
-                    const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "Errore di parsing nella risposta dell'LLM.";
-                    setAiMessages(prev => [...prev, { role: 'model', content: textResponse }]);
+                    clearTimeout(timer);
+                    let data = null;
+                    try { data = await res.json(); } catch (e) {}
+                    setAiMessages(prev => [...prev, { role: 'model', content: (data && data.reply) || HUMAN_FALLBACK }]);
                 } catch (error) {
-                    setAiMessages(prev => [...prev, { role: 'model', content: "Eccezione: Fallimento nella connessione all'endpoint API. Riprovare." }]);
+                    setAiMessages(prev => [...prev, { role: 'model', content: HUMAN_FALLBACK }]);
                 } finally {
                     setIsAiLoading(false);
                 }
@@ -994,20 +1014,7 @@
                                     </div>
                                     <button 
                                         onClick={() => {
-                                            if (!isEditMode) {
-                                                const pin = prompt("Inserisci PIN Amministratore:");
-                                                if (pin === "marconi2026") {
-                                                    sessionStorage.setItem('in_situ_edit_mode', 'true');
-                                                    setIsEditMode(true);
-                                                    showToast("🔓 Modalità In-Situ Direct Admin Attivata!");
-                                                } else if (pin) {
-                                                    alert("PIN Errato! Accesso negato.");
-                                                }
-                                            } else {
-                                                sessionStorage.removeItem('in_situ_edit_mode');
-                                                setIsEditMode(false);
-                                                showToast("🔒 Modalità Edit Disattivata.");
-                                            }
+                                            if (!isEditMode) { unlockAdmin(); } else { lockAdmin(); }
                                         }}
                                         className="mt-2 text-white/40 hover:text-amber-400 text-xs flex items-center gap-2 transition-colors cursor-pointer py-1.5 px-4 rounded-full border border-white/10 hover:border-amber-400/40"
                                     >
@@ -1142,11 +1149,7 @@
                                 </button>
                                 
                                 <button 
-                                    onClick={() => {
-                                        sessionStorage.removeItem('in_situ_edit_mode');
-                                        setIsEditMode(false);
-                                        showToast("🔒 Modalità Edit Disattivata.");
-                                    }}
+                                    onClick={lockAdmin}
                                     className="bg-red-500/20 hover:bg-red-500/40 text-red-300 text-xs font-bold px-3 py-2 rounded-xl border border-red-500/30 transition-all cursor-pointer"
                                 >
                                     <i className="fa-solid fa-xmark"></i> Esci

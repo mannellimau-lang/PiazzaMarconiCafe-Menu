@@ -5,22 +5,14 @@ import { Lock, LockOpen } from "lucide-react";
 import { useInSituAdmin } from "@/context/InSituAdminContext";
 
 export default function Footer() {
-  const { isEditMode, setIsEditMode, showToast } = useInSituAdmin();
+  const { isEditMode, unlockAdmin, lockAdmin, showToast } = useInSituAdmin();
 
   const handleToggleAdmin = () => {
     if (!isEditMode) {
-      const pin = prompt("Inserisci PIN Amministratore:");
-      if (pin === "marconi2026") {
-        sessionStorage.setItem("in_situ_edit_mode", "true");
-        setIsEditMode(true);
-        showToast("🔓 Modalità In-Situ Direct Admin Attivata!");
-      } else if (pin) {
-        alert("PIN Errato! Accesso negato.");
-      }
+      void unlockAdmin();
     } else {
-      sessionStorage.removeItem("in_situ_edit_mode");
-      setIsEditMode(false);
-      showToast("🔒 Modalità Edit Disattivata.");
+      lockAdmin();
+      showToast("🔒 Modalità modifica disattivata.");
     }
   };
 
