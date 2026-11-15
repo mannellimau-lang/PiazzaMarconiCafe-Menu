@@ -5,11 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import GoogleTranslate from "@/components/GoogleTranslate";
+import AlertBanner from "@/components/AlertBanner";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [menuUrl, setMenuUrl] = useState("https://piazza-marconi-cafe-menu.vercel.app");
+  const menuUrl = process.env.NEXT_PUBLIC_MENU_URL || "https://piazza-marconi-cafe-menu.vercel.app";
   const pathname = usePathname();
 
   useEffect(() => {
@@ -17,13 +18,6 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
-    
-    if (typeof window !== "undefined") {
-      const host = window.location.hostname;
-      if (host.includes("-mannellimau-langs-projects.vercel.app") || host.includes("localhost") || host.includes("127.0.0.1")) {
-        setMenuUrl("https://piazza-marconi-cafe-menu-prlrmdf2s-mannellimau-langs-projects.vercel.app");
-      }
-    }
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -40,10 +34,16 @@ export default function Navbar() {
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || isMobileMenuOpen || pathname !== "/" ? "bg-black border-b border-white/10 shadow-lg py-4" : "bg-transparent py-6"
+        isScrolled || isMobileMenuOpen || pathname !== "/" ? "bg-black border-b border-white/10 shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
+      {/* L'avviso sta DENTRO la barra fissa: così non copre mai logo e menu (prima vi si sovrapponeva). */}
+      {pathname === "/" && <AlertBanner />}
+      <div
+        className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${
+          isScrolled || isMobileMenuOpen || pathname !== "/" ? "py-4" : "py-6"
+        }`}
+      >
         {/* Logo */}
         <Link href="/" className="flex flex-col items-center group">
           <span className="text-xl md:text-2xl font-serif text-white tracking-[0.2em] uppercase">Piazza Marconi</span>

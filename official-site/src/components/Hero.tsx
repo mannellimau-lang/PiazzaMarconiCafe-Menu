@@ -8,7 +8,7 @@ import { useInSituAdmin } from "@/context/InSituAdminContext";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [menuUrl, setMenuUrl] = useState("https://piazza-marconi-cafe-menu.vercel.app");
+  const menuUrl = process.env.NEXT_PUBLIC_MENU_URL || "https://piazza-marconi-cafe-menu.vercel.app";
   const { isEditMode, hero, setHero } = useInSituAdmin();
 
   // Ensure autoplay works on all browsers including Safari
@@ -61,20 +61,6 @@ export default function Hero() {
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const host = window.location.hostname;
-      if (
-        host.includes("-mannellimau-langs-projects.vercel.app") ||
-        host.includes("localhost") ||
-        host.includes("127.0.0.1")
-      ) {
-        setMenuUrl(
-          "https://piazza-marconi-cafe-menu-prlrmdf2s-mannellimau-langs-projects.vercel.app"
-        );
-      }
-    }
-  }, []);
 
   return (
     <section
