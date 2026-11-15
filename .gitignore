@@ -56,3 +56,18 @@ core/virtual-company/staging/
 core/virtual-company/agents/python_brains/output.json
 core/virtual-company/agents/python_brains/screenshots/
 core/social-agents/
+
+# --- Cartelle di lavoro locali degli agenti (contengono percorsi e dati personali) ---
+/.agents/*
+!/.agents/AGENTS.md
+!/.agents/skills/
+.codex/
+/PRODUCT.md
+/PROJECT.md
+/TEST_INFRA.md
+/reports/
+core/virtual-company/agents/python_brains/fix_*.py
+core/virtual-company/send_*.js
+core/virtual-company/test_e2e.js
+/package.json
+/package-lock.json
