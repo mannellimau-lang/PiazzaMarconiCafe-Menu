@@ -110,58 +110,64 @@ git commit -m "legal: update statutory VAT notice (Art. 35 DPR 633/1972) and com
 
 ---
 
-### Task 3: Conformità EU AI Act (Art. 50 - Trasparenza Chatbot & Fallback Umano)
+### Task 3: Audit di Sicurezza del Codice & Prevenzione Fughe di Segreti / Dati Privati
 
 **Files:**
-- Modify: `index.html:1020-1065` (Chatbot Ordini & Catering AI)
-- Modify: `official-site/src/components/CateringReservation.tsx` (se pertinente)
+- Audit: `index.html`, `official-site/`, configurazioni `.env`, `.env.local`, `google_credentials.json`, `token.json`
+- Fix: Sanitizzazione di credenziali hardcoded o dati privati esposti
 
 **Interfaces:**
-- Consumes: Regolamento UE 2024/1689 (EU AI Act) Art. 50
-- Produces: Widget chat trasparente, disclaimer contrattuale non vincolante, divieto dati particolari e canale umano diretto
+- Consumes: Scansione dell'intero repository
+- Produces: Eliminazione di segreti client-side, bonifica PIN/backdoor in chiaro, isolamento chiavi API
 
-- [ ] **Step 1: Integrare banner di trasparenza AI Act nell'header del chatbot**
-Nel container di chat in `index.html`, aggiungere l'etichetta esplicita:
-```html
-<div className="bg-[#0c2461] text-white p-3 flex flex-col gap-2">
-    <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-            <i className="fa-solid fa-robot"></i>
-            <span className="font-bold text-xs tracking-wider uppercase">Assistente AI (Reg. UE 2024/1689)</span>
-        </div>
-        <button onClick={() => setIsAiOpen(false)} className="hover:text-gray-300 transition-colors">
-            <i className="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-    <div className="text-[10px] bg-blue-950/70 p-2 rounded text-blue-100 leading-snug border border-blue-400/20">
-        🤖 Stai interagendo con un sistema di Intelligenza Artificiale. Le risposte e stime sono indicative e non costituiscono preventivo o vincolo contrattuale.
-    </div>
-    <a href="https://wa.me/393295405941?text=Vorrei%20parlare%20con%20il%20personale%20per%20un%20preventivo" target="_blank" className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-1.5 px-3 rounded text-center uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2">
-        <i className="fa-brands fa-whatsapp text-base"></i> Parla con un Operatore Umano
-    </a>
-</div>
-```
+- [ ] **Step 1: Scansione approfondita di chiavi API, token e credenziali hardcoded**
+Verificare assenza di chiavi esposte nel bundle client o in file pubblici (es. `index.html:428` `const apiKey = ""` o chiamate dirette ad API esterne da browser).
 
-- [ ] **Step 2: Rafforzare il disclaimer privacy e minimizzazione dati**
-Nel footer della chatbox (`index.html#L1049-L1051`), aggiornare la nota:
-```html
-<div className="px-3 pb-2 pt-1 bg-white text-[8px] text-gray-400 text-center border-t border-gray-100 leading-tight">
-    Sistema AI informativo. Non inserire dati personali particolari o bancari. Continuando accetti la nostra <a href="/privacy-policy" className="underline text-[#0c2461]">Privacy Policy</a>.
-</div>
-```
+- [ ] **Step 2: Bonifica credenziali amministrative o dati privati in chiaro**
+Isolare o rimuovere logiche amministrative con PIN in chiaro nel client (es. `index.html:997` `pinInput.trim() === 'marconi2026'`) per impedire accessi non autorizzati.
 
-- [ ] **Step 3: Verificare visivamente e sintatticamente la modale di chat**
-Eseguire verifica della sintassi React e JSX all'interno di `index.html`.
+- [ ] **Step 3: Verifica isolamento file sensibili dal deployment**
+Assicurarsi che file come `google_credentials.json`, `token.json` o `.env` non vengano inclusi o serviti come asset statici accessibili dall'esterno.
 
 - [ ] **Step 4: Commit**
 ```bash
 git add index.html
-git commit -m "legal(ai-act): enforce EU AI Act Art. 50 transparency disclosure and human operator fallback"
+git commit -m "security: sanitize codebase, isolate private credentials and remove client-side hardcoded secrets"
 ```
 
 ---
 
-### Task 4: Risoluzione Problemi Generali del Sito & Health Check
+### Task 4: Audit di Conformità Legale a 360° (Italiana, Europea & EU AI Act Completo)
+
+**Files:**
+- Audit & Modify: `index.html`, `privacy-policy.html`, `cookie-policy.html`, `official-site/`
+
+**Interfaces:**
+- Consumes: Codice del Consumo, Codice Civile, DPR 633/1972, GDPR (Reg. UE 2016/679), EU AI Act (Reg. UE 2024/1689)
+- Produces: Piena aderenza statutaria, informative aggiornate, trasparenza e disclaimers per l'assistente virtuale
+
+- [ ] **Step 1: Audit statutario e consumatori (Legislazione Italiana)**
+Verifica correttezza e completezza di ragione sociale, P.IVA, sede legale, indicazione prezzi, tabella allergeni e condizioni di prenotazione/vendita.
+
+- [ ] **Step 2: Audit privacy, cookie e consensi (Legislazione Europea - GDPR)**
+Verifica di `privacy-policy.html` e `cookie-policy.html`, titolare del trattamento, base giuridica, diritti degli interessati e divieto raccolta dati particolari.
+
+- [ ] **Step 3: Audit globale Regolamento UE sull'Intelligenza Artificiale (EU AI Act)**
+Analizzare in autonomia l'intero testo dell'AI Act applicabile al sistema di intelligenza artificiale presente sul sito:
+- Trasparenza esplicita (comunicazione chiara all'utente che sta interagendo con un'AI).
+- Valore puramente indicativo e non vincolante contrattualmente delle stime/preventivi.
+- Minimizzazione dati personali (divieto esplicito inserimento dati particolari/bancari).
+- Presenza visibile del canale di contatto umano diretto (operatore WhatsApp/telefono).
+
+- [ ] **Step 4: Commit**
+```bash
+git add index.html privacy-policy.html cookie-policy.html
+git commit -m "legal: open comprehensive compliance audit across Italian, EU and EU AI Act regulations"
+```
+
+---
+
+### Task 5: Risoluzione Problemi Generali del Sito & Health Check
 
 **Files:**
 - Modify: `index.html`, `official-site/` (se emergono asset o link mancanti)
@@ -191,7 +197,7 @@ git commit -m "fix(health): add viewport-fit cover and verify asset references f
 
 ---
 
-### Task 5: Refactoring Report Agentico (Resilienza Antigravity Post-Fable)
+### Task 6: Refactoring Report Agentico (Resilienza Antigravity Post-Fable)
 
 **Files:**
 - Modify: `core/virtual-company/run_all_now.js`
@@ -231,7 +237,7 @@ git commit -m "refactor(agents): ensure resilient model fallback and protected a
 
 ---
 
-### Task 6: Generazione Dossier Operativo per Claude Fable 5.2
+### Task 7: Generazione Dossier Operativo per Claude Fable 5.2
 
 **Files:**
 - Create: `FABLE_DIRECTIVE_PACK.md`
@@ -243,7 +249,7 @@ git commit -m "refactor(agents): ensure resilient model fallback and protected a
 - [ ] **Step 1: Redigere `FABLE_DIRECTIVE_PACK.md`**
 Includere:
 1. Blocco Domande Iniziale: *"Fai tutte le eventuali domande subito in questo primo messaggio, perché devo allontanarmi e poi procederai in totale autonomia"*.
-2. Ordine rigoroso delle priorità (1: Bugfix e Legal/AI Act, 2: Problemi generali, 3: Ottimizzazione report e scelta modelli, 4: Se residuano crediti, micro-rifinitura frontend senza alterare lo stile, 5: Handover tecnico per Antigravity).
+2. Ordine rigoroso delle priorità (1: Sicurezza del codice e segreti, 2: Audit Legale aperto 360°, 3: Problemi generali, 4: Ottimizzazione report e scelta modelli, 5: Se residuano crediti, micro-rifinitura frontend senza alterare lo stile, 6: Handover tecnico per Antigravity).
 3. Riepilogo dei file del repository e delle architetture di deploy.
 
 - [ ] **Step 2: Commit del Dossier**
@@ -254,7 +260,7 @@ git commit -m "docs: generate comprehensive Fable 5.2 autonomous directive and h
 
 ---
 
-### Task 7: Vercel Preview Deploy & Safety Lock
+### Task 8: Vercel Preview Deploy & Safety Lock
 
 **Files:**
 - Nessun file modificato in produzione.

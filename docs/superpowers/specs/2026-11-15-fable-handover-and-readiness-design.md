@@ -28,20 +28,23 @@ Il frontend attuale incontra il pieno gradimento dell'utente: non è richiesto a
 - **Privacy & Cookie Policy:** Aggiornare `privacy-policy.html` e `cookie-policy.html` inserendo la corretta denominazione del Titolare del Trattamento e la P.IVA reale.
 - **Trasparenza Prezzi (Codice del Consumo):** Confermare la visibilità dei prezzi IVA e coperto inclusi e della tabella allergeni.
 
-### 2.3 Conformità Regolamento Europeo sull'Intelligenza Artificiale (EU AI Act - Reg. UE 2024/1689)
-L'applicazione ospita un assistente conversazionale ("Ordini & Catering AI"). Ai sensi dell'Art. 50 (Obblighi di trasparenza per deployer di sistemi AI):
-1. **Trasparenza Esplicita:** Dichiarare visibilmente prima e dentro la chat che l'utente sta dialogando con un sistema basato su intelligenza artificiale.
-2. **Natura Non Vincolante:** Chiarire espressamente che le risposte e le stime generate non costituiscono contratto o prenotazione formale fino a conferma dello staff umano.
-3. **Minimizzazione Dati:** Inserire un esplicito divieto di inserire dati particolari (salute, carte di pagamento, documenti).
-4. **Fallback Umano:** Presenza costante e in primo piano del canale umano diretto (pulsante WhatsApp / telefono).
+### 2.3 Audit di Sicurezza del Codice & Prevenzione Fughe di Segreti / Dati Privati
+- **Scansione Segreti & Credenziali:** Verifica approfondita del codice sorgente, script client-side e configurazioni per rilevare chiavi API, token di accesso, credenziali di servizio, password o segreti inseriti erroneamente in chiaro o esposti al browser.
+- **Isolamento Dati Privati:** Controllo di elementi o funzioni amministrative lasciate accidentalmente nel client (es. PIN o backdoor in chiaro nel DOM/JS, chiamate dirette con chiavi visibili) e predisposizione delle necessarie misure di bonifica.
 
-### 2.4 Scansione e Risoluzione Problemi Generali del Sito (Health Check & Ready to Deploy)
+### 2.4 Audit di Conformità Legale a 360° (Legislazione Italiana, Europea & EU AI Act)
+- **Mandato Aperto senza Vincoli:** L'analisi legale non deve essere vincolata a singoli articoli o disposizioni predeterminate, bensì condotta a tutto campo su:
+  - *Legislazione Italiana:* Codice del Consumo, Codice Civile, obblighi fiscali (indicazione P.IVA, sede legale, denominazione registrata), trasparenza prezzi e contratti.
+  - *Legislazione Europea:* GDPR (Reg. UE 2016/679) per privacy policy, cookie policy, informativa trattamento, gestione consensi e diritti.
+  - *Regolamento UE sull'Intelligenza Artificiale (EU AI Act - Reg. UE 2024/1689):* Scrutinio autonomo dell'intero framework normativo per classificare il sistema AI ("Ordini & Catering AI"), individuando tutti gli articoli applicabili (obblighi di trasparenza, disclaimers non vincolanti, minimizzazione dati sensibili, fallback operatore umano) e proponendo le contromisure necessarie.
+
+### 2.5 Scansione e Risoluzione Problemi Generali del Sito (Health Check & Ready to Deploy)
 - **Asset & Link Integrity:** Verifica che tutti i link interni, esterni (social, mappe) e asset statici (immagini, loghi, icone) rispondano con HTTP 200 senza risorse rotte o errori 404.
 - **Console & Runtime Errors:** Eliminazione di warning React, errori JavaScript o mancate dichiarazioni di tipi che possano degradare l'esperienza utente o il caricamento.
 - **Responsività & Layout Shift:** Prevenzione di overflow orizzontali accidentali su mobile e rifinitura dei Core Web Vitals per garantire che il sito sia al 100% pronto per la pubblicazione pubblica.
 
-### 2.5 Revisione Finale Frontend (Condizionale: Se residua limite di utilizzo Fable)
-- **Criterio di Attivazione:** Solo dopo aver completato con successo i requisiti 2.1, 2.2, 2.3, 2.4 e l'ottimizzazione del report agentico, se restano crediti/limiti di utilizzo su Fable 5.2.
+### 2.6 Revisione Finale Frontend (Condizionale: Se residua limite di utilizzo Fable)
+- **Criterio di Attivazione:** Solo dopo aver completato con successo la sicurezza, l'audit legale, i problemi generali e l'ottimizzazione del report agentico, se restano crediti/limiti di utilizzo su Fable 5.2.
 - **Ambito di Intervento:** Micro-rifinitura e lucidatura dell'interfaccia (es. fluidità transizioni, accessibilità contrasto colori WCAG, coerenza padding su touch target mobile), preservando rigorosamente l'estetica e la personalità visiva attuale che l'utente ha già approvato.
 
 ---
@@ -58,11 +61,12 @@ In stretta osservanza delle regole operative del progetto:
 ## 4. Pacchetto Direttiva per Claude Fable 5.2
 Fable 5.2 riceverà un dossier ingegneristico strutturato che scandisce la precisa gerarchia delle priorità operative:
 1. **Regola di Ingaggio Temporale (Blocco Domande Iniziale):** Fable 5.2 deve porre **tutte le eventuali domande di allineamento subito, in un unico blocco all'inizio**, consentendo all'utente di rispondere prima di uscire e permettendo a Fable di procedere in totale autonomia per tutta la sessione.
-2. **Priorità 1 - Bugfix Menu & Legal/AI Act:** Correzione navigazione menu, eliminazione P.IVA fittizia, conformità statutaria e contromisure Art. 50 EU AI Act.
-3. **Priorità 2 - Risoluzione Problemi Generali:** Scansione e fixing errori generali, link rotti e prontezza per il deploy.
-4. **Priorità 3 - Ottimizzazione Report Agentico:** Analisi libera e autonoma da parte di Fable (senza modelli imposti a priori) per stabilire la migliore architettura di modelli e fallback per eliminare errori di quota e dipendenze.
-5. **Priorità 4 (Solo se residua utilizzo):** Piccola revisione/finitura del frontend senza alterare il design gradito dall'utente.
-6. **Priorità 5 - Handover ad Antigravity:** Stesura obbligatoria del capitolo *"Raccomandazioni Tecniche e Linee Guida per Antigravity"*, per garantire a me la piena continuità operativa alla scadenza dei crediti Claude.
+2. **Priorità 1 - Sicurezza del Codice & Segreti:** Bonifica di eventuali chiavi, credenziali o PIN esposti nel client-side o nel codice.
+3. **Priorità 2 - Audit Legale Aperto a 360°:** Scansione autonoma di legislazione italiana, europea e dell'intero EU AI Act per l'assistente virtuale e il business.
+4. **Priorità 3 - Risoluzione Problemi Generali del Sito:** Correzione link rotti, asset 404, layout mobile borderless e stato "Ready to Deploy".
+5. **Priorità 4 - Ottimizzazione Report Agentico:** Scelta autonoma dei modelli e architettura di resilienza per crash/quote.
+6. **Priorità 5 (Solo se residua utilizzo):** Micro-finitura del frontend senza alterare il design approvato dall'utente.
+7. **Priorità 6 - Handover ad Antigravity:** Stesura obbligatoria del capitolo *"Architettura & Raccomandazioni Tecniche per Antigravity"*.
 
 ---
 
